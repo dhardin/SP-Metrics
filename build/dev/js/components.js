@@ -30,7 +30,7 @@ Vue.component('edit-metric', {
             this.editName = newVal;
         },
         styleObj: function(newVal, oldVal){
-        	this.styleObj = newVal;
+        	this.editStyleObj = JSON.parse(JSON.stringify(newVal));
         },
         status: {
             handler: function(val, oldVal) {
@@ -133,10 +133,13 @@ Vue.component('metric-config', {
     methods: {
         edit: function(e) {
             this.$emit('edit', this.name);
+        },
+        deleteMetric: function(e){
+          this.$emit('deletemetric', this.name);
         }
     },
     data: function() {
-        return { editName: this.name };
+        return { };
     }
 });
 

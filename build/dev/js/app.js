@@ -4,21 +4,7 @@
         editing: true,
         configFetched: true,
         isValidated: false,
-        currentMetric: {
-            name: '',
-            sortOrder: 0,
-            sytleObj: {
-            	backgroundColor: '',
-            	color: ''
-            },
-            editing: false,
-            id: 0,
-            status: {
-                errorCode: false,
-                message: '',
-                isSaving: false
-            }
-        },
+        currentMetric: {},
         currentMetricIndex: -1,
         editingMetric: false,
         config: {
@@ -62,6 +48,28 @@
         ]
     },
     methods: {
+       setCurrentMetric : function(optionsArr){
+          var defaults = {
+              name: '',
+              sortOrder: 0,
+              sytleObj: {
+              	backgroundColor: '',
+              	color: ''
+              },
+              editing: false,
+              id: 0,
+              status: {
+                  errorCode: false,
+                  message: '',
+                  isSaving: false
+              }
+          };
+          var i;
+          this.currentMetric = JSON.parse(JSON.stringify(defaults));
+          for(i = 0; i < optionsArr.length; i++){
+            Object.assign(this.currentMetric, JSON.parse(JSON.stringify(optionsArr[i])));
+          }
+       },
         onMetricUpdate: function(object, options, oldName) {
             var i;
             var updatedMetric;
@@ -69,14 +77,14 @@
             if (this.config.metrics.hasOwnProperty(oldName)) {
                 //check to see if name changed
                 if (oldName != options.name && !this.config.metrics.hasOwnProperty(options.name)) {
-                    delete this.config.metrics[oldName];
+                    Vue.delete(this.config.metrics, oldName);
                     Vue.set(this.config.metrics, options.name, options);
-                    Object.assign(this.currentMetric, { status: { errorCode: false, message: 'Added new name to metrics.', isSaving: false } }, this.config.metrics[options.name]);
+                    this.setCurrentMetric([this.config.metrics[options.name], { status: { errorCode: false, message: 'Added new name to metrics.', isSaving: false } }]);
                 } else if (oldName != options.name && this.config.metrics.hasOwnProperty(options.name)) {
-                    Object.assign(this.currentMetric.status, { errorCode: 0, message: 'Name already exists.', isSaving: false });
+                    this.setCurrentMetric([{ status: { errorCode: 0, message: 'Name already exists.', isSaving: false }}]);
                 } else {
-                	Object.assign(this.config.metrics[options.name], options);
-                    Object.assign(this.currentMetric, {status: { errorCode: false, message: 'Updated metrics.', isSaving: false }}, options);
+                    Vue.set(this.config.metrics, options.name, options);
+                    this.setCurrentMetric([this.config.metrics[options.name], {status: { errorCode: false, message: 'Updated metrics.', isSaving: false }}]);
                 }
                 return;
             }
@@ -84,12 +92,16 @@
         onMetricEdit: function(name) {
             var i;
             var currentMetric;
+            var key;
             if (this.config.metrics.hasOwnProperty(name)) {
-                Object.assign(this.currentMetric, this.config.metrics[name], { status: { errorCode: false, message: '', isSaving: false } });
-            } else {
-                Object.assign(this.currentMetric, { status: { errorCode: false, message: '', isSaving: false } });
+              this.setCurrentMetric([this.config.metrics[name], {status: { errorCode: false, message: '', isSaving: false }}]);
+              $(this.$refs.modal.$el).foundation('open')
             }
-            $(this.$refs.modal.$el).foundation('open')
+        },
+        onMetricDelete: function(name) {
+          if(this.config.metrics.hasOwnProperty(name)){
+            Vue.delete(this.config.metrics, name);
+          }
         },
         getData: function(callback, errorCallback) {
 
@@ -141,12 +153,19 @@
             });
         },
         addMetric: function() {
-            if (!this.config.metrics.hasOwnProperty('New')) {
-                Vue.set(this.config.metrics, 'New', { name: 'New' });
+          var number = 1;
+            if (!this.config.metrics.hasOwnProperty('_New')) {
+                Vue.set(this.config.metrics, '_New', { name: '_New' });
+            } else {
+              while(this.config.metrics.hasOwnProperty('_New' + '('+number+')')){
+                number++;
+              }
+              Vue.set(this.config.metrics, '_New' + '('+number+')', { name: '_New' + '('+number+')' });
             }
         },
     },
     created: function() {
+      this.setCurrentMetric([]);
         /*(function(app){
         	new Promise(function(resolve, reject){
         		app.getConfigData(function(data){
@@ -155,7 +174,7 @@
         	}).then(function(result){
         		return new Promise(function(resolve, reject){
         			app.getData(function(data){
-        				resolve();	
+        				resolve();
         			});
         		});
         	}).then(function(result){

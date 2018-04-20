@@ -23,13 +23,20 @@
 <body>
     <script type="text/x-template" id="metric-config">
         <div v-bind:style="styleObj" class="metric card">
+          <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
+            <span aria-hidden="true">&times;</span>
+          </button>
             <button type="button" class="button edit" v-on:click="edit" data-open="exampleModal1">Edit</button>
+              <div class="card-section text-center">
             <h4>{{name}}</h4>
+          </div>
         </div>
     </script>
     <script type="text/x-template" id="metric">
-        <div v-bind:style="styleObj" class="metric">
-            <h4>{{name}}</h4>
+        <div v-bind:style="styleObj" class="metric card">
+              <div class="card-section text-center">
+                <h4>{{name}}</h4>
+          </div>
         </div>
     </script>
     <script type="text/x-template" id="edit-metric">
@@ -228,7 +235,7 @@
                                         <kbd>Add</kbd> to add a new metric.
                                     </blockquote>
                                     <div id="metrics-config">
-                                        <metric-config @update="onMetricUpdate" @edit="onMetricEdit" v-for="(metric, key) in config.metrics" v-bind="metric" :key="key"></metric-config>
+                                        <metric-config @update="onMetricUpdate" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, key) in config.metrics" v-bind="metric" :key="key"></metric-config>
                                         <a v-on:click="addMetric">
                                             <div class="card metric" id="addMetricBtn">
                                                 <div class="card-section text-center">
