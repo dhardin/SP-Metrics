@@ -87,13 +87,14 @@
     position: absolute;
     margin: 0;
     width: 70px;
+    background-color: #2c3840 !important
 }
 .sortIcon{
   fill: none;
   stroke: white;
   stroke-width: 2px;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
 }
 
 .sortBtn:hover .sortIcon{

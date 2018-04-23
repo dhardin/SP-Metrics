@@ -46,12 +46,12 @@
               <div class="card-section text-center">
             <h4>{{name}}</h4>
           </div>
-          <button class="hollow button sortBtn decreaseSort" href="#" type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
+          <button class="button sortBtn decreaseSort" href="#" type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
          <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
               <path d="M1 16l15 15v-9h16v-12h-16v-9z"></path>
           </svg>
         </button>
-            <button class="hollow button sortBtn increaseSort" href="#" type="button" v-on:click="increaseSortOrder" v-if="!islast">
+            <button class="button sortBtn increaseSort" href="#" type="button" v-on:click="increaseSortOrder" v-if="!islast">
           <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
           <path d="M31 16l-15-15v9h-16v12h16v9z"></path>
         </svg>
@@ -290,6 +290,7 @@
         </div>
     </div>
     <script type="text/javascript" src="js/components.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript">
     $(document).foundation();
