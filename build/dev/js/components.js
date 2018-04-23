@@ -125,6 +125,14 @@ Vue.component('metric-config', {
             type: Boolean,
             default: false
         },
+        index: {
+          type: Number,
+          default: 0
+        },
+        islast: {
+          type: Boolean,
+          default: false
+        },
         id: {
             type: Number,
             default: 0
@@ -136,11 +144,36 @@ Vue.component('metric-config', {
         },
         deleteMetric: function(e){
           this.$emit('deletemetric', this.name);
+        },
+        decreaseSortOrder: function(e){
+          this.$emit('decreaseorder',
+              this.name,
+              this.index
+            );
+        },
+        increaseSortOrder: function(e){
+          this.$emit('increaseorder',
+            this.name,
+            this.index
+          );
         }
     },
     data: function() {
         return { };
     }
+});
+
+Vue.component('loading', {
+  template : '#loading-template',
+  props: ['message', 'canCancel', 'canClose'],
+  methods: {
+    cancel: function(e){
+      this.$emit('cancel');
+    }
+  },
+  data: function(){
+    return {};
+  }
 });
 
 Vue.component('metric', {
@@ -172,7 +205,9 @@ Vue.component('metric', {
             default: 0
         }
     },
-    methods: {},
+    methods: {
+
+    },
     data: function() {
         return {};
     }

@@ -7,6 +7,14 @@
         currentMetric: {},
         currentMetricIndex: -1,
         editingMetric: false,
+        state_map: {
+          loading: {
+            canCancel: false,
+            canClose: false,
+            message: '',
+            isloading: false
+          }
+        },
         config: {
             hasFiltering: false,
             isDocumentLibrary: false,
@@ -46,6 +54,11 @@
             	id: 4
             }*/
         ]
+    },
+    computed: {
+      orderedMetrics: function(){
+         return _.orderBy(this.config.metrics, 'sortOrder');
+      }
     },
     methods: {
        setCurrentMetric : function(optionsArr){
@@ -103,6 +116,33 @@
             Vue.delete(this.config.metrics, name);
           }
         },
+        onIncreaseOrder: function(name, index){
+            var currentMetric = this.orderedMetrics[index];
+            var tempOrder;
+            var nextMetric;
+            if(this.orderedMetrics.length <= index){
+              return;
+            }
+            nextMetric = this.orderedMetrics[index + 1];
+            tempOrder = nextMetric.sortOrder;
+            nextMetric.sortOrder = currentMetric.sortOrder;
+            currentMetric.sortOrder = tempOrder;
+        },
+        onCancelLoading: function(){
+          this.state_map.loading.isloading = false;
+        },
+        onDecreaseOrder: function(name, index){
+          var currentMetric = this.orderedMetrics[index];
+          var tempOrder;
+          var prevMetric;
+          if(index < 0){
+            return;
+          }
+          prevMetric = this.orderedMetrics[index - 1];
+          tempOrder = prevMetric.sortOrder;
+          prevMetric.sortOrder = currentMetric.sortOrder;
+          currentMetric.sortOrder = tempOrder;
+        },
         getData: function(callback, errorCallback) {
 
         },
@@ -111,6 +151,16 @@
         },
         saveConfig: function(callback, errorCallback) {
             console.log(this.$data.config);
+        },
+        toggleLoading: function(options){
+          options=  _.defaults(options, {isLoading: false, message: '', canCancel: false, canClose: false})
+          this.state_map.loading.isloading = options.isloading;
+          this.state_map.loading.message = options.message;
+          this.state_map.loading.canCancel = options.canCancel;
+          this.state_map.loading.canClose = options.canClose;
+          if(!options.isLoading){
+                $(document).foundation();
+          }
         },
         getConfigData: function(callback, errorCallback) {
             console.log('fetching config');
@@ -129,7 +179,9 @@
                     callback(data);
                 }
             }).catch(function(error) {
-                console.log(error);
+              if (errorCallback) {
+                  errorCallback(error);
+              }
             });
         },
         getData: function(callback) {
@@ -149,37 +201,44 @@
                 }
                 console.log(data);
             }).catch(function(error) {
-                console.log(error);
+              if (errorCallback) {
+                  errorCallback(error);
+              }
             });
         },
         addMetric: function() {
           var number = 1;
             if (!this.config.metrics.hasOwnProperty('_New')) {
-                Vue.set(this.config.metrics, '_New', { name: '_New' });
+                Vue.set(this.config.metrics, '_New', { name: '_New', sortOrder: Object.keys(this.config.metrics).length });
             } else {
               while(this.config.metrics.hasOwnProperty('_New' + '('+number+')')){
                 number++;
               }
-              Vue.set(this.config.metrics, '_New' + '('+number+')', { name: '_New' + '('+number+')' });
+              Vue.set(this.config.metrics, '_New' + '('+number+')', { name: '_New' + '('+number+')',  sortOrder: Object.keys(this.config.metrics).length});
             }
         },
     },
     created: function() {
+      this.toggleLoading({isloading: true, message: "Loading", canCancel:true, canClose: false});
       this.setCurrentMetric([]);
-        /*(function(app){
+        (function(that){
         	new Promise(function(resolve, reject){
-        		app.getConfigData(function(data){
+        		that.getConfigData(function(data){
         			resolve();
-        		});
+        		}, function(error){
+               that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
         	}).then(function(result){
         		return new Promise(function(resolve, reject){
-        			app.getData(function(data){
+        			that.getData(function(data){
         				resolve();
-        			});
+        			}, function(error){
+                    that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+              });
         		});
         	}).then(function(result){
-        		console.log('done');
+        	   that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
         	});
-        })(this);*/
+        })(this);
     }
 });

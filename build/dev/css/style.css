@@ -83,3 +83,51 @@
 	width: 40px;
 	height: 40px;
 }
+.sortBtn {
+    position: absolute;
+    margin: 0;
+    width: 70px;
+}
+.sortIcon{
+  fill: none;
+  stroke: white;
+  stroke-width: 2px;
+  width: 24px;
+  height: 24px;
+}
+
+.sortBtn:hover .sortIcon{
+  fill: white;
+}
+
+.increaseSort {
+  right: 5px;
+  bottom: 5px;
+}
+
+.decreaseSort {
+  left: 5px;
+  bottom: 5px;
+}
+
+#app {
+  position: relative;
+}
+
+#loading {
+  height: 300px;
+  width: 100%;
+
+}
+
+#loading-container {
+
+}
+
+#lloading-container:before {
+
+}
+
+#loading .callout {
+
+ }

@@ -18,18 +18,44 @@
     <script type="text/javascript" src="lib/foundation/what-input.js"></script>
     <script type="text/javascript" src="lib/foundation/foundation.js"></script>
     <script type="text/javascript" src="lib/Spectrum/spectrum.js"></script>
+    <script type="text/javascript" src="lib/lodash.js"></script>
 </head>
 
 <body>
+  <script type="text/template" id="loading-template">
+      <div  id="loading" class="grid-x grid-margin-x grid-padding-x">
+          <div class="cell auto">
+          </div>
+          <div id="loading-container" class="cell small-12 medium-10">
+    <div class="callout large secondary">
+      <h2>{{message}}</h2>
+      <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
+      <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
+    </div>
+  </div>
+  <div class="cell auto">
+  </div>
+</div>
+  </script>
     <script type="text/x-template" id="metric-config">
         <div v-bind:style="styleObj" class="metric card">
           <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
             <span aria-hidden="true">&times;</span>
           </button>
-            <button type="button" class="button edit" v-on:click="edit" data-open="exampleModal1">Edit</button>
+            <button type="button" class="button edit" v-on:click="edit" >Edit</button>
               <div class="card-section text-center">
             <h4>{{name}}</h4>
           </div>
+          <button class="hollow button sortBtn decreaseSort" href="#" type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
+         <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
+              <path d="M1 16l15 15v-9h16v-12h-16v-9z"></path>
+          </svg>
+        </button>
+            <button class="hollow button sortBtn increaseSort" href="#" type="button" v-on:click="increaseSortOrder" v-if="!islast">
+          <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
+          <path d="M31 16l-15-15v9h-16v12h16v9z"></path>
+        </svg>
+        </button>
         </div>
     </script>
     <script type="text/x-template" id="metric">
@@ -66,8 +92,10 @@
         </div>
     </script>
     <div id="app">
+
         <div class="grid-container">
-            <div class="grid-x grid-margin-x grid-padding-x">
+            <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" @cancel="onCancelLoading"></loading>
+            <div class="grid-x grid-margin-x grid-padding-x" v-show="!state_map.loading.isloading">
                 <div class="cell auto">
                 </div>
                 <div class="cell small-12 medium-10">
@@ -235,7 +263,7 @@
                                         <kbd>Add</kbd> to add a new metric.
                                     </blockquote>
                                     <div id="metrics-config">
-                                        <metric-config @update="onMetricUpdate" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, key) in config.metrics" v-bind="metric" :key="key"></metric-config>
+                                        <metric-config @update="onMetricUpdate" @decreaseorder="onDecreaseOrder" @increaseorder="onIncreaseOrder" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, index) in orderedMetrics" v-bind="metric" :index="index" :islast="(index == orderedMetrics.length - 1)"></metric-config>
                                         <a v-on:click="addMetric">
                                             <div class="card metric" id="addMetricBtn">
                                                 <div class="card-section text-center">
