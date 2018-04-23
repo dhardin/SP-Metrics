@@ -68,64 +68,60 @@ var app_data = {
           }
         });
       },
-      saveConfigData: function(callback, errorCallback){
-        var listName = 'MetricsConfig';
-        var url = window.location.origin + "/_api/web/lists/GetByTitle('"+listName +"')" + (stateMap.id > 0 ? '/items('+stateMap.id+')' :  '/Items');
+      saveConfigData: function(configData, digest, callback, errorCallback){
+        var listName = this.listName;
+        var site = this.site;
+        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (configData.id > 0 ? '/items('+configData.id+')' :  '/Items');
         var type = getItemTypeForListName(listName);
         var data = {};
         var headers = {
           "accept": "application/json;odata=verbose",
-          "X-RequestDigest": stateMap.digest,
+          "X-RequestDigest": digest,
           "content-Type": "application/json;odata=verbose"
         };
 
-        if(stateMap.id > 0){
-          $.extend(headers, {
+        if(configData.id > 0){
+          _.extend(headers, {
             "IF-MATCH": "*",
             "X-HTTP-Method": "MERGE"
           });
         }
-        $.extend(data, configOptions, { '__metadata': { 'type': type } });
-        data.sortOrder = JSON.stringify(data.sortOrder);
-        data.colorMap = JSON.stringify(data.colorMap);
-        data.fontColorMap = JSON.stringify(data.fontColorMap );
-        data.styleMap = JSON.stringify(data.styleMap);
-        $.ajax({
+        _.extend(data, configOptions, { '__metadata': { 'type': type } });
+        data.sortOrder = JSON.stringify(configData.sortOrder);
+        data.colorMap = JSON.stringify(configData.colorMap);
+        data.fontColorMap = JSON.stringify(configData.fontColorMap );
+        data.styleMap = JSON.stringify(configData.styleMap);
+        return axios({
           url: url,
-          type: 'POST',
-          headers: headers,
-          data: JSON.stringify(data),
-          success: function(data, textStatus, jqXHR) {
-            if(callback)
-            {
-              callback(data);
-            }
-          },
-          error: function( jqXHR, textStatus, errorThrown ){
-            if(errorCallback){
-              errorCallback(jqXHR, textStatus, errorThrown);
-            }
+          method: "post",
+          headers: headers
+        }).then(function(response) {
+          var data = response.data.d.results;
+          if (callback) {
+            callback(data);
+          }
+        }).catch(function(error) {
+          if (errorCallback) {
+            errorCallback(error);
           }
         });
       },
       getDigest: function(callback, errorCallback){
-        $.ajax({
-          url: window.location.origin + "/_api/contextinfo",
-          method: "POST",
+        return axios({
+          url: this.site +  "/_api/contextinfo",
+          method: "post",
           headers: {
             "Accept": "application/json; odata=verbose"
           },
-          success: function(data, textStatus, jqXHR) {
-            var digest = data.d.GetContextWebInformation.FormDigestValue;
-            if(callback){
-              callback(digest);
-            }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            if(errorCallback){
-              errorCallback(jqXHR, textStatus, errorThrown);
-              console.log('error');
-            }
+        }).then(function(response) {
+          var data = response.data.d.results;
+          var digest = data.d.GetContextWebInformation.FormDigestValue;
+          if(callback){
+            callback(digest);
+          }
+        }).catch(function(error) {
+          if (errorCallback) {
+            errorCallback(error);
           }
         });
       },  // Get List Item Type metadata

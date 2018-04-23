@@ -2,6 +2,8 @@ var app = new Vue({
   el: '#app',
   mixins: [app_data],
   data: {
+    listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
+    site: window.location.origin, //site where the SharePoint configuration list is located
     editing: true,
     configFetched: true,
     isValidated: false,
@@ -17,6 +19,7 @@ var app = new Vue({
       }
     },
     config: {
+      id: 0,
       hasFiltering: false,
       isDocumentLibrary: false,
       isLookupField: false,
@@ -62,7 +65,29 @@ var app = new Vue({
       }
     },
     generateMetrics: function(){},
-    saveConfig: function(){},
+    saveConfig: function(){
+      that.toggleLoading({isloading: true, message: 'Saving config data', canCancel:false, canClose: false});
+      (function(that){
+        new Promise(function(resolve, reject){
+          that.getDigest(function(digest){
+            that.state_map.digest = digest;
+            resolve();
+          }, function(error){
+            that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+          });
+        })
+      }).then(function(that){
+          new Promise(function(resolve, reject){
+            that.saveConfigData(that.config, that.state_map.digest, function(data){
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          })
+        }).then(function(result){
+          that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+        });
+    },
     addMetric: function() {
       var number = 1;
       if (!this.config.metrics.hasOwnProperty('_New')) {
@@ -158,7 +183,7 @@ var app = new Vue({
         }, function(error){
           that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
         });
-      }).then(function(result){
+      })/*.then(function(result){
         return new Promise(function(resolve, reject){
           that.getData(function(data){
             resolve();
@@ -166,7 +191,7 @@ var app = new Vue({
             that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
           });
         });
-      }).then(function(result){
+      })*/.then(function(result){
         that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
       });
     })(this);
