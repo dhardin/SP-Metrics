@@ -71,7 +71,7 @@ var app_data = {
       saveConfigData: function(configData, digest, callback, errorCallback){
         var listName = this.listName;
         var site = this.site;
-        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (configData.id > 0 ? '/items('+configData.id+')' :  '/Items');
+        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (configData.ID > 0 ? '/items('+configData.ID+')' :  '/Items');
         var type = this.getItemTypeForListName(listName);
         var data = {
           		Title: window.location.pathname
