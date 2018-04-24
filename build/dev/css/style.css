@@ -160,6 +160,10 @@
     cursor: not-allowed;
 }
 
+.displayedMetric {
+  margin-top: 30px;
+}
+
 #loading .loader, #loading-container .loader{
   left: 50%;
 }

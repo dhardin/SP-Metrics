@@ -111,11 +111,10 @@ var app = new Vue({
       this.toggleGenerating({isgenerating: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
         that.getData(that.config, function(data){
-          that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success', message: '', isError: false, isSuccess: true});
+          that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
           that.populateMetrics(data);
-          resolve();
         }, function(error){
-            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
+            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
         });
       })(this);
     },
@@ -131,7 +130,7 @@ var app = new Vue({
             that.state_map.digest = digest;
             resolve();
           }, function(error){
-            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
+            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error: Saving Config', message: error.message, isError: true, isSuccess: false});
           })
         }).then(function(result){
           return new Promise(function(resolve, reject){
@@ -140,12 +139,12 @@ var app = new Vue({
               resolve();
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
+              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error: Saving Config', message: error.message, isError: true, isSuccess: false});
             });
           })
         }).then(function(result){
           //hat.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-          that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success', message: result, isError: false, isSuccess: true});
+          that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
         });
       })(this);
     },
