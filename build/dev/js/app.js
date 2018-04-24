@@ -13,7 +13,11 @@ var app = new Vue({
     state_map: {
       saving: {
         issaving: false,
-        message: ''
+        message: '',
+        messageTitle: '',
+        isError: false,
+        isSuccess: false,
+        showMessage: false
       },
       loading: {
         canCancel: false,
@@ -70,22 +74,19 @@ var app = new Vue({
       }
     },
     toggleSaving: function(options){
-      options=  _.defaults(options, {issaving: false, message: '', canCancel: false, canClose: false})
-      this.state_map.saving.issaving = options.issaving;
-      this.state_map.saving.message = options.message;
-      this.state_map.saving.canCancel = options.canCancel;
-      this.state_map.saving.canClose = options.canClose;
+      options=  _.defaults(options, {issaving: false, message: '', messageTitle: '', isError: false, isSuccess: false, showMessage: false});
+      Object.assign(this.state_map.saving, options);
     },
     generateMetrics: function(){},
     saveConfig: function(){
-      this.toggleLoading({isloading: true, message: 'Saving config data', canCancel:false, canClose: false});
+          that.toggleSaving({issaving: false, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
         new Promise(function(resolve, reject){
           that.getDigest(function(digest){
             that.state_map.digest = digest;
             resolve();
           }, function(error){
-            that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error, isError: true, isSuccess: false});
           });
         })
       }).then(function(that){
@@ -93,11 +94,13 @@ var app = new Vue({
             that.saveConfigData(that.config, that.state_map.digest, function(data){
               resolve();
             }, function(error){
-              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+              //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+                  that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error, isError: true, isSuccess: false});
             });
           })
         }).then(function(result){
-          that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+          //hat.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success', message: result, isError: false, isSuccess: true});
         });
     },
     addMetric: function() {
@@ -176,11 +179,7 @@ var app = new Vue({
     },
     toggleLoading: function(options){
       options=  _.defaults(options, {isLoading: false, showLoading: false, message: '', canCancel: false, canClose: false})
-      this.state_map.loading.isloading = options.isloading;
-      this.state_map.loading.message = options.message;
-      this.state_map.loading.canCancel = options.canCancel;
-      this.state_map.loading.canClose = options.canClose;
-      this.state_map.loading.showLoading = options.showLoading;
+      Object.assign(this.state_map.loading, options);
       if(!options.isLoading){
         $(document).foundation();
       }

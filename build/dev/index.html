@@ -279,6 +279,10 @@
                                 <a class="button" v-on:click="generateMetrics" :disabled="state_map.saving.issaving">Generate Metrics</a>
                                 <a class="button" v-on:click="saveConfig" :disabled="state_map.saving.issaving"><span class="square" v-if="state_map.saving.issaving"></span>Save Config</a>
                             </div>
+                            <div class="callout"  v-bind:class="{ alert: state_map.saving.isError, success: state_map.saving.isSuccess }" v-if="!state_map.saving.issaving || state_map.saving.showMessage">
+                              <h5>{{state_map.saving.messageTitle}}</h5>
+                              <p>{{state_map.saving.message}}.</p>
+                            </div>
                         </form>
                     </div>
                     <!--<div id="metrics">
