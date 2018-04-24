@@ -85,12 +85,11 @@ var app = new Vue({
           that.getDigest(function(digest){
             that.state_map.digest = digest;
             resolve();
-          }, function(error){
-            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error, isError: true, isSuccess: false});
-          });
-        })
-      }).then(function(that){
-          new Promise(function(resolve, reject){
+            }, function(error){
+              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error, isError: true, isSuccess: false});
+            })
+        }).then(function(that){
+            return new Promise(function(resolve, reject){
             that.saveConfigData(that.config, that.state_map.digest, function(data){
               resolve();
             }, function(error){
@@ -102,6 +101,7 @@ var app = new Vue({
           //hat.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
             that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success', message: result, isError: false, isSuccess: true});
         });
+      })(this);
     },
     addMetric: function() {
       var number = 1;
