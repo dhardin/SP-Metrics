@@ -79,7 +79,7 @@ var app = new Vue({
     },
     generateMetrics: function(){},
     saveConfig: function(){
-          this.toggleSaving({issaving: false, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
+          this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
         new Promise(function(resolve, reject){
           that.getDigest(function(digest){
@@ -88,7 +88,7 @@ var app = new Vue({
             }, function(error){
               that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
             })
-        }).then(function(that){
+        }).then(function(result){
             return new Promise(function(resolve, reject){
             that.saveConfigData(that.config, that.state_map.digest, function(data){
               resolve();
