@@ -73,7 +73,9 @@ var app_data = {
         var site = this.site;
         var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (configData.id > 0 ? '/items('+configData.id+')' :  '/Items');
         var type = this.getItemTypeForListName(listName);
-        var data = {};
+        var data = {
+          		Title: window.location.pathname
+        };
         var headers = {
           "accept": "application/json;odata=verbose",
           "X-RequestDigest": digest,
