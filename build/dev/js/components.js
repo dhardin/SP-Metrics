@@ -196,13 +196,9 @@ Vue.component('metric', {
             type: Number,
             default: 0
         },
-        editing: {
-            type: Boolean,
-            default: false
-        },
-        id: {
-            type: Number,
-            default: 0
+        count: {
+          type: Number,
+          default: 0
         }
     },
     methods: {

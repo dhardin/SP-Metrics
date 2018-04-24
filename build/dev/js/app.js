@@ -43,11 +43,14 @@ var app = new Vue({
       lookupFieldName: '',
       metrics: {}
     },
-    metrics: []
+    metrics: {}
   },
   computed: {
     orderedMetrics: function(){
       return _.orderBy(this.config.metrics, 'sortOrder');
+    },
+    orderedDisplayMetrics: function(){
+      return _.orderBy(this.metrics, 'sortOrder');
     }
   },
   methods: {
@@ -77,6 +80,20 @@ var app = new Vue({
       options=  _.defaults(options, {issaving: false, message: '', messageTitle: '', isError: false, isSuccess: false, showMessage: false});
       Object.assign(this.state_map.saving, options);
     },
+    populateMetrics: function(data){
+      Vue.set(this, 'metrics', this.buildDataMap(data));
+    },
+    buildDataMap: function(data){
+     var dataMap = {};
+     var i;
+     var key = '';
+     for(i = 0; i < data.length; i ++){
+       key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][configOptions.fieldName];
+       dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : false};
+       dataMap[key].count = dataMap[key].count + 1;
+     }
+     return dataMap;
+   },
     generateMetrics: function(){},
     validateForm: function(){
       $(this.$refs.form).foundation("validateForm");
@@ -214,17 +231,22 @@ var app = new Vue({
         }, function(error){
           that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
         });
-      })/*.then(function(result){
+      }).then(function(result){
         return new Promise(function(resolve, reject){
-        that.getData(function(data){
-        resolve();
-      }, function(error){
-      that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-    });
-  });
-})*/.then(function(result){
-that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-});
-})(this);
-}
+          if(that.config.ID > 0){
+            that.getData(function(data){
+              that.populateMetrics(data);
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          } else {
+            resolve();
+          }
+        });
+      }).then(function(result){
+        that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+      });
+    })(this);
+  }
 });

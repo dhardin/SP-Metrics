@@ -62,6 +62,7 @@
   <script type="text/x-template" id="metric">
     <div v-bind:style="styleObj" class="metric card">
       <div class="card-section text-center">
+        <h6>{{count}}</h6>
         <h4>{{name}}</h4>
       </div>
     </div>
@@ -301,9 +302,7 @@
                 </div>
               </form>
             </div>
-            <!--<div id="metrics">
-            <metric @update="onMetricUpdate" v-for="metric in metrics" v-bind="metric"></metric>
-          </div>-->
+              <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics"></metric>
         </div>
         <div class="cell auto">
         </div>
