@@ -160,6 +160,10 @@
     cursor: not-allowed;
 }
 
+#loading .loader {
+  left: 50%;
+}
+
 #config-btns .button:disabled, #config-btns .button[disabled] {
   opacity: 1;
 }
