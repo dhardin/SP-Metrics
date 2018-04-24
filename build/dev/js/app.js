@@ -89,7 +89,7 @@ var app = new Vue({
      var i;
      var key = '';
      for(i = 0; i < data.length; i ++){
-       key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][configOptions.fieldName];
+       key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
        dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : false};
        dataMap[key].count = dataMap[key].count + 1;
      }
