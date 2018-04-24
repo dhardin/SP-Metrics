@@ -91,7 +91,7 @@ var app = new Vue({
         }).then(function(result){
             return new Promise(function(resolve, reject){
             that.saveConfigData(that.config, that.state_map.digest, function(data){
-              Object.assign(that.config, data);
+               _.assign(that.config, _.pick(data, _.keys(that.config)));
               resolve();
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
@@ -197,7 +197,7 @@ var app = new Vue({
       new Promise(function(resolve, reject){
         that.getConfigData(function(data){
           data[0].metrics = JSON.parse(data[0].metrics);
-          _.assign(that.config, data[0]);
+         _.assign(that.config, _.pick(data[0], _.keys(that.config)));
           resolve();
         }, function(error){
           that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
