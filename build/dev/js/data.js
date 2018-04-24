@@ -96,7 +96,8 @@ var app_data = {
         return axios({
           url: url,
           method: "post",
-          headers: headers
+          headers: headers,
+          data: data
         }).then(function(response) {
           var data = response.data.d.results;
           if (callback) {
