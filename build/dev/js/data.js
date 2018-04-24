@@ -91,6 +91,8 @@ var app_data = {
         data.colorMap = JSON.stringify(configData.colorMap);
         data.fontColorMap = JSON.stringify(configData.fontColorMap );
         data.styleMap = JSON.stringify(configData.styleMap);
+        //we don't need to pass in the id of the config data
+        delete data.id;
         return axios({
           url: url,
           method: "post",

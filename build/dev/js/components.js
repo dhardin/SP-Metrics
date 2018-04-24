@@ -165,7 +165,7 @@ Vue.component('metric-config', {
 
 Vue.component('loading', {
   template : '#loading-template',
-  props: ['message', 'canCancel', 'canClose'],
+  props: ['message', 'canCancel', 'canClose', 'showLoading'],
   methods: {
     cancel: function(e){
       this.$emit('cancel');

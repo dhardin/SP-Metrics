@@ -11,11 +11,16 @@ var app = new Vue({
     currentMetricIndex: -1,
     editingMetric: false,
     state_map: {
+      saving: {
+        issaving: false,
+        message: ''
+      },
       loading: {
         canCancel: false,
         canClose: false,
+        showLoading: true,
         message: '',
-        isloading: false
+        isloading: true
       }
     },
     config: {
@@ -64,9 +69,16 @@ var app = new Vue({
         Object.assign(this.currentMetric, JSON.parse(JSON.stringify(optionsArr[i])));
       }
     },
+    toggleSaving: function(options){
+      options=  _.defaults(options, {issaving: false, message: '', canCancel: false, canClose: false})
+      this.state_map.saving.issaving = options.issaving;
+      this.state_map.saving.message = options.message;
+      this.state_map.saving.canCancel = options.canCancel;
+      this.state_map.saving.canClose = options.canClose;
+    },
     generateMetrics: function(){},
     saveConfig: function(){
-      that.toggleLoading({isloading: true, message: 'Saving config data', canCancel:false, canClose: false});
+      this.toggleLoading({isloading: true, message: 'Saving config data', canCancel:false, canClose: false});
       (function(that){
         new Promise(function(resolve, reject){
           that.getDigest(function(digest){
@@ -103,11 +115,14 @@ var app = new Vue({
       var i;
       var updatedMetric;
       this.currentMetric.status.isSaving = true;
+      var prevSettings;
       if (this.config.metrics.hasOwnProperty(oldName)) {
         //check to see if name changed
         if (oldName != options.name && !this.config.metrics.hasOwnProperty(options.name)) {
+          prevSettings = JSON.parse(JSON.stringify(this.config.metrics[oldName]));
+          Object.assign(prevSettings, options);
           Vue.delete(this.config.metrics, oldName);
-          Vue.set(this.config.metrics, options.name, options);
+          Vue.set(this.config.metrics, options.name, prevSettings);
           this.setCurrentMetric([this.config.metrics[options.name], { status: { errorCode: false, message: 'Added new name to metrics.', isSaving: false } }]);
         } else if (oldName != options.name && this.config.metrics.hasOwnProperty(options.name)) {
           this.setCurrentMetric([{ status: { errorCode: 0, message: 'Name already exists.', isSaving: false }}]);
@@ -160,11 +175,12 @@ var app = new Vue({
       currentMetric.sortOrder = tempOrder;
     },
     toggleLoading: function(options){
-      options=  _.defaults(options, {isLoading: false, message: '', canCancel: false, canClose: false})
+      options=  _.defaults(options, {isLoading: false, showLoading: false, message: '', canCancel: false, canClose: false})
       this.state_map.loading.isloading = options.isloading;
       this.state_map.loading.message = options.message;
       this.state_map.loading.canCancel = options.canCancel;
       this.state_map.loading.canClose = options.canClose;
+      this.state_map.loading.showLoading = options.showLoading;
       if(!options.isLoading){
         $(document).foundation();
       }
@@ -174,7 +190,7 @@ var app = new Vue({
     if (!window.location.origin) {
       window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
     }
-    this.toggleLoading({isloading: true, message: "Loading", canCancel:true, canClose: false});
+    this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
     (function(that){
       new Promise(function(resolve, reject){

@@ -29,6 +29,7 @@
           <div id="loading-container" class="cell small-12 medium-10">
     <div class="callout large secondary">
       <h2>{{message}}</h2>
+      <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
       <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
       <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
     </div>
@@ -108,7 +109,7 @@
                             <div class="grid-x grid-padding-x">
                                 <div class="medium-6 cell">
                                     <label>List Name
-                                        <input type="text" placeholder="List Name" v-model="config.listName">
+                                        <input type="text" placeholder="List Name" v-model="config.listName" :disabled="state_map.saving.issaving"/>
                                         <blockquote>
                                             The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name.
                                         </blockquote>
@@ -116,7 +117,7 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <label>Site Relative URL
-                                        <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl">
+                                        <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl" :disabled="state_map.saving.issaving"/>
                                         <blockquote>
                                             URL of site where the list is stored.
                                         </blockquote>
@@ -124,7 +125,7 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <label>Field Name
-                                        <input type="text" placeholder="Field Name" v-model="config.fieldName">
+                                        <input type="text" placeholder="Field Name" v-model="config.fieldName" :disabled="state_map.saving.issaving"/>
                                         <blockquote>
                                             The field name which will be used to generate metrics on. This should be the internal name of the field, not display name.
                                         </blockquote>
@@ -132,7 +133,7 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <label>Column Width
-                                        <select v-model="config.columnWidth">
+                                        <select v-model="config.columnWidth" :disabled="state_map.saving.issaving">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>
@@ -152,8 +153,8 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <div class="switch-wrapper">
-                                        <div class="switch large">
-                                            <input class="switch-input" id="hasDynamicWidth" type="checkbox" name="hasDynamicWidth" v-model="config.hasDynamicWidth">
+                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                                            <input class="switch-input" id="hasDynamicWidth" type="checkbox" name="hasDynamicWidth" v-model="config.hasDynamicWidth" :disabled="state_map.saving.issaving"/>
                                             <label class="switch-paddle" for="hasDynamicWidth">
                                                 <span class="switch-active" aria-hidden="true">Yes</span>
                                                 <span class="switch-inactive" aria-hidden="true">No</span>
@@ -167,8 +168,8 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <div class="switch-wrapper">
-                                        <div class="switch large">
-                                            <input class="switch-input" id="hasFiltering" type="checkbox" name="hasFiltering" v-model="config.hasFiltering" />
+                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                                            <input class="switch-input" id="hasFiltering" type="checkbox" name="hasFiltering" v-model="config.hasFiltering" :disabled="state_map.saving.issaving"/>
                                             <label class="switch-paddle" for="hasFiltering">
                                                 <span class="switch-active" aria-hidden="true">Yes</span>
                                                 <span class="switch-inactive" aria-hidden="true">No</span>
@@ -181,7 +182,7 @@
                                     </blockquote>
                                     <div class="callout secondary" v-show="config.hasFiltering">
                                         <label>Filter View Name
-                                            <input type="text" placeholder="Filter View Name" v-model="config.filterViewName">
+                                            <input type="text" placeholder="Filter View Name" v-model="config.filterViewName" :disabled="state_map.saving.issaving"/>
                                             <blockquote>
                                                 The list view for the filter to be applied to.
                                             </blockquote>
@@ -190,8 +191,8 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <div class="switch-wrapper">
-                                        <div class="switch large">
-                                            <input class="switch-input" id="hasFilterDetection" type="checkbox" name="hasFilterDetection" v-model="config.hasFilterDetection">
+                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                                            <input class="switch-input" id="hasFilterDetection" type="checkbox" name="hasFilterDetection" v-model="config.hasFilterDetection" :disabled="state_map.saving.issaving"/>
                                             <label class="switch-paddle" for="hasFilterDetection">
                                                 <span class="switch-active" aria-hidden="true">Yes</span>
                                                 <span class="switch-inactive" aria-hidden="true">No</span>
@@ -205,8 +206,8 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <div class="switch-wrapper">
-                                        <div class="switch large">
-                                            <input class="switch-input" id="isDocumentLibrary" type="checkbox" name="isDocumentLibrary" v-model="config.isDocumentLibrary">
+                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                                            <input class="switch-input" id="isDocumentLibrary" type="checkbox" name="isDocumentLibrary" v-model="config.isDocumentLibrary" :disabled="state_map.saving.issaving"/>
                                             <label class="switch-paddle" for="isDocumentLibrary">
                                                 <span class="switch-active" aria-hidden="true">Yes</span>
                                                 <span class="switch-inactive" aria-hidden="true">No</span>
@@ -220,8 +221,8 @@
                                     <div class="callout secondary" v-show="config.isDocumentLibrary">
                                         <p>Document Type</p>
                                         <div class="mobile-app-toggle">
-                                            <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 0 }" v-on:click="config.fileObjectType = 0">File</button>
-                                            <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 1}" v-on:click="config.fileObjectType = 1">Folder</button>
+                                            <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 0 }" v-on:click="config.fileObjectType = 0" :disabled="state_map.saving.issaving">File</button>
+                                            <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 1}" v-on:click="config.fileObjectType = 1" :disabled="state_map.saving.issaving">Folder</button>
                                         </div>
                                         <blockquote>
                                             Select the type of object to perform queries against.
@@ -230,8 +231,8 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <div class="switch-wrapper">
-                                        <div class="switch large">
-                                            <input class="switch-input" id="isLookupField" type="checkbox" name="isLookupField" v-model="config.isLookupField">
+                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                                            <input class="switch-input" id="isLookupField" type="checkbox" name="isLookupField" v-model="config.isLookupField" :disabled="state_map.saving.issaving"/>
                                             <label class="switch-paddle" for="isLookupField">
                                                 <span class="switch-active" aria-hidden="true">Yes</span>
                                                 <span class="switch-inactive" aria-hidden="true">No</span>
@@ -244,7 +245,7 @@
                                     </blockquote>
                                     <div class="callout secondary" v-show="config.isLookupField">
                                         <label>Lookup Field Name
-                                            <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName">
+                                            <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving"/>
                                             <blockquote>
                                                 Name of the lookup field&#39;s originating field name in the lookup list.
                                             </blockquote>
@@ -266,19 +267,17 @@
                                     </blockquote>
                                     <div id="metrics-config">
                                         <metric-config @update="onMetricUpdate" @decreaseorder="onDecreaseOrder" @increaseorder="onIncreaseOrder" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, index) in orderedMetrics" v-bind="metric" :index="index" :islast="(index == orderedMetrics.length - 1)"></metric-config>
-                                        <a v-on:click="addMetric">
-                                            <div class="card metric" id="addMetricBtn">
-                                                <div class="card-section text-center">
+                                        <button type="button" class="button card metric success text-center" v-on:click="addMetric" id="addMetricBtn" :disabled="state_map.saving.issaving">
+                                                <div class="card-section">
                                                     <h4>+ Add</h4>
                                                 </div>
-                                            </div>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="expanded large button-group stacked-for-small">
-                                <a class="button" v-on:click="generateMetrics">Generate Metrics</a>
-                                <a class="button" v-on:click="saveConfig">Save Config</a>
+                            <div class="expanded large button-group stacked-for-small" id="config-btns">
+                                <a class="button" v-on:click="generateMetrics" :disabled="state_map.saving.issaving">Generate Metrics</a>
+                                <a class="button" v-on:click="saveConfig" :disabled="state_map.saving.issaving"><span class="square" v-if="state_map.saving.issaving"></span>Save Config</a>
                             </div>
                         </form>
                     </div>
