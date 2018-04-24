@@ -72,7 +72,7 @@ var app_data = {
         var listName = this.listName;
         var site = this.site;
         var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (configData.id > 0 ? '/items('+configData.id+')' :  '/Items');
-        var type = getItemTypeForListName(listName);
+        var type = this.getItemTypeForListName(listName);
         var data = {};
         var headers = {
           "accept": "application/json;odata=verbose",
@@ -87,10 +87,7 @@ var app_data = {
           });
         }
         _.extend(data, configOptions, { '__metadata': { 'type': type } });
-        data.sortOrder = JSON.stringify(configData.sortOrder);
-        data.colorMap = JSON.stringify(configData.colorMap);
-        data.fontColorMap = JSON.stringify(configData.fontColorMap );
-        data.styleMap = JSON.stringify(configData.styleMap);
+        data.metrics = JSON.stringify(configData.metrics);
         //we don't need to pass in the id of the config data
         delete data.id;
         return axios({
