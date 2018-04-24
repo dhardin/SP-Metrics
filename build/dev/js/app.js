@@ -197,7 +197,7 @@ var app = new Vue({
       new Promise(function(resolve, reject){
         that.getConfigData(function(data){
           data[0].metrics = JSON.parse(data[0].metrics);
-          Object.assign(that.config, data[0]);
+          _.assign(that.config, data[0]);
           resolve();
         }, function(error){
           that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
