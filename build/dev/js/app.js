@@ -86,7 +86,7 @@ var app = new Vue({
             that.state_map.digest = digest;
             resolve();
             }, function(error){
-              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error, isError: true, isSuccess: false});
+              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
             })
         }).then(function(that){
             return new Promise(function(resolve, reject){
@@ -94,7 +94,7 @@ var app = new Vue({
               resolve();
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-                  that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error, isError: true, isSuccess: false});
+                  that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
             });
           })
         }).then(function(result){

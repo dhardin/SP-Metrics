@@ -116,8 +116,7 @@ var app_data = {
             "Accept": "application/json; odata=verbose"
           },
         }).then(function(response) {
-          var data = response.data.d.results;
-          var digest = data.d.GetContextWebInformation.FormDigestValue;
+          var digest = response.data.d.GetContextWebInformation.FormDigestValue;
           if(callback){
             callback(digest);
           }
