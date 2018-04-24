@@ -82,7 +82,7 @@ var app_data = {
           "content-Type": "application/json;odata=verbose"
         };
 
-        if(configData.id > 0){
+        if(configData.ID > 0){
           _.extend(headers, {
             "IF-MATCH": "*",
             "X-HTTP-Method": "MERGE"
@@ -92,7 +92,7 @@ var app_data = {
         _.extend(data, configData, { '__metadata': { 'type': type } });
         data.metrics = JSON.stringify(configData.metrics);
         //we don't need to pass in the id of the config data
-        delete data.id;
+        delete data.ID;
         return axios({
           url: url,
           method: "post",

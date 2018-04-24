@@ -160,7 +160,7 @@
     cursor: not-allowed;
 }
 
-#loading .loader {
+#loading .loader, #loading-container .loader{
   left: 50%;
 }
 

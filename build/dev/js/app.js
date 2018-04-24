@@ -28,7 +28,7 @@ var app = new Vue({
       }
     },
     config: {
-      id: 0,
+      ID: 0,
       hasFiltering: false,
       isDocumentLibrary: false,
       isLookupField: false,
@@ -91,9 +91,7 @@ var app = new Vue({
         }).then(function(result){
             return new Promise(function(resolve, reject){
             that.saveConfigData(that.config, that.state_map.digest, function(data){
-              if(that.config.id == 0){
-                that.config.id = data.ID;//update returned id
-              }
+              Object.assign(that.config, data);
               resolve();
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
@@ -198,6 +196,7 @@ var app = new Vue({
     (function(that){
       new Promise(function(resolve, reject){
         that.getConfigData(function(data){
+          Object.assign(that.config, data[0]);
           resolve();
         }, function(error){
           that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
