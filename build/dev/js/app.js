@@ -79,7 +79,7 @@ var app = new Vue({
     },
     generateMetrics: function(){},
     saveConfig: function(){
-          that.toggleSaving({issaving: false, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
+          this.toggleSaving({issaving: false, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
         new Promise(function(resolve, reject){
           that.getDigest(function(digest){
