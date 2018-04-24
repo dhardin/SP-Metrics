@@ -113,30 +113,33 @@
         <div class="cell small-12 medium-10">
           <edit-metric @save="onMetricUpdate" v-bind="currentMetric" ref="modal"></edit-metric>
           <div v-if="editing">
-            <form class="callout">
+            <form class="callout" data-abide="ajax" ref="form">
               <span class="label float-right success" v-if="config.ID > 0">Config Data Loaded</span>
               <span class="label float-right warning" v-else>No Data Loaded</span>
               <h3 class="text-left">Metrics Configuration</h3>
               <div class="grid-x grid-padding-x">
                 <div class="medium-6 cell">
-                  <label>List Name
-                    <input type="text" placeholder="List Name" v-model="config.listName" :disabled="state_map.saving.issaving"/>
+                  <label>List Name <small>required</small>
+                    <input type="text" placeholder="List Name" v-model="config.listName" :disabled="state_map.saving.issaving" required pattern="[a-zA-Z]+"/>
+                        <small class="error">List Name is required.</small>
                     <blockquote>
                       The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name.
                     </blockquote>
                   </label>
                 </div>
                 <div class="medium-6 cell">
-                  <label>Site Relative URL
-                    <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl" :disabled="state_map.saving.issaving"/>
+                  <label>Site Relative URL <small>required</small>
+                    <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl" :disabled="state_map.saving.issaving" required pattern="[a-zA-Z]+"/>
+                        <small class="error">Site Relative URL is required.</small>
                     <blockquote>
                       URL of site where the list is stored.
                     </blockquote>
                   </label>
                 </div>
                 <div class="medium-6 cell">
-                  <label>Field Name
-                    <input type="text" placeholder="Field Name" v-model="config.fieldName" :disabled="state_map.saving.issaving"/>
+                  <label>Field Name <small>required</small>
+                    <input type="text" placeholder="Field Name" v-model="config.fieldName" :disabled="state_map.saving.issaving" required pattern="[a-zA-Z]+"/>
+                        <small class="error">Field Name is required.</small>
                     <blockquote>
                       The field name which will be used to generate metrics on. This should be the internal name of the field, not display name.
                     </blockquote>
@@ -192,8 +195,9 @@
                     Clicking on metric's totals will navigate to the list filtered by the value clicked on.
                   </blockquote>
                   <div class="callout secondary" v-show="config.hasFiltering">
-                    <label>Filter View Name
-                      <input type="text" placeholder="Filter View Name" v-model="config.filterViewName" :disabled="state_map.saving.issaving"/>
+                    <label>Filter View Name <small>required</small>
+                      <input type="text" placeholder="Filter View Name" v-model="config.filterViewName" :disabled="state_map.saving.issaving"  :required="config.hasFiltering" pattern="[a-zA-Z]+"/>
+                          <small class="error">Filter View Name is required.</small>
                       <blockquote>
                         The list view for the filter to be applied to.
                       </blockquote>
@@ -255,8 +259,9 @@
                     Specify whether or not the field to produce metrics on is a lookup field.
                   </blockquote>
                   <div class="callout secondary" v-show="config.isLookupField">
-                    <label>Lookup Field Name
-                      <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving"/>
+                    <label>Lookup Field Name <small>required</small>
+                      <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving" :required="config.isLookupField" pattern="[a-zA-Z]+"/>
+                      <small class="error">Lookup Field Name is required.</small>
                       <blockquote>
                         Name of the lookup field&#39;s originating field name in the lookup list.
                       </blockquote>
@@ -288,7 +293,7 @@
                 </div>
                 <div class="expanded large button-group stacked-for-small" id="config-btns">
                   <a class="button" v-on:click="generateMetrics" :disabled="state_map.saving.issaving">Generate Metrics</a>
-                  <a class="button" v-on:click="saveConfig" :disabled="state_map.saving.issaving"><span class="square" v-if="state_map.saving.issaving"></span><span v-if="!state_map.saving.issaving">Save Config</span><span v-else>Saving...</span></a>
+                  <a class="button" v-on:click="validateForm" :disabled="state_map.saving.issaving"><span class="square" v-if="state_map.saving.issaving"></span><span v-if="!state_map.saving.issaving">Save Config</span><span v-else>Saving...</span></a>
                 </div>
                 <div class="callout"  v-bind:class="{ alert: state_map.saving.isError, success: state_map.saving.isSuccess }" v-if="!state_map.saving.issaving && state_map.saving.showMessage">
                   <h5>{{state_map.saving.messageTitle}}</h5>

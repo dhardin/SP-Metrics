@@ -78,29 +78,38 @@ var app = new Vue({
       Object.assign(this.state_map.saving, options);
     },
     generateMetrics: function(){},
+    validateForm: function(){
+      (function(that){
+        $(that.$refs.form).on("valid.zf.abide", function(e,target) {
+          that.saveConfig();
+        });
+      })(this);
+      $(this.$refs.form).foundation("validateForm");
+    },
     saveConfig: function(){
-          this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
+
+      this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
         new Promise(function(resolve, reject){
           that.getDigest(function(digest){
             that.state_map.digest = digest;
             resolve();
-            }, function(error){
-              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
-            })
+          }, function(error){
+            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
+          })
         }).then(function(result){
-            return new Promise(function(resolve, reject){
+          return new Promise(function(resolve, reject){
             that.saveConfigData(that.config, that.state_map.digest, function(data){
-               _.assign(that.config, _.pick(data, _.keys(that.config)));
+              _.assign(that.config, _.pick(data, _.keys(that.config)));
               resolve();
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-                  that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
+              that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
             });
           })
         }).then(function(result){
           //hat.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success', message: result, isError: false, isSuccess: true});
+          that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success', message: result, isError: false, isSuccess: true});
         });
       })(this);
     },
@@ -186,10 +195,14 @@ var app = new Vue({
       }
     }
   },
+  mounted: function(){
+
+  },
   created: function() {
     if (!window.location.origin) {
       window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
     }
+
 
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
@@ -197,22 +210,22 @@ var app = new Vue({
       new Promise(function(resolve, reject){
         that.getConfigData(function(data){
           data[0].metrics = JSON.parse(data[0].metrics);
-         _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+          _.assign(that.config, _.pick(data[0], _.keys(that.config)));
           resolve();
         }, function(error){
           that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
         });
       })/*.then(function(result){
         return new Promise(function(resolve, reject){
-          that.getData(function(data){
-            resolve();
-          }, function(error){
-            that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-          });
-        });
-      })*/.then(function(result){
-        that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-      });
-    })(this);
-  }
+        that.getData(function(data){
+        resolve();
+      }, function(error){
+      that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+    });
+  });
+})*/.then(function(result){
+that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+});
+})(this);
+}
 });
