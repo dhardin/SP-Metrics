@@ -28,7 +28,7 @@
           </div>
           <div id="loading-container" class="cell small-12 medium-10">
     <div class="callout large secondary">
-      <h2>{{message}}</h2>
+      <h2 class="text-center">{{message}}</h2>
       <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
       <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
       <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="medium-6 cell">
                                     <label>Column Width
-                                        <select v-model="config.columnWidth" :disabled="state_map.saving.issaving">
+                                        <select v-model="config.minColumnWidth" :disabled="state_map.saving.issaving">
                                             <option value="1">1</option>
                                             <option value="2">2</option>
                                             <option value="3">3</option>

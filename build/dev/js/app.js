@@ -35,7 +35,7 @@ var app = new Vue({
       hasDynamicWidth: false,
       hasFilterDetection: false,
       fileObjectType: 0,
-      columnWidth: 1,
+      minColumnWidth: 1,
       listName: '',
       siteUrl: '',
       fieldName: '',
