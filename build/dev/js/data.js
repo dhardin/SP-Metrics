@@ -99,7 +99,7 @@ var app_data = {
           headers: headers,
           data: data
         }).then(function(response) {
-          var data = response.data.d.results;
+          var data = response.data.d;
           if (callback) {
             callback(data);
           }

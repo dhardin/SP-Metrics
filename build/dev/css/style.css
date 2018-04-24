@@ -212,6 +212,9 @@
   background-color: #555;
 }
 
+[v-cloak] {
+   display: none;
+ }
 
 .loader:after{
 	content: "";

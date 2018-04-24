@@ -91,6 +91,9 @@ var app = new Vue({
         }).then(function(result){
             return new Promise(function(resolve, reject){
             that.saveConfigData(that.config, that.state_map.digest, function(data){
+              if(that.config.id == 0){
+                that.config.id = data.ID;//update returned id
+              }
               resolve();
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
@@ -189,6 +192,7 @@ var app = new Vue({
     if (!window.location.origin) {
       window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
     }
+
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
     (function(that){

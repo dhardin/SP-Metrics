@@ -1,305 +1,318 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Dustin Hardin" />
-    <title>Metrics</title>
-    <link href="lib/foundation/foundation.css" rel="stylesheet" />
-    <link href="lib/Spectrum/spectrum.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
-    <script type="text/javascript" src="lib/es5-shim.js"></script>
-    <script type="text/javascript" src="lib/es6-shim.js"></script>
-    <script type="text/javascript" src="lib/vue.js"></script>
-    <script type="text/javascript" src="lib/axios.min.js"></script>
-    <script type="text/javascript" src="lib/jquery-2.1.0.js"></script>
-    <script type="text/javascript" src="lib/foundation/what-input.js"></script>
-    <script type="text/javascript" src="lib/foundation/foundation.js"></script>
-    <script type="text/javascript" src="lib/Spectrum/spectrum.js"></script>
-    <script type="text/javascript" src="lib/lodash.js"></script>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Dustin Hardin" />
+  <title>Metrics</title>
+  <link href="lib/foundation/foundation.css" rel="stylesheet" />
+  <link href="lib/Spectrum/spectrum.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <script type="text/javascript" src="lib/es5-shim.js"></script>
+  <script type="text/javascript" src="lib/es6-shim.js"></script>
+  <script type="text/javascript" src="lib/vue.js"></script>
+  <script type="text/javascript" src="lib/axios.min.js"></script>
+  <script type="text/javascript" src="lib/jquery-2.1.0.js"></script>
+  <script type="text/javascript" src="lib/foundation/what-input.js"></script>
+  <script type="text/javascript" src="lib/foundation/foundation.js"></script>
+  <script type="text/javascript" src="lib/Spectrum/spectrum.js"></script>
+  <script type="text/javascript" src="lib/lodash.js"></script>
 </head>
 
 <body>
   <script type="text/template" id="loading-template">
-      <div  id="loading" class="grid-x grid-margin-x grid-padding-x">
-          <div class="cell auto">
-          </div>
-          <div id="loading-container" class="cell small-12 medium-10">
-    <div class="callout large secondary">
-      <h2 class="text-center">{{message}}</h2>
-      <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
-      <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
-      <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
+    <div  id="loading" class="grid-x grid-margin-x grid-padding-x">
+      <div class="cell auto">
+      </div>
+      <div id="loading-container" class="cell small-12 medium-10">
+        <div class="callout large secondary">
+          <h2 class="text-center">{{message}}</h2>
+          <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
+          <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
+          <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
+        </div>
+      </div>
+      <div class="cell auto">
+      </div>
     </div>
-  </div>
-  <div class="cell auto">
-  </div>
-</div>
   </script>
-    <script type="text/x-template" id="metric-config">
-        <div v-bind:style="styleObj" class="metric card">
-          <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
-            <span aria-hidden="true">&times;</span>
-          </button>
-            <button type="button" class="button edit" v-on:click="edit" >Edit</button>
-              <div class="card-section text-center">
-            <h4>{{name}}</h4>
-          </div>
-          <button class="button sortBtn decreaseSort" href="#" type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
-         <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
-              <path d="M1 16l15 15v-9h16v-12h-16v-9z"></path>
-          </svg>
-        </button>
-            <button class="button sortBtn increaseSort" href="#" type="button" v-on:click="increaseSortOrder" v-if="!islast">
-          <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
+  <script type="text/x-template" id="metric-config">
+    <div v-bind:style="styleObj" class="metric card">
+      <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <button type="button" class="button edit" v-on:click="edit" >Edit</button>
+      <div class="card-section text-center">
+        <h4>{{name}}</h4>
+      </div>
+      <button class="button sortBtn decreaseSort" href="#" type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
+        <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
+          <path d="M1 16l15 15v-9h16v-12h-16v-9z"></path>
+        </svg>
+      </button>
+      <button class="button sortBtn increaseSort" href="#" type="button" v-on:click="increaseSortOrder" v-if="!islast">
+        <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
           <path d="M31 16l-15-15v9h-16v12h16v9z"></path>
         </svg>
-        </button>
+      </button>
+    </div>
+  </script>
+  <script type="text/x-template" id="metric">
+    <div v-bind:style="styleObj" class="metric card">
+      <div class="card-section text-center">
+        <h4>{{name}}</h4>
+      </div>
+    </div>
+  </script>
+  <script type="text/x-template" id="edit-metric">
+    <div class="reveal" id="exampleModal1" data-reveal>
+      <form class="callout">
+        <label>Name
+          <input type="text" placeholder="Name" v-model="editName" />
+        </label>
+        <label>Background Color
+          <a>
+            <div class="card color-swatch" v-bind:style="{backgroundColor: editStyleObj.backgroundColor}" ref="backgroundColor">
+            </div>
+          </a>
+        </label>
+        <label>Font Color
+          <a>
+            <div class="card color-swatch" v-bind:style="{backgroundColor: editStyleObj.color}" ref="fontColor">
+            </div>
+          </a>
+        </label>
+        <button type="button" class="button" v-on:click="save" data-open="exampleModal1">Save</button>
+        <div class="callout small" v-bind:class="{ alert: hasError, success: !hasError && status.message.length > 0}" v-if="!status.isSaving && (hasError || status.message.length > 0)">
+          <h5>{{ hasError ? 'Error!' : 'Success!'}}</h5>
+          <p>{{status.message}}</p>
         </div>
-    </script>
-    <script type="text/x-template" id="metric">
-        <div v-bind:style="styleObj" class="metric card">
-              <div class="card-section text-center">
-                <h4>{{name}}</h4>
+      </form>
+    </div>
+  </script>
+  <div id="app">
+    <div class="grid-container">
+      <div  id="appLoading" class="grid-x grid-margin-x grid-padding-x" v-if="false">
+        <div class="cell auto">
+        </div>
+        <div id="loading-container" class="cell small-12 medium-10">
+          <div class="callout large secondary">
+            <h2 class="text-center">Loading...</h2>
+            <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
+            <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
+            <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
           </div>
         </div>
-    </script>
-    <script type="text/x-template" id="edit-metric">
-        <div class="reveal" id="exampleModal1" data-reveal>
+        <div class="cell auto">
+        </div>
+      </div>
+      <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" @cancel="onCancelLoading"></loading>
+      <div class="grid-x grid-margin-x grid-padding-x" v-cloak v-show="!state_map.loading.isloading">
+        <div class="cell auto">
+        </div>
+        <div class="cell small-12 medium-10">
+          <edit-metric @save="onMetricUpdate" v-bind="currentMetric" ref="modal"></edit-metric>
+          <div v-if="editing">
             <form class="callout">
-                <label>Name
-                    <input type="text" placeholder="Name" v-model="editName" />
-                </label>
-                <label>Background Color
-                    <a>
-                        <div class="card color-swatch" v-bind:style="{backgroundColor: editStyleObj.backgroundColor}" ref="backgroundColor">
-                        </div>
-                    </a>
-                </label>
-                 <label>Font Color
-                    <a>
-                        <div class="card color-swatch" v-bind:style="{backgroundColor: editStyleObj.color}" ref="fontColor">
-                        </div>
-                    </a>
-                </label>
-                <button type="button" class="button" v-on:click="save" data-open="exampleModal1">Save</button>
-                <div class="callout small" v-bind:class="{ alert: hasError, success: !hasError && status.message.length > 0}" v-if="!status.isSaving && (hasError || status.message.length > 0)">
-                    <h5>{{ hasError ? 'Error!' : 'Success!'}}</h5>
-                    <p>{{status.message}}</p>
+              <span class="label warning float-right success" v-if="config.id > 0">Config Data Loaded</span>
+              <span class="label warning float-right warning" v-else>No Data Loaded</span>
+              <h3 class="text-left">Metrics Configuration</h3>
+              <div class="grid-x grid-padding-x">
+                <div class="medium-6 cell">
+                  <label>List Name
+                    <input type="text" placeholder="List Name" v-model="config.listName" :disabled="state_map.saving.issaving"/>
+                    <blockquote>
+                      The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name.
+                    </blockquote>
+                  </label>
                 </div>
-            </form>
-        </div>
-    </script>
-    <div id="app">
-
-        <div class="grid-container">
-            <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" @cancel="onCancelLoading"></loading>
-            <div class="grid-x grid-margin-x grid-padding-x" v-show="!state_map.loading.isloading">
-                <div class="cell auto">
+                <div class="medium-6 cell">
+                  <label>Site Relative URL
+                    <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl" :disabled="state_map.saving.issaving"/>
+                    <blockquote>
+                      URL of site where the list is stored.
+                    </blockquote>
+                  </label>
                 </div>
-                <div class="cell small-12 medium-10">
-                    <edit-metric @save="onMetricUpdate" v-bind="currentMetric" ref="modal"></edit-metric>
-                    <div v-if="editing">
-                        <form class="callout">
-                            <span class="label warning float-right success" v-if="config.id > 0">Config Data Loaded</span>
-                            <span class="label warning float-right warning" v-else>No Data Loaded</span>
-                            <h3 class="text-left">Metrics Configuration</h3>
-                            <div class="grid-x grid-padding-x">
-                                <div class="medium-6 cell">
-                                    <label>List Name
-                                        <input type="text" placeholder="List Name" v-model="config.listName" :disabled="state_map.saving.issaving"/>
-                                        <blockquote>
-                                            The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name.
-                                        </blockquote>
-                                    </label>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <label>Site Relative URL
-                                        <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl" :disabled="state_map.saving.issaving"/>
-                                        <blockquote>
-                                            URL of site where the list is stored.
-                                        </blockquote>
-                                    </label>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <label>Field Name
-                                        <input type="text" placeholder="Field Name" v-model="config.fieldName" :disabled="state_map.saving.issaving"/>
-                                        <blockquote>
-                                            The field name which will be used to generate metrics on. This should be the internal name of the field, not display name.
-                                        </blockquote>
-                                    </label>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <label>Column Width
-                                        <select v-model="config.minColumnWidth" :disabled="state_map.saving.issaving">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="4">6</option>
-                                            <option value="4">12</option>
-                                        </select>
-                                        <blockquote>
-                                            Grid columns are created by specifying a number that is a factor of
-                                            <kbd>12</kbd> available columns you wish to span. For example, column width of
-                                            <kbd>3</kbd> will create
-                                            <kbd>4</kbd> items in that row. I.e.,
-                                            <kbd>12 / 3 = 4</kbd>, so all availble column widths are factors of
-                                            <kbd>12</kbd>.
-                                        </blockquote>
-                                    </label>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <div class="switch-wrapper">
-                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                                            <input class="switch-input" id="hasDynamicWidth" type="checkbox" name="hasDynamicWidth" v-model="config.hasDynamicWidth" :disabled="state_map.saving.issaving"/>
-                                            <label class="switch-paddle" for="hasDynamicWidth">
-                                                <span class="switch-active" aria-hidden="true">Yes</span>
-                                                <span class="switch-inactive" aria-hidden="true">No</span>
-                                            </label>
-                                        </div>
-                                        <span class="switch-label"> Dynamic Width <small class="text-uppercase">Experimental</small></span>
-                                    </div>
-                                    <blockquote>
-                                        Dynamic Width will procedurally select an appropriate width for column widths if remaining columns in the row do not evenly fill up leftover space.
-                                    </blockquote>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <div class="switch-wrapper">
-                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                                            <input class="switch-input" id="hasFiltering" type="checkbox" name="hasFiltering" v-model="config.hasFiltering" :disabled="state_map.saving.issaving"/>
-                                            <label class="switch-paddle" for="hasFiltering">
-                                                <span class="switch-active" aria-hidden="true">Yes</span>
-                                                <span class="switch-inactive" aria-hidden="true">No</span>
-                                            </label>
-                                        </div>
-                                        <span class="switch-label"> Enable Filter Navigation</span>
-                                    </div>
-                                    <blockquote>
-                                        Clicking on metric's totals will navigate to the list filtered by the value clicked on.
-                                    </blockquote>
-                                    <div class="callout secondary" v-show="config.hasFiltering">
-                                        <label>Filter View Name
-                                            <input type="text" placeholder="Filter View Name" v-model="config.filterViewName" :disabled="state_map.saving.issaving"/>
-                                            <blockquote>
-                                                The list view for the filter to be applied to.
-                                            </blockquote>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <div class="switch-wrapper">
-                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                                            <input class="switch-input" id="hasFilterDetection" type="checkbox" name="hasFilterDetection" v-model="config.hasFilterDetection" :disabled="state_map.saving.issaving"/>
-                                            <label class="switch-paddle" for="hasFilterDetection">
-                                                <span class="switch-active" aria-hidden="true">Yes</span>
-                                                <span class="switch-inactive" aria-hidden="true">No</span>
-                                            </label>
-                                        </div>
-                                        <span class="switch-label"> Enable Filter Detection</span>
-                                    </div>
-                                    <blockquote>
-                                        Metrics will be filtered based on query string filters being applied to the page.
-                                    </blockquote>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <div class="switch-wrapper">
-                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                                            <input class="switch-input" id="isDocumentLibrary" type="checkbox" name="isDocumentLibrary" v-model="config.isDocumentLibrary" :disabled="state_map.saving.issaving"/>
-                                            <label class="switch-paddle" for="isDocumentLibrary">
-                                                <span class="switch-active" aria-hidden="true">Yes</span>
-                                                <span class="switch-inactive" aria-hidden="true">No</span>
-                                            </label>
-                                        </div>
-                                        <span class="switch-label"> Document Library</span>
-                                    </div>
-                                    <blockquote>
-                                        Determines if list is a document library or not. This will help determine the types of queries and filters to apply on web service calls.
-                                    </blockquote>
-                                    <div class="callout secondary" v-show="config.isDocumentLibrary">
-                                        <p>Document Type</p>
-                                        <div class="mobile-app-toggle">
-                                            <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 0 }" v-on:click="config.fileObjectType = 0" :disabled="state_map.saving.issaving">File</button>
-                                            <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 1}" v-on:click="config.fileObjectType = 1" :disabled="state_map.saving.issaving">Folder</button>
-                                        </div>
-                                        <blockquote>
-                                            Select the type of object to perform queries against.
-                                        </blockquote>
-                                    </div>
-                                </div>
-                                <div class="medium-6 cell">
-                                    <div class="switch-wrapper">
-                                        <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                                            <input class="switch-input" id="isLookupField" type="checkbox" name="isLookupField" v-model="config.isLookupField" :disabled="state_map.saving.issaving"/>
-                                            <label class="switch-paddle" for="isLookupField">
-                                                <span class="switch-active" aria-hidden="true">Yes</span>
-                                                <span class="switch-inactive" aria-hidden="true">No</span>
-                                            </label>
-                                        </div>
-                                        <span class="switch-label"> Lookup Field</span>
-                                    </div>
-                                    <blockquote>
-                                        Specify whether or not the field to produce metrics on is a lookup field.
-                                    </blockquote>
-                                    <div class="callout secondary" v-show="config.isLookupField">
-                                        <label>Lookup Field Name
-                                            <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving"/>
-                                            <blockquote>
-                                                Name of the lookup field&#39;s originating field name in the lookup list.
-                                            </blockquote>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="cell medium-12" v-show="configFetched">
-                                    <p>Order/Color</p>
-                                    <blockquote>
-                                        Order and color of the metrics displayed. Click on
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" version="1.1">
-                                            <path d="M 9.609 12 h 4.781 l -2.391 -6.328 Z M 11.016 3 h 1.969 l 5.484 14.016 h -2.25 l -1.078 -3 h -6.281 l -1.125 3 h -2.25 Z M 0 20.016 h 24 v 3.984 h -24 v -3.984 Z" />
-                                        </svg>
-                                        to change the font color and click on
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" version="1.1">
-                                            <path d="M 17.484 12 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 14.484 8.016 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 9.516 8.016 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 6.516 12 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 12 3 c 4.969 0 9 3.609 9 8.016 c 0 2.766 -2.25 4.969 -5.016 4.969 h -1.734 c -0.844 0 -1.5 0.656 -1.5 1.5 c 0 0.375 0.141 0.703 0.375 0.984 s 0.375 0.656 0.375 1.031 c 0 0.844 -0.656 1.5 -1.5 1.5 c -4.969 0 -9 -4.031 -9 -9 s 4.031 -9 9 -9 Z" /> </svg>
-                                        to change the background color. To delete a metric from being displayed, click on the <span aria-hidden="true"><kbd>×</kbd></span>. Click
-                                        <kbd>Add</kbd> to add a new metric.
-                                    </blockquote>
-                                    <div id="metrics-config">
-                                        <metric-config @update="onMetricUpdate" @decreaseorder="onDecreaseOrder" @increaseorder="onIncreaseOrder" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, index) in orderedMetrics" v-bind="metric" :index="index" :islast="(index == orderedMetrics.length - 1)"></metric-config>
-                                        <button type="button" class="button card metric success text-center" v-on:click="addMetric" id="addMetricBtn" :disabled="state_map.saving.issaving">
-                                                <div class="card-section">
-                                                    <h4>+ Add</h4>
-                                                </div>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="expanded large button-group stacked-for-small" id="config-btns">
-                                <a class="button" v-on:click="generateMetrics" :disabled="state_map.saving.issaving">Generate Metrics</a>
-                                <a class="button" v-on:click="saveConfig" :disabled="state_map.saving.issaving"><span class="square" v-if="state_map.saving.issaving"></span><span v-if="!state_map.saving.issaving">Save Config</span><span v-else>Saving...</span></a>
-                            </div>
-                            <div class="callout"  v-bind:class="{ alert: state_map.saving.isError, success: state_map.saving.isSuccess }" v-if="!state_map.saving.issaving && state_map.saving.showMessage">
-                              <h5>{{state_map.saving.messageTitle}}</h5>
-                              <p>{{state_map.saving.message}}.</p>
-                            </div>
-                        </form>
+                <div class="medium-6 cell">
+                  <label>Field Name
+                    <input type="text" placeholder="Field Name" v-model="config.fieldName" :disabled="state_map.saving.issaving"/>
+                    <blockquote>
+                      The field name which will be used to generate metrics on. This should be the internal name of the field, not display name.
+                    </blockquote>
+                  </label>
+                </div>
+                <div class="medium-6 cell">
+                  <label>Column Width
+                    <select v-model="config.minColumnWidth" :disabled="state_map.saving.issaving">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="4">6</option>
+                      <option value="4">12</option>
+                    </select>
+                    <blockquote>
+                      Grid columns are created by specifying a number that is a factor of
+                      <kbd>12</kbd> available columns you wish to span. For example, column width of
+                      <kbd>3</kbd> will create
+                      <kbd>4</kbd> items in that row. I.e.,
+                      <kbd>12 / 3 = 4</kbd>, so all availble column widths are factors of
+                      <kbd>12</kbd>.
+                    </blockquote>
+                  </label>
+                </div>
+                <div class="medium-6 cell">
+                  <div class="switch-wrapper">
+                    <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                      <input class="switch-input" id="hasDynamicWidth" type="checkbox" name="hasDynamicWidth" v-model="config.hasDynamicWidth" :disabled="state_map.saving.issaving"/>
+                      <label class="switch-paddle" for="hasDynamicWidth">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                      </label>
                     </div>
-                    <!--<div id="metrics">
-	           	<metric @update="onMetricUpdate" v-for="metric in metrics" v-bind="metric"></metric>
-	           	</div>-->
+                    <span class="switch-label"> Dynamic Width <small class="text-uppercase">Experimental</small></span>
+                  </div>
+                  <blockquote>
+                    Dynamic Width will procedurally select an appropriate width for column widths if remaining columns in the row do not evenly fill up leftover space.
+                  </blockquote>
                 </div>
-                <div class="cell auto">
+                <div class="medium-6 cell">
+                  <div class="switch-wrapper">
+                    <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                      <input class="switch-input" id="hasFiltering" type="checkbox" name="hasFiltering" v-model="config.hasFiltering" :disabled="state_map.saving.issaving"/>
+                      <label class="switch-paddle" for="hasFiltering">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                      </label>
+                    </div>
+                    <span class="switch-label"> Enable Filter Navigation</span>
+                  </div>
+                  <blockquote>
+                    Clicking on metric's totals will navigate to the list filtered by the value clicked on.
+                  </blockquote>
+                  <div class="callout secondary" v-show="config.hasFiltering">
+                    <label>Filter View Name
+                      <input type="text" placeholder="Filter View Name" v-model="config.filterViewName" :disabled="state_map.saving.issaving"/>
+                      <blockquote>
+                        The list view for the filter to be applied to.
+                      </blockquote>
+                    </label>
+                  </div>
                 </div>
+                <div class="medium-6 cell">
+                  <div class="switch-wrapper">
+                    <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                      <input class="switch-input" id="hasFilterDetection" type="checkbox" name="hasFilterDetection" v-model="config.hasFilterDetection" :disabled="state_map.saving.issaving"/>
+                      <label class="switch-paddle" for="hasFilterDetection">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                      </label>
+                    </div>
+                    <span class="switch-label"> Enable Filter Detection</span>
+                  </div>
+                  <blockquote>
+                    Metrics will be filtered based on query string filters being applied to the page.
+                  </blockquote>
+                </div>
+                <div class="medium-6 cell">
+                  <div class="switch-wrapper">
+                    <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                      <input class="switch-input" id="isDocumentLibrary" type="checkbox" name="isDocumentLibrary" v-model="config.isDocumentLibrary" :disabled="state_map.saving.issaving"/>
+                      <label class="switch-paddle" for="isDocumentLibrary">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                      </label>
+                    </div>
+                    <span class="switch-label"> Document Library</span>
+                  </div>
+                  <blockquote>
+                    Determines if list is a document library or not. This will help determine the types of queries and filters to apply on web service calls.
+                  </blockquote>
+                  <div class="callout secondary" v-show="config.isDocumentLibrary">
+                    <p>Document Type</p>
+                    <div class="mobile-app-toggle">
+                      <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 0 }" v-on:click="config.fileObjectType = 0" :disabled="state_map.saving.issaving">File</button>
+                      <button type="button" class="button" v-bind:class="{ isActive: config.fileObjectType == 1}" v-on:click="config.fileObjectType = 1" :disabled="state_map.saving.issaving">Folder</button>
+                    </div>
+                    <blockquote>
+                      Select the type of object to perform queries against.
+                    </blockquote>
+                  </div>
+                </div>
+                <div class="medium-6 cell">
+                  <div class="switch-wrapper">
+                    <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                      <input class="switch-input" id="isLookupField" type="checkbox" name="isLookupField" v-model="config.isLookupField" :disabled="state_map.saving.issaving"/>
+                      <label class="switch-paddle" for="isLookupField">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                      </label>
+                    </div>
+                    <span class="switch-label"> Lookup Field</span>
+                  </div>
+                  <blockquote>
+                    Specify whether or not the field to produce metrics on is a lookup field.
+                  </blockquote>
+                  <div class="callout secondary" v-show="config.isLookupField">
+                    <label>Lookup Field Name
+                      <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving"/>
+                      <blockquote>
+                        Name of the lookup field&#39;s originating field name in the lookup list.
+                      </blockquote>
+                    </label>
+                  </div>
+                </div>
+                <div class="cell medium-12" v-show="configFetched">
+                  <p>Order/Color</p>
+                  <blockquote>
+                    Order and color of the metrics displayed. Click on
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" version="1.1">
+                      <path d="M 9.609 12 h 4.781 l -2.391 -6.328 Z M 11.016 3 h 1.969 l 5.484 14.016 h -2.25 l -1.078 -3 h -6.281 l -1.125 3 h -2.25 Z M 0 20.016 h 24 v 3.984 h -24 v -3.984 Z" />
+                    </svg>
+                    to change the font color and click on
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" version="1.1">
+                      <path d="M 17.484 12 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 14.484 8.016 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 9.516 8.016 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 6.516 12 c 0.844 0 1.5 -0.656 1.5 -1.5 s -0.656 -1.5 -1.5 -1.5 s -1.5 0.656 -1.5 1.5 s 0.656 1.5 1.5 1.5 Z M 12 3 c 4.969 0 9 3.609 9 8.016 c 0 2.766 -2.25 4.969 -5.016 4.969 h -1.734 c -0.844 0 -1.5 0.656 -1.5 1.5 c 0 0.375 0.141 0.703 0.375 0.984 s 0.375 0.656 0.375 1.031 c 0 0.844 -0.656 1.5 -1.5 1.5 c -4.969 0 -9 -4.031 -9 -9 s 4.031 -9 9 -9 Z" /> </svg>
+                      to change the background color. To delete a metric from being displayed, click on the <span aria-hidden="true"><kbd>×</kbd></span>. Click
+                      <kbd>Add</kbd> to add a new metric.
+                    </blockquote>
+                    <div id="metrics-config">
+                      <metric-config @update="onMetricUpdate" @decreaseorder="onDecreaseOrder" @increaseorder="onIncreaseOrder" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, index) in orderedMetrics" v-bind="metric" :index="index" :islast="(index == orderedMetrics.length - 1)"></metric-config>
+                      <button type="button" class="button card metric success text-center" v-on:click="addMetric" id="addMetricBtn" :disabled="state_map.saving.issaving">
+                        <div class="card-section">
+                          <h4>+ Add</h4>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="expanded large button-group stacked-for-small" id="config-btns">
+                  <a class="button" v-on:click="generateMetrics" :disabled="state_map.saving.issaving">Generate Metrics</a>
+                  <a class="button" v-on:click="saveConfig" :disabled="state_map.saving.issaving"><span class="square" v-if="state_map.saving.issaving"></span><span v-if="!state_map.saving.issaving">Save Config</span><span v-else>Saving...</span></a>
+                </div>
+                <div class="callout"  v-bind:class="{ alert: state_map.saving.isError, success: state_map.saving.isSuccess }" v-if="!state_map.saving.issaving && state_map.saving.showMessage">
+                  <h5>{{state_map.saving.messageTitle}}</h5>
+                  <p>{{state_map.saving.message}}.</p>
+                </div>
+              </form>
             </div>
+            <!--<div id="metrics">
+            <metric @update="onMetricUpdate" v-for="metric in metrics" v-bind="metric"></metric>
+          </div>-->
         </div>
+        <div class="cell auto">
+        </div>
+      </div>
     </div>
-    <script type="text/javascript" src="js/components.js"></script>
-    <script type="text/javascript" src="js/data.js"></script>
-    <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript">
-    $(document).foundation();
-    </script>
+  </div>
+  <script type="text/javascript" src="js/components.js"></script>
+  <script type="text/javascript" src="js/data.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+  <script type="text/javascript">
+  $(document).foundation();
+  </script>
 </body>
 
 </html>
