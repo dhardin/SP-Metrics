@@ -11,6 +11,7 @@ var app = new Vue({
     currentMetricIndex: -1,
     editingMetric: false,
     state_map: {
+      isFiltered: false,
       saving: {
         issaving: false,
         message: '',

@@ -22,7 +22,7 @@ var app_data = {
       }*/
       url = configData.siteUrl + "/_api/web/lists/GetByTitle('" + configData.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ configData.fieldName
       + (configData.isLookupField ? "/"+ configData.lookupFieldName+"&$expand="+ configData.fieldName : "")
-      + (stateMap.isFiltered
+      + (this.state_map.isFiltered
         ? '&$filter=' + filters + (configData.isDocumentLibrary ? ' and FSObjType ' + configData.fileObjectType : '')
         : (configData.isDocumentLibrary ? '&$filter=(FSObjType eq ' + configData.fileObjectType + ')' : '')) + '&$top=5000';
 
