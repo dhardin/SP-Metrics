@@ -79,11 +79,6 @@ var app = new Vue({
     },
     generateMetrics: function(){},
     validateForm: function(){
-      (function(that){
-        $(that.$refs.form).on("valid.zf.abide", function(e,target) {
-          that.saveConfig();
-        });
-      })(this);
       $(this.$refs.form).foundation("validateForm");
     },
     saveConfig: function(){
@@ -196,7 +191,11 @@ var app = new Vue({
     }
   },
   mounted: function(){
-
+    (function(that){
+      $(document).on("formvalid.zf.abide", function(ev,frm) {
+        that.saveConfig();
+      });
+    })(this);
   },
   created: function() {
     if (!window.location.origin) {
