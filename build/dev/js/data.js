@@ -1,14 +1,14 @@
 var app_data = {
   methods: {
-    getData: function(options, callback, errorCallback){
+    getData: function(configData, callback, errorCallback){
       var filterMap = {};
       var filters = '';
       var key;
       var i;
       var url;
       var subfilter = '';
-      if(configOptions.hasFilterDetection){
-        filterMap = getFilterMap();
+      /*if(configData.hasFilterDetection){
+        filterMap = this.getFilterMap();
         stateMap.isFiltered = Object.keys(filterMap).length > 0;
         if(stateMap.isFiltered){
           for(key in filterMap){
@@ -19,32 +19,31 @@ var app_data = {
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';
           }
         }
-      }
-      url = configOptions.siteUrl + "/_api/web/lists/GetByTitle('" + configOptions.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ configOptions.fieldName
-      + (configOptions.isLookupField ? "/"+ configOptions.lookupFieldName+"&$expand="+ configOptions.fieldName : "")
+      }*/
+      url = configData.siteUrl + "/_api/web/lists/GetByTitle('" + configData.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ configData.fieldName
+      + (configData.isLookupField ? "/"+ configData.lookupFieldName+"&$expand="+ configData.fieldName : "")
       + (stateMap.isFiltered
-        ? '&$filter=' + filters + (configOptions.isDocumentLibrary ? ' and FSObjType ' + configOptions.fileObjectType : '')
-        : (configOptions.isDocumentLibrary ? '&$filter=(FSObjType eq ' + configOptions.fileObjectType + ')' : '')) + '&$top=5000';
+        ? '&$filter=' + filters + (configData.isDocumentLibrary ? ' and FSObjType ' + configData.fileObjectType : '')
+        : (configData.isDocumentLibrary ? '&$filter=(FSObjType eq ' + configData.fileObjectType + ')' : '')) + '&$top=5000';
 
-        $.ajax({
+      return axios({
           url: url,
-          type: "GET",
+          method: "get",
           headers: {
             "accept": "application/json;odata=verbose",
             "content-type": "application/json;odata=verbose"
-          },
-          success: function(data, textStatus, jqXHR) {
-            var data = data.d.results;
+          }
+          }).then(function(response) {
+            var data = response.data.d.results;
             if (callback) {
               callback(data);
             }
-          },
-          error: function( jqXHR, textStatus, errorThrown ){
-            if(errorCallback){
-              errorCallback(jqXHR, textStatus, errorThrown);
-            }
-          }
-        });
+          }).catch(function(error) {
+                  if (errorCallback) {
+                    errorCallback(error);
+                  }
+          });
+
       },
       getConfigData: function(callback, errorCallback) {
         console.log('fetching config');

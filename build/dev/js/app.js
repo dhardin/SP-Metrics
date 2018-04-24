@@ -234,7 +234,7 @@ var app = new Vue({
       }).then(function(result){
         return new Promise(function(resolve, reject){
           if(that.config.ID > 0){
-            that.getData(function(data){
+            that.getData(that.config, function(data){
               that.populateMetrics(data);
               resolve();
             }, function(error){
