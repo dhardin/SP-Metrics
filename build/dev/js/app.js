@@ -20,6 +20,14 @@ var app = new Vue({
         isSuccess: false,
         showMessage: false
       },
+      generating: {
+        isgenerating: false,
+        message: '',
+        messageTitle: '',
+        isError: false,
+        isSuccess: false,
+        showMessage: false
+      },
       loading: {
         canCancel: false,
         canClose: false,
@@ -81,6 +89,10 @@ var app = new Vue({
       options=  _.defaults(options, {issaving: false, message: '', messageTitle: '', isError: false, isSuccess: false, showMessage: false});
       Object.assign(this.state_map.saving, options);
     },
+    toggleGenerating: function(options){
+      options=  _.defaults(options, {isgenerating: false, message: '', messageTitle: '', isError: false, isSuccess: false, showMessage: false});
+      Object.assign(this.state_map.generating, options);
+    },
     populateMetrics: function(data){
       Vue.set(this, 'metrics', this.buildDataMap(data));
     },
@@ -95,7 +107,18 @@ var app = new Vue({
      }
      return dataMap;
    },
-    generateMetrics: function(){},
+    generateMetrics: function(){
+      this.toggleGenerating({isgenerating: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
+      (function(that){
+        that.getData(that.config, function(data){
+          that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success', message: '', isError: false, isSuccess: true});
+          that.populateMetrics(data);
+          resolve();
+        }, function(error){
+            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error', message: error.message, isError: true, isSuccess: false});
+        });
+      })(this);
+    },
     validateForm: function(){
       $(this.$refs.form).foundation("validateForm");
     },
