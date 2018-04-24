@@ -114,8 +114,8 @@
           <edit-metric @save="onMetricUpdate" v-bind="currentMetric" ref="modal"></edit-metric>
           <div v-if="editing">
             <form class="callout">
-              <span class="label warning float-right success" v-if="config.ID > 0">Config Data Loaded</span>
-              <span class="label warning float-right warning" v-else>No Data Loaded</span>
+              <span class="label float-right success" v-if="config.ID > 0">Config Data Loaded</span>
+              <span class="label float-right warning" v-else>No Data Loaded</span>
               <h3 class="text-left">Metrics Configuration</h3>
               <div class="grid-x grid-padding-x">
                 <div class="medium-6 cell">

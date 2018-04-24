@@ -196,6 +196,7 @@ var app = new Vue({
     (function(that){
       new Promise(function(resolve, reject){
         that.getConfigData(function(data){
+          data.metrics = JSON.parse(data.metrics);
           Object.assign(that.config, data[0]);
           resolve();
         }, function(error){
