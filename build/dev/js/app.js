@@ -107,13 +107,13 @@ var app = new Vue({
        if(this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
         continue;
        }
-       dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}};
+       dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
        dataMap[key].count = dataMap[key].count + 1;
      }
      //we also want to display counts for metrics that have been defined but have no data
      for(key in this.config.metrics){
        if(!dataMap.hasOwnProperty(key) && this.config.metrics.visible){
-         dataMap[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}};
+         dataMap[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
        }
      }
      return dataMap;

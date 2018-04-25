@@ -68,8 +68,8 @@
     </div>
   </script>
   <script type="text/x-template" id="metric">
-    <div v-bind:style="styleObj" class="metric card">
-      <div class="card-section text-center displayedMetric">
+    <div v-bind:style="styleObj" class="cell" v-bind:class="calcClassObj">
+      <div class="metric text-center">
         <h3>{{count}}</h3>
         <h5>{{name}}</h5>
       </div>
@@ -111,6 +111,7 @@
       </form>
     </div>
   </script>
+
   <div id="app">
     <div class="grid-container">
       <div  id="appLoading" class="grid-x grid-margin-x grid-padding-x" v-if="false">
@@ -140,7 +141,7 @@
                 <div class="medium-6 cell">
                   <label>List Name <small>required</small>
                     <input type="text" placeholder="List Name" v-model="config.listName" :disabled="state_map.saving.issaving" required pattern="[a-zA-Z]+"/>
-                        <small class="error">List Name is required.</small>
+                    <small class="error">List Name is required.</small>
                     <blockquote>
                       The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name.
                     </blockquote>
@@ -149,7 +150,7 @@
                 <div class="medium-6 cell">
                   <label>Site Relative URL <small>required</small>
                     <input type="text" placeholder="Site Relative URL" v-model="config.siteUrl" :disabled="state_map.saving.issaving" required pattern="[a-zA-Z]+"/>
-                        <small class="error">Site Relative URL is required.</small>
+                    <small class="error">Site Relative URL is required.</small>
                     <blockquote>
                       URL of site where the list is stored.
                     </blockquote>
@@ -158,7 +159,7 @@
                 <div class="medium-6 cell">
                   <label>Field Name <small>required</small>
                     <input type="text" placeholder="Field Name" v-model="config.fieldName" :disabled="state_map.saving.issaving" required pattern="[a-zA-Z]+"/>
-                        <small class="error">Field Name is required.</small>
+                    <small class="error">Field Name is required.</small>
                     <blockquote>
                       The field name which will be used to generate metrics on. This should be the internal name of the field, not display name.
                     </blockquote>
@@ -167,12 +168,12 @@
                 <div class="medium-6 cell">
                   <label>Column Width
                     <select v-model="config.minColumnWidth" :disabled="state_map.saving.issaving">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="4">6</option>
-                      <option value="4">12</option>
+                      <option v-bind:value="1">1</option>
+                      <option v-bind:value="2">2</option>
+                      <option v-bind:value="3">3</option>
+                      <option v-bind:value="4">4</option>
+                      <option v-bind:value="6">6</option>
+                      <option v-bind:value="12">12</option>
                     </select>
                     <blockquote>
                       Grid columns are created by specifying a number that is a factor of
@@ -216,7 +217,7 @@
                   <div class="callout secondary" v-show="config.hasFiltering">
                     <label>Filter View Name <small>required</small>
                       <input type="text" placeholder="Filter View Name" v-model="config.filterViewName" :disabled="state_map.saving.issaving"  :required="config.hasFiltering" pattern="[a-zA-Z]+"/>
-                          <small class="error">Filter View Name is required.</small>
+                      <small class="error">Filter View Name is required.</small>
                       <blockquote>
                         The list view for the filter to be applied to.
                       </blockquote>
@@ -324,20 +325,22 @@
                 </div>
               </form>
             </div>
-              <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics"></metric>
+          </div>
+          <div class="cell auto">
+          </div>
         </div>
-        <div class="cell auto">
+        <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading">
+          <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth"></metric>
         </div>
       </div>
     </div>
-  </div>
-  <script type="text/javascript" src="js/components.js"></script>
-  <script type="text/javascript" src="js/data.js"></script>
-  <script type="text/javascript" src="js/testData.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
-  <script type="text/javascript">
-  $(document).foundation();
-  </script>
-</body>
+      <script type="text/javascript" src="js/components.js"></script>
+      <script type="text/javascript" src="js/data.js"></script>
+      <script type="text/javascript" src="js/testData.js"></script>
+      <script type="text/javascript" src="js/app.js"></script>
+      <script type="text/javascript">
+      $(document).foundation();
+      </script>
+    </body>
 
-</html>
+    </html>

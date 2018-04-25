@@ -214,6 +214,10 @@ Vue.component('metric', {
                 };
             }
         },
+        mincolumnwidth: {
+          type: Number,
+          default: 2
+        },
         visible: {
           type: Boolean,
           default: true
@@ -225,12 +229,22 @@ Vue.component('metric', {
         count: {
           type: Number,
           default: 0
+        },
+        hasdynamicwidth: {
+          type: Boolean,
+          default: true
         }
     },
-    methods: {
-
+    computed: {
+      calcClassObj: function(){
+        var className = this.hasdynamicwidth ? 'auto' : 'small-' + this.mincolumnwidth;
+        var classObj = {};
+        classObj[className] = true;
+        return classObj;
+      }
     },
     data: function() {
-        return {};
+        return {
+        };
     }
 });

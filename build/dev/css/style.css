@@ -52,14 +52,25 @@
  padding-top: 0.93rem;
 }
 
+ #metrics-config .metric {
+   height: 200px;
+   width: 200px;
+   display: inline-block;
+   position:relative;
+ }
+
+ #metrics-container .metric{
+   padding: 1em;
+   border: 1px solid rgba(10,10,10, .25);
+ }
+
+#metrics-container .cell {
+  padding: 5px;
+}
+
 .metric {
-	width: 200px;
-	height: 200px;
 	text-align:center;
-	display: inline-block;
-	position:relative;
-  margin: 5px;
-  border: 1px solid rgba(10,10,10, .25);
+  padding: 5px;
 }
 
 .metric h4 {
@@ -174,10 +185,6 @@
 #addMetricBtn.disabled {
     opacity: 0.25;
     cursor: not-allowed;
-}
-
-.displayedMetric {
-  margin-top: 30px;
 }
 
 #loading .loader, #loading-container .loader{
