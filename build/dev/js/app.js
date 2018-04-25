@@ -112,7 +112,7 @@ var app = new Vue({
      }
      //we also want to display counts for metrics that have been defined but have no data
      for(key in this.config.metrics){
-       if(!dataMap.hasOwnProperty(key) && this.config.metrics.visible){
+       if(!dataMap.hasOwnProperty(key) && this.config.metrics[key].visible){
          dataMap[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
        }
      }
@@ -219,9 +219,9 @@ var app = new Vue({
         return;
       }
       nextMetric = this.orderedMetrics[index + 1];
-      tempOrder = nextMetric.sortOrder;
-      nextMetric.sortOrder = currentMetric.sortOrder;
-      currentMetric.sortOrder = tempOrder;
+    //  tempOrder = nextMetric.sortOrder;
+      nextMetric.sortOrder = index;
+      currentMetric.sortOrder = index + 1;
     },
     onCancelLoading: function(){
       this.state_map.loading.isloading = false;
@@ -230,13 +230,13 @@ var app = new Vue({
       var currentMetric = this.orderedMetrics[index];
       var tempOrder;
       var prevMetric;
-      if(index < 0){
+      if(index <= 0){
         return;
       }
       prevMetric = this.orderedMetrics[index - 1];
-      tempOrder = prevMetric.sortOrder;
-      prevMetric.sortOrder = currentMetric.sortOrder;
-      currentMetric.sortOrder = tempOrder;
+      //tempOrder = prevMetric.sortOrder;
+      prevMetric.sortOrder = index - 1;
+      currentMetric.sortOrder = index;
     },
     onToggleVisibility: function(name){
       this.config.metrics[name].visible = !this.config.metrics[name].visible;
