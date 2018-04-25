@@ -71,8 +71,7 @@ var app = new Vue({
           backgroundColor: '',
           color: ''
         },
-        editing: false,
-        id: 0,
+        visible: true,
         status: {
           errorCode: false,
           message: '',
@@ -84,6 +83,7 @@ var app = new Vue({
       for(i = 0; i < optionsArr.length; i++){
         Object.assign(this.currentMetric, JSON.parse(JSON.stringify(optionsArr[i])));
       }
+      Vue.set(this, 'currentMetric', this.currentMetric);
     },
     toggleSaving: function(options){
       options=  _.defaults(options, {issaving: false, message: '', messageTitle: '', isError: false, isSuccess: false, showMessage: false});
@@ -102,8 +102,18 @@ var app = new Vue({
      var key = '';
      for(i = 0; i < data.length; i ++){
        key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
+       //skip non-visible items
+       if(!this.config.metrics[key].visible){
+        continue;
+       }
        dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}};
        dataMap[key].count = dataMap[key].count + 1;
+     }
+     //we also want to display counts for metrics that have been defined but have no data
+     for(key in this.config.metrics){
+       if(!dataMap.hasOwnProperty(key) && this.config.metrics.visible){
+         dataMap[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}};
+       }
      }
      return dataMap;
    },
@@ -151,15 +161,15 @@ var app = new Vue({
     addMetric: function() {
       var number = 1;
       if (!this.config.metrics.hasOwnProperty('_New')) {
-        Vue.set(this.config.metrics, '_New', { name: '_New', sortOrder: Object.keys(this.config.metrics).length });
+        Vue.set(this.config.metrics, '_New', { name: '_New', sortOrder: Object.keys(this.config.metrics).length, visible: true, styleObj: {backgroundColor: '#aaa', color: '#fff'}});
       } else {
         while(this.config.metrics.hasOwnProperty('_New' + '('+number+')')){
           number++;
         }
-        Vue.set(this.config.metrics, '_New' + '('+number+')', { name: '_New' + '('+number+')',  sortOrder: Object.keys(this.config.metrics).length});
+        Vue.set(this.config.metrics, '_New' + '('+number+')', { name: '_New' + '('+number+')',  sortOrder: Object.keys(this.config.metrics).length, visible: true, styleObj: {backgroundColor: '#aaa', color: '#fff'}});
       }
     },
-    onMetricUpdate: function(object, options, oldName) {
+    onMetricUpdate: function( options, oldName) {
       var i;
       var updatedMetric;
       this.currentMetric.status.isSaving = true;
@@ -222,6 +232,9 @@ var app = new Vue({
       prevMetric.sortOrder = currentMetric.sortOrder;
       currentMetric.sortOrder = tempOrder;
     },
+    onToggleVisibility: function(name){
+      this.config.metrics[name].visible = !this.config.metrics[name].visible;
+    },
     toggleLoading: function(options){
       options=  _.defaults(options, {isLoading: false, showLoading: false, message: '', canCancel: false, canClose: false})
       Object.assign(this.state_map.loading, options);
@@ -241,8 +254,6 @@ var app = new Vue({
     if (!window.location.origin) {
       window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
     }
-
-
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
     (function(that){

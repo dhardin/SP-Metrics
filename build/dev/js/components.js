@@ -23,11 +23,18 @@ Vue.component('edit-metric', {
                     isSaving: false
                 };
             }
+        },
+        visible: {
+          type: Boolean,
+          default: true
         }
     },
     watch: {
         name: function(newVal, oldVal) {
             this.editName = newVal;
+        },
+        visible: function(newVal, oldVal){
+          this.editVisible = newVal;
         },
         styleObj: function(newVal, oldVal){
         	this.editStyleObj = JSON.parse(JSON.stringify(newVal));
@@ -43,6 +50,12 @@ Vue.component('edit-metric', {
         (function(that) {
             $(that.$el).on('open.zf.reveal', function() {
                 that.open();
+                //watch doesn't fire when modal is re-opened on edited item
+                //by default, we'd want these values to default to what they were previously.
+                //only seems to be an issue with the visible property
+                if(that.visible != that.editVisible){
+                  that.editVisible = that.visible;
+                }
             });
             $(that.$el).on('closed.zf.reveal', function() {
                 that.close();
@@ -51,9 +64,10 @@ Vue.component('edit-metric', {
     },
     methods: {
         save: function() {
-            this.$emit('save', this, {
+            this.$emit('save', {
                 name: this.editName,
-                styleObj: this.editStyleObj
+                styleObj: this.editStyleObj,
+                visible: this.editVisible,
             }, this.name);
         },
         onSaveComplete: function(results) {
@@ -96,6 +110,7 @@ Vue.component('edit-metric', {
         return {
             editName: this.name,
             hasError: false,
+            editVisible: this.visible,
             editStyleObj: this.styleObj
         };
     }
@@ -136,6 +151,10 @@ Vue.component('metric-config', {
         id: {
             type: Number,
             default: 0
+        },
+        visible: {
+          type: Boolean,
+          default: true
         }
     },
     methods: {
@@ -144,6 +163,9 @@ Vue.component('metric-config', {
         },
         deleteMetric: function(e){
           this.$emit('deletemetric', this.name);
+        },
+        toggleVisibility: function(e){
+          this.$emit('togglevisibility', this.name);
         },
         decreaseSortOrder: function(e){
           this.$emit('decreaseorder',
@@ -191,6 +213,10 @@ Vue.component('metric', {
                     backgroundColor: '#aaa'
                 };
             }
+        },
+        visible: {
+          type: Boolean,
+          default: true
         },
         sortOrder: {
             type: Number,
