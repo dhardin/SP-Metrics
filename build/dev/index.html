@@ -103,7 +103,9 @@
           </div>
           <span class="switch-label"> Visible</span>
         </div>
-        <button type="button" class="button" v-on:click="save" data-open="exampleModal1">Save</button>
+        <div class="clearfix">
+        <button type="button" class="button float-right expanded" v-on:click="save" data-open="exampleModal1">Save</button>
+      </div>
         <div class="callout small" v-bind:class="{ alert: hasError, success: !hasError && status.message.length > 0}" v-if="!status.isSaving && (hasError || status.message.length > 0)">
           <h5>{{ hasError ? 'Error!' : 'Success!'}}</h5>
           <p>{{status.message}}</p>
