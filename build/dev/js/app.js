@@ -103,7 +103,7 @@ var app = new Vue({
      for(i = 0; i < data.length; i ++){
        key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
        //skip non-visible items
-       if(!this.config.metrics[key].visible){
+       if(this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
         continue;
        }
        dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}};
