@@ -62,6 +62,9 @@
  #metrics-container .metric{
    padding: 1em;
    border: 1px solid rgba(10,10,10, .25);
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   overflow: hidden;
  }
 
 #metrics-container .cell {
