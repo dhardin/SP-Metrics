@@ -1,6 +1,6 @@
 var app = new Vue({
   el: '#app',
-  mixins: [app_data],
+  mixins: [app_data, app_test_data],
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
     site: window.location.origin, //site where the SharePoint configuration list is located
@@ -8,6 +8,7 @@ var app = new Vue({
     configFetched: true,
     isValidated: false,
     currentMetric: {},
+    testing: window.location.host.indexOf('localhost') > -1,
     currentMetricIndex: -1,
     editingMetric: false,
     state_map: {
@@ -120,12 +121,17 @@ var app = new Vue({
     generateMetrics: function(){
       this.toggleGenerating({isgenerating: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
-        that.getData(that.config, function(data){
+        if(that.testing){
           that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
-          that.populateMetrics(data);
-        }, function(error){
-            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
-        });
+          that.populateMetrics(that.metricData);
+        } else {
+          that.getData(that.config, function(data){
+            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
+            that.populateMetrics(data);
+          }, function(error){
+              that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
+          });
+        }
       })(this);
     },
     validateForm: function(){
@@ -268,12 +274,17 @@ var app = new Vue({
       }).then(function(result){
         return new Promise(function(resolve, reject){
           if(that.config.ID > 0){
-            that.getData(that.config, function(data){
-              that.populateMetrics(data);
+            if(that.testing){
+              that.populateMetrics(metricData);
               resolve();
-            }, function(error){
-              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-            });
+            } else {
+              that.getData(that.config, function(data){
+                that.populateMetrics(data);
+                resolve();
+              }, function(error){
+                that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+              });
+            }
           } else {
             resolve();
           }
