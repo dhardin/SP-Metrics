@@ -39,7 +39,8 @@
     </div>
   </script>
   <script type="text/x-template" id="metric-config">
-    <div v-bind:style="styleObj" class="metric card">
+    <div class="cell small-6 medium-3">
+      <div class="metric card" v-bind:style="styleObj">
       <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -66,6 +67,7 @@
         </svg>
       </button>
     </div>
+  </div>
   </script>
   <script type="text/x-template" id="metric">
     <div class="cell" v-bind:class="calcClassObj">
@@ -301,13 +303,15 @@
                       to change the background color. To delete a metric from being displayed, click on the <span aria-hidden="true"><kbd>×</kbd></span>. Click
                       <kbd>Add</kbd> to add a new metric.
                     </blockquote>
-                    <div id="metrics-config">
+                    <div id="metrics-config" class="grid-x grid-padding-x align-center-middle">
                       <metric-config @update="onMetricUpdate" @decreaseorder="onDecreaseOrder" @togglevisibility="onToggleVisibility" @increaseorder="onIncreaseOrder" @edit="onMetricEdit" @deletemetric="onMetricDelete" v-for="(metric, index) in orderedMetrics" v-bind="metric" :index="index" :islast="(index == orderedMetrics.length - 1)"></metric-config>
-                      <button type="button" class="button card metric success text-center" v-on:click="addMetric" id="addMetricBtn" :disabled="state_map.saving.issaving">
+                      <div class="cell small-6 medium-3">
+                        <div class="card metric success text-center" v-on:click="addMetric" id="addMetricBtn" :disabled="state_map.saving.issaving">
                         <div class="card-section">
                           <h4>+ Add</h4>
                         </div>
-                      </button>
+                      </div>
+                    </div>
                     </div>
                   </div>
                 </div>

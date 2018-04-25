@@ -57,7 +57,9 @@ var app = new Vue({
   },
   computed: {
     orderedMetrics: function(){
-      return _.orderBy(this.config.metrics, 'sortOrder');
+      var arr = [];
+      arr = _.orderBy(this.config.metrics, 'sortOrder');
+      return arr;
     },
     orderedDisplayMetrics: function(){
       return _.orderBy(this.metrics, 'sortOrder');
@@ -209,6 +211,13 @@ var app = new Vue({
     onMetricDelete: function(name) {
       if(this.config.metrics.hasOwnProperty(name)){
         Vue.delete(this.config.metrics, name);
+      }
+      this.updateSortOrder();
+    },
+    updateSortOrder: function(){
+      var i;
+      for(i = 0; i < this.orderedMetrics.length; i++){
+        this.orderedMetrics[i].sortOrder = i;
       }
     },
     onIncreaseOrder: function(name, index){
