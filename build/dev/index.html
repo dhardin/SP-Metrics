@@ -68,8 +68,8 @@
     </div>
   </script>
   <script type="text/x-template" id="metric">
-    <div v-bind:style="styleObj" class="cell" v-bind:class="calcClassObj">
-      <div class="metric text-center">
+    <div class="cell" v-bind:class="calcClassObj">
+      <div v-bind:style="styleObj" class="metric text-center">
         <h3>{{count}}</h3>
         <h5>{{name}}</h5>
       </div>
@@ -103,7 +103,7 @@
           </div>
           <span class="switch-label"> Visible</span>
         </div>
-        <button type="button" class="button" v-on:click="save" data-open="exampleModal1">Save</button>
+        <button type="button" class="button expanded" v-on:click="save" data-open="exampleModal1">Save</button>
         <div class="callout small" v-bind:class="{ alert: hasError, success: !hasError && status.message.length > 0}" v-if="!status.isSaving && (hasError || status.message.length > 0)">
           <h5>{{ hasError ? 'Error!' : 'Success!'}}</h5>
           <p>{{status.message}}</p>
