@@ -82,7 +82,7 @@ Vue.component('edit-metric', {
                     showPalette: true,
                     preferredFormat: "hex",
                     showInput: true,
-                    selectionPalette: [],
+                    selectionPalette: ['#337ab7','#3c763d','#31708f','#aa6708','#d9534f', '#6f5499', '#555'],
                     change: function(color) {
                         that.editStyleObj.backgroundColor = color.toHexString();
                     }
@@ -92,7 +92,7 @@ Vue.component('edit-metric', {
                     showPalette: true,
                     preferredFormat: "hex",
                     showInput: true,
-                    selectionPalette: [],
+                    selectionPalette: ["#000", "#fff",  ['#337ab7','#3c763d','#31708f','#aa6708','#d9534f', '#6f5499', '#555'],
                     change: function(color) {
                         that.editStyleObj.color = color.toHexString();
                     }
