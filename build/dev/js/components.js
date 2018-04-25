@@ -237,7 +237,7 @@ Vue.component('metric', {
     },
     computed: {
       calcClassObj: function(){
-        var className = this.hasdynamicwidth ? 'auto' : 'small-' + this.mincolumnwidth;
+        var className = this.hasdynamicwidth ? 'medium-auto' : 'small-' + this.mincolumnwidth;
         var classObj = {};
         classObj[className] = true;
         return classObj;
