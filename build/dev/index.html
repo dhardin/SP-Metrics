@@ -167,7 +167,7 @@
                 </div>
                 <div class="medium-6 cell">
                   <label>Column Width
-                    <select v-model="config.minColumnWidth" :disabled="state_map.saving.issaving">
+                    <select v-model="config.minColumnWidth" :disabled="state_map.saving.issaving || config.hasDynamicWidth">
                       <option v-bind:value="1">1</option>
                       <option v-bind:value="2">2</option>
                       <option v-bind:value="3">3</option>
