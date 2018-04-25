@@ -235,8 +235,8 @@ var app = new Vue({
       }
       prevMetric = this.orderedMetrics[index - 1];
       //tempOrder = prevMetric.sortOrder;
-      prevMetric.sortOrder = index - 1;
-      currentMetric.sortOrder = index;
+      prevMetric.sortOrder = index;
+      currentMetric.sortOrder = index - 1;
     },
     onToggleVisibility: function(name){
       this.config.metrics[name].visible = !this.config.metrics[name].visible;
