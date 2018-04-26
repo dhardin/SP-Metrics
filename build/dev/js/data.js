@@ -84,7 +84,7 @@ var app_data = {
           });
         }
         _.extend(data, this.config, { '__metadata': { 'type': type } });
-        data.metrics = JSON.stringify(this.metrics);
+        data.metrics = JSON.stringify(this.config.metrics);
         //we don't need to pass in the id of the config data
         delete data.ID;
         return axios({
