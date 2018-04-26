@@ -262,6 +262,38 @@
 			animation: loaderdd 3s ease-in-out infinite;
 }
 
+.query-builder .rules-group-container {
+  background-color: #d7ecfa;
+  border: 1px solid rgba(10, 10, 10, 0.25);
+      border-radius: 0;
+      font-family: Consolas, "Liberation Mono", Courier, monospace !important;
+}
+
+ .query-builder .rule-container, .query-builder .rule-placeholder {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.rule-filter-container select, .rule-value-container input {
+  margin-bottom: 0;
+  -o-appearance: none;
+   -ms-appearance: none;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+}
+
+.rule-filter-container select {
+  padding-right: 0.5rem;
+}
+
+ .rule-filter-container select::-ms-expand{
+   display: none;
+ }
+
+.query-builder .rule-container .rule-filter-container, .query-builder .rule-container .rule-operator-container, .query-builder .rule-container .rule-value-container, .query-builder .error-container, .query-builder .drag-handle {
+  vertical-align: inherit;
+}
+
 @-webkit-keyframes loaderg{
 	0%{	left: -200%; background-color: rgba(255, 255, 255, .8); }
 	50%{ left: 0px; background-color: rgba(255, 255, 255, .1);}

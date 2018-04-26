@@ -7,21 +7,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Dustin Hardin" />
   <title>Metrics</title>
-  <link href="lib/foundation/foundation.css" rel="stylesheet" />
-  <link href="lib/Spectrum/spectrum.css" rel="stylesheet" />
+  <link href="/lib/foundation/foundation.css" rel="stylesheet" />
+  <link href="/lib/Spectrum/spectrum.css" rel="stylesheet" />
+  <link href="/lib/QueryBuilder/query-builder.default.css" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet" />
-  <script type="text/javascript" src="lib/es5-shim.js"></script>
-  <script type="text/javascript" src="lib/es6-shim.js"></script>
-  <script type="text/javascript" src="lib/vue.js"></script>
-  <script type="text/javascript" src="lib/axios.min.js"></script>
-  <script type="text/javascript" src="lib/jquery-2.1.0.js"></script>
-  <script type="text/javascript" src="lib/foundation/what-input.js"></script>
-  <script type="text/javascript" src="lib/foundation/foundation.js"></script>
-  <script type="text/javascript" src="lib/Spectrum/spectrum.js"></script>
-  <script type="text/javascript" src="lib/lodash.js"></script>
+  <script type="text/javascript" src="/lib/es5-shim.js"></script>
+  <script type="text/javascript" src="/lib/es6-shim.js"></script>
+  <script type="text/javascript" src="/lib/vue.js"></script>
+  <script type="text/javascript" src="/lib/axios.min.js"></script>
+  <script type="text/javascript" src="/lib/jquery-2.1.0.js"></script>
+  <script type="text/javascript" src="/lib/foundation/what-input.js"></script>
+  <script type="text/javascript" src="/lib/foundation/foundation.js"></script>
+  <script type="text/javascript" src="/lib/Spectrum/spectrum.js"></script>
+  <script type="text/javascript" src="/lib/lodash.js"></script>
+  <script type="text/javascript" src="/lib/QueryBuilder/query-builder.standalone.min.js"></script>
 </head>
 
 <body>
+  <script type="text/template" id="filter-template">
+    <ul class="accordion" data-accordion data-allow-all-closed="true" v-show="hasFilters">
+      <li class="accordion-item" data-accordion-item>
+        <!-- Accordion tab title -->
+        <a class="accordion-title">Filters</a>
+        <!-- Accordion tab content: it would start in the open state due to using the `is-active` state class. -->
+        <div class="accordion-content" data-tab-content>
+          <div ref="filters"></div>
+        </div>
+      </li>
+      <!-- ... -->
+    </ul>
+  </script>
   <script type="text/template" id="loading-template">
     <div  id="loading" class="grid-x grid-margin-x grid-padding-x">
       <div class="cell auto">
@@ -30,8 +45,10 @@
         <div class="callout large secondary">
           <h2 class="text-center">{{message}}</h2>
           <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
-          <button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>
-          <button type="button" class="button alert" v-if="canClose == true" v-on:click="cancel">Close</button>
+          <div class="clearfix">
+          <!--<button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>-->
+          <button type="button" class="button alert float-right" v-if="canClose == true && editing" v-on:click="cancel">Close</button>
+          </div>
         </div>
       </div>
       <div class="cell auto">
@@ -40,12 +57,12 @@
   </script>
   <script type="text/x-template" id="metric-config">
     <div class="cell small-6 medium-3">
-      <div class="metric card" v-bind:style="styleObj">
+      <div class="metric card" v-bind:style="styleObj" >
       <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
         <span aria-hidden="true">&times;</span>
       </button>
       <button type="button" class="button edit" v-on:click="edit" >Edit</button>
-      <button class="button visibility clear" href="#" type="button" v-on:click="toggleVisibility">
+      <button class="button visibility clear"  type="button" v-on:click="toggleVisibility">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
           <path v-if="visible" d="M16 6c-6.979 0-13.028 4.064-16 10 2.972 5.936 9.021 10 16 10s13.027-4.064 16-10c-2.972-5.936-9.021-10-16-10zM23.889 11.303c1.88 1.199 3.473 2.805 4.67 4.697-1.197 1.891-2.79 3.498-4.67 4.697-2.362 1.507-5.090 2.303-7.889 2.303s-5.527-0.796-7.889-2.303c-1.88-1.199-3.473-2.805-4.67-4.697 1.197-1.891 2.79-3.498 4.67-4.697 0.122-0.078 0.246-0.154 0.371-0.228-0.311 0.854-0.482 1.776-0.482 2.737 0 4.418 3.582 8 8 8s8-3.582 8-8c0-0.962-0.17-1.883-0.482-2.737 0.124 0.074 0.248 0.15 0.371 0.228v0zM16 13c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"></path>
           <path v-if="!visible" d="M29.561 0.439c-0.586-0.586-1.535-0.586-2.121 0l-6.318 6.318c-1.623-0.492-3.342-0.757-5.122-0.757-6.979 0-13.028 4.064-16 10 1.285 2.566 3.145 4.782 5.407 6.472l-4.968 4.968c-0.586 0.586-0.586 1.535 0 2.121 0.293 0.293 0.677 0.439 1.061 0.439s0.768-0.146 1.061-0.439l27-27c0.586-0.586 0.586-1.536 0-2.121zM13 10c1.32 0 2.44 0.853 2.841 2.037l-3.804 3.804c-1.184-0.401-2.037-1.521-2.037-2.841 0-1.657 1.343-3 3-3zM3.441 16c1.197-1.891 2.79-3.498 4.67-4.697 0.122-0.078 0.246-0.154 0.371-0.228-0.311 0.854-0.482 1.776-0.482 2.737 0 1.715 0.54 3.304 1.459 4.607l-1.904 1.904c-1.639-1.151-3.038-2.621-4.114-4.323z"></path>
@@ -56,12 +73,12 @@
       <div class="card-section text-center">
         <h4>{{name}}</h4>
       </div>
-      <button class="button sortBtn decreaseSort" href="#" type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
+      <button class="button sortBtn decreaseSort"  type="button" v-if="index > 0" v-on:click="decreaseSortOrder">
         <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
           <path d="M1 16l15 15v-9h16v-12h-16v-9z"></path>
         </svg>
       </button>
-      <button class="button sortBtn increaseSort" href="#" type="button" v-on:click="increaseSortOrder" v-if="!islast">
+      <button class="button sortBtn increaseSort"  type="button" v-on:click="increaseSortOrder" v-if="!islast">
         <svg class="sortIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1">
           <path d="M31 16l-15-15v9h-16v12h16v9z"></path>
         </svg>
@@ -128,7 +145,7 @@
         <div class="cell auto">
         </div>
       </div>
-      <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" @cancel="onCancelLoading"></loading>
+      <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" v-bind:editing="editing" @cancel="onCancelLoading"></loading>
       <div class="grid-x grid-margin-x grid-padding-x" v-cloak v-show="!state_map.loading.isloading">
         <div class="cell auto">
         </div>
@@ -338,6 +355,11 @@
         <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading">
           <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth"></metric>
         </div>
+        <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">
+          <div class="cell small-12">
+                <filters @filterupdate="onFilterUpdate"></filters>
+        </div>
+      </div>
       </div>
     </div>
       <script type="text/javascript" src="js/components.js"></script>

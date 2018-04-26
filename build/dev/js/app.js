@@ -4,7 +4,7 @@ var app = new Vue({
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
     site: window.location.origin, //site where the SharePoint configuration list is located
-    editing: true,
+    editing: false,
     configFetched: true,
     isValidated: false,
     currentMetric: {},
@@ -35,6 +35,10 @@ var app = new Vue({
         showLoading: true,
         message: '',
         isloading: true
+      },
+      filters: {
+        filterMap: {},
+        hasFilters: false
       }
     },
     config: {
@@ -48,7 +52,7 @@ var app = new Vue({
       minColumnWidth: 1,
       listName: '',
       siteUrl: '',
-      fieldName: '',
+      fieldName: window.location.host.indexOf('localhost') > -1 ? 'Status' :  '',
       filterViewName: '',
       lookupFieldName: '',
       metrics: {}
@@ -100,26 +104,26 @@ var app = new Vue({
       Vue.set(this, 'metrics', this.buildDataMap(data));
     },
     buildDataMap: function(data){
-     var dataMap = {};
-     var i;
-     var key = '';
-     for(i = 0; i < data.length; i ++){
-       key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
-       //skip non-visible items
-       if(this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
-        continue;
-       }
-       dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
-       dataMap[key].count = dataMap[key].count + 1;
-     }
-     //we also want to display counts for metrics that have been defined but have no data
-     for(key in this.config.metrics){
-       if(!dataMap.hasOwnProperty(key) && this.config.metrics[key].visible){
-         dataMap[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
-       }
-     }
-     return dataMap;
-   },
+      var dataMap = {};
+      var i;
+      var key = '';
+      for(i = 0; i < data.length; i ++){
+        key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
+        //skip non-visible items
+        if(this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
+          continue;
+        }
+        dataMap[key] = dataMap[key] || {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
+        dataMap[key].count = dataMap[key].count + 1;
+      }
+      //we also want to display counts for metrics that have been defined but have no data
+      for(key in this.config.metrics){
+        if(!dataMap.hasOwnProperty(key) && this.config.metrics[key].visible){
+          dataMap[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
+        }
+      }
+      return dataMap;
+    },
     generateMetrics: function(){
       this.toggleGenerating({isgenerating: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
@@ -131,7 +135,7 @@ var app = new Vue({
             that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
             that.populateMetrics(data);
           }, function(error){
-              that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
+            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
           });
         }
       })(this);
@@ -220,6 +224,9 @@ var app = new Vue({
         this.orderedMetrics[i].sortOrder = i;
       }
     },
+    onFilterUpdate: function(options){
+      Object.assign(this.state_map.filters, options);
+    },
     onIncreaseOrder: function(name, index){
       var currentMetric = this.orderedMetrics[index];
       var tempOrder;
@@ -228,7 +235,7 @@ var app = new Vue({
         return;
       }
       nextMetric = this.orderedMetrics[index + 1];
-    //  tempOrder = nextMetric.sortOrder;
+      //  tempOrder = nextMetric.sortOrder;
       nextMetric.sortOrder = index;
       currentMetric.sortOrder = index + 1;
     },
@@ -256,6 +263,19 @@ var app = new Vue({
       if(!options.isLoading){
         $(document).foundation();
       }
+    },
+    checkEditMode: function(){
+      this.editing = false;
+      try {
+        SP.Ribbon.PageState.Handlers.isPublishEnabled();
+        this.editing = SP.Ribbon.PageState.Handlers.isInEditMode();
+      }catch(err){
+        console.log('MSOWebPartPageFormName: ' + window.hasOwnProperty('MSOWebPartPageFormName'));
+        if(window.hasOwnProperty('MSOWebPartPageFormName')){
+          this.editing = document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode.value == '1';
+        }
+        this.editing = this.editing || window.location.hash.indexOf('edit=true') > -1;
+      }
     }
   },
   mounted: function(){
@@ -263,39 +283,49 @@ var app = new Vue({
       $(document).on("formvalid.zf.abide", function(ev,frm) {
         that.saveConfig();
       });
+      $(window).on('hashchange', function(e){
+        that.checkEditMode();
+      });
+
     })(this);
   },
+
   created: function() {
     if (!window.location.origin) {
       window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
     }
+    this.checkEditMode();
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
     (function(that){
       new Promise(function(resolve, reject){
-        that.getConfigData(function(data){
-          data[0].metrics = JSON.parse(data[0].metrics);
-          _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+        if(that.testing){
           resolve();
-        }, function(error){
-          that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-        });
+        } else {
+          that.getConfigData(function(data){
+            data[0].metrics = JSON.parse(data[0].metrics);
+            _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+            resolve();
+          }, function(error){
+            that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+          });
+        }
       }).then(function(result){
         return new Promise(function(resolve, reject){
           if(that.config.ID > 0){
+            that.getData(that.config, function(data){
+              that.populateMetrics(data);
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          } else {
             if(that.testing){
-              that.populateMetrics(metricData);
+              that.populateMetrics(that.metricData);
               resolve();
             } else {
-              that.getData(that.config, function(data){
-                that.populateMetrics(data);
-                resolve();
-              }, function(error){
-                that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-              });
+              resolve();
             }
-          } else {
-            resolve();
           }
         });
       }).then(function(result){

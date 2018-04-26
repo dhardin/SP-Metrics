@@ -1,16 +1,15 @@
 var app_data = {
   methods: {
-    getData: function(configData, callback, errorCallback){
+    getData: function(callback, errorCallback){
       var filterMap = {};
       var filters = '';
       var key;
       var i;
       var url;
       var subfilter = '';
-      /*if(configData.hasFilterDetection){
-        filterMap = this.getFilterMap();
-        stateMap.isFiltered = Object.keys(filterMap).length > 0;
-        if(stateMap.isFiltered){
+      if(this.hasFilterDetection){
+        if(this.state_map.filters.hasFilters){
+          filterMap = this.state_map.filters.filterMap;
           for(key in filterMap){
             subfilter = '';
             for(i = 0; i < filterMap[key].length; i++){
@@ -19,33 +18,33 @@ var app_data = {
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';
           }
         }
-      }*/
-      url = configData.siteUrl + "/_api/web/lists/GetByTitle('" + configData.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ configData.fieldName
-      + (configData.isLookupField ? "/"+ configData.lookupFieldName+"&$expand="+ configData.fieldName : "")
-      + (this.state_map.isFiltered
-        ? '&$filter=' + filters + (configData.isDocumentLibrary ? ' and FSObjType ' + configData.fileObjectType : '')
-        : (configData.isDocumentLibrary ? '&$filter=(FSObjType eq ' + configData.fileObjectType + ')' : '')) + '&$top=5000';
+      }
+      url = this.siteUrl + "/_api/web/lists/GetByTitle('" + this.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ this.fieldName
+      + (this.isLookupField ? "/"+ this.lookupFieldName+"&$expand="+ this.fieldName : "")
+      + (this.state_map.filters.hasFilters
+        ? '&$filter=' + filters + (this.isDocumentLibrary ? ' and FSObjType ' + this.fileObjectType : '')
+        : (this.isDocumentLibrary ? '&$filter=(FSObjType eq ' + this.fileObjectType + ')' : '')) + '&$top=5000';
 
-      return axios({
+        return axios({
           url: url,
           method: "get",
           headers: {
             "accept": "application/json;odata=verbose",
             "content-type": "application/json;odata=verbose"
           }
-          }).then(function(response) {
-            var data = response.data.d.results;
-            if (callback) {
-              callback(data);
-            }
-          }).catch(function(error) {
-                  if (errorCallback) {
-                    errorCallback(error);
-                  }
-          });
+        }).then(function(response) {
+          var data = response.data.d.results;
+          if (callback) {
+            callback(data);
+          }
+        }).catch(function(error) {
+          if (errorCallback) {
+            errorCallback(error);
+          }
+        });
 
       },
-      getConfigData: function(callback, errorCallback) {
+      getthis: function(callback, errorCallback) {
         console.log('fetching config');
         return axios({
           url: window.location.origin + "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" + window.location.pathname + "'))",
@@ -67,13 +66,13 @@ var app_data = {
           }
         });
       },
-      saveConfigData: function(configData, digest, callback, errorCallback){
+      saveConfigData: function(digest, callback, errorCallback){
         var listName = this.listName;
         var site = this.site;
-        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (configData.ID > 0 ? '/items('+configData.ID+')' :  '/Items');
+        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (this.ID > 0 ? '/items('+this.ID+')' :  '/Items');
         var type = this.getItemTypeForListName(listName);
         var data = {
-          		Title: window.location.pathname
+          Title: window.location.pathname
         };
         var headers = {
           "accept": "application/json;odata=verbose",
@@ -81,15 +80,14 @@ var app_data = {
           "content-Type": "application/json;odata=verbose"
         };
 
-        if(configData.ID > 0){
+        if(this.ID > 0){
           _.extend(headers, {
             "IF-MATCH": "*",
             "X-HTTP-Method": "MERGE"
           });
         }
-
-        _.extend(data, configData, { '__metadata': { 'type': type } });
-        data.metrics = JSON.stringify(configData.metrics);
+        _.extend(data, this, { '__metadata': { 'type': type } });
+        data.metrics = JSON.stringify(this.metrics);
         //we don't need to pass in the id of the config data
         delete data.ID;
         return axios({
