@@ -131,7 +131,7 @@ var app = new Vue({
           that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
           that.populateMetrics(that.metricData);
         } else {
-          that.getData(that.config, function(data){
+          that.getData(function(data){
             that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
             that.populateMetrics(data);
           }, function(error){
@@ -313,7 +313,7 @@ var app = new Vue({
       }).then(function(result){
         return new Promise(function(resolve, reject){
           if(that.config.ID > 0){
-            that.getData(that.config, function(data){
+            that.getData(function(data){
               that.populateMetrics(data);
               resolve();
             }, function(error){
