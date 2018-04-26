@@ -46,7 +46,7 @@ var app_data = {
       },
       getConfigData: function(callback, errorCallback) {
         return axios({
-          url: window.location.origin + "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" + window.location.pathname + "'))",
+          url: this.site + "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" + window.location.pathname + "'))",
           method: "get",
           headers: {
             "accept": "application/json;odata=verbose",
