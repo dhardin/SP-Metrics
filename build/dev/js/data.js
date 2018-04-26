@@ -67,7 +67,7 @@ var app_data = {
         var listName = this.listName;
         var site = this.site;
         console.log(this.site);
-        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (this.ID > 0 ? '/items('+this.config.ID+')' :  '/Items');
+        var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (this.config.ID > 0 ? '/items('+this.config.ID+')' :  '/Items');
         var type = this.getItemTypeForListName(listName);
         var data = {
           Title: window.location.pathname
@@ -78,7 +78,7 @@ var app_data = {
           "content-Type": "application/json;odata=verbose"
         };
 
-        if(this.ID > 0){
+        if(this.config.ID > 0){
           _.extend(headers, {
             "IF-MATCH": "*",
             "X-HTTP-Method": "MERGE"
