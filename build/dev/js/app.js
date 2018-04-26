@@ -265,7 +265,7 @@ var app = new Vue({
       options=  _.defaults(options, {isLoading: false, showLoading: false, message: '', canCancel: false, canClose: false})
       Object.assign(this.state_map.loading, options);
       if(!options.isLoading){
-        $(document).foundation();
+        $(this.$options.el).foundation();
       }
     },
     checkEditMode: function(){

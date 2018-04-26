@@ -205,7 +205,7 @@ Vue.component('filters', {
   props: [],
   mounted: function(){
     (function(that){
-    $(document).foundation();
+    $(that.$parent.$options.el).foundation();
     $(window).on('hashchange', function(){
       that.updateQuery();
     });
