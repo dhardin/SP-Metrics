@@ -144,7 +144,6 @@ var app = new Vue({
       $(this.$refs.form).foundation("validateForm");
     },
     saveConfig: function(){
-
       this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
         new Promise(function(resolve, reject){
@@ -157,9 +156,13 @@ var app = new Vue({
         }).then(function(result){
           return new Promise(function(resolve, reject){
             that.saveConfigData(that.state_map.digest, function(data){
-              data.metrics = JSON.parse(data.metrics);
-              _.assign(that.config, _.pick(data, _.keys(that.config)));
-              resolve();
+              if(data.length > 0){}
+                data.metrics = JSON.parse(data.metrics);
+                _.assign(that.config, _.pick(data, _.keys(that.config)));
+                resolve();
+              } else {
+                  resolve('No changes.');
+              }
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
               that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error: Saving Config', message: error.message, isError: true, isSuccess: false});
@@ -329,11 +332,11 @@ var app = new Vue({
           }
         });
       }).then(function(result){
-         if(Object.keys(that.config.metrics).length > 0 || that.editing){
-           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-         } else {
-             that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
-         }
+        if(Object.keys(that.config.metrics).length > 0 || that.editing){
+          that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+        } else {
+          that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
+        }
       });
     })(this);
   }

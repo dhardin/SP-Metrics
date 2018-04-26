@@ -94,9 +94,9 @@ var app_data = {
           headers: headers,
           data: data
         }).then(function(response) {
-          var data = response.data.d;
+          var data = response.data;
           if (callback) {
-            callback(data);
+            callback(response.data.hasOwnProperty('d') ? response.data.d : []);
           }
         }).catch(function(error) {
           if (errorCallback) {
