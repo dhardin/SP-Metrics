@@ -306,8 +306,6 @@ var app = new Vue({
             if(data.length > 0){
               data[0].metrics = JSON.parse(data[0].metrics);
               _.assign(that.config, _.pick(data[0], _.keys(that.config)));
-            } else {
-              that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
             }
             resolve();
           }, function(error){
@@ -333,7 +331,11 @@ var app = new Vue({
           }
         });
       }).then(function(result){
-        that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+         if(Object.keys(that.config.metrics).length > 0 || that.editing){
+           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+         } else {
+             that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
+         }
       });
     })(this);
   }
