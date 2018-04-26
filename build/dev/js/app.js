@@ -303,8 +303,12 @@ var app = new Vue({
           resolve();
         } else {
           that.getConfigData(function(data){
-            data[0].metrics = JSON.parse(data[0].metrics);
-            _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+            if(data.length > 0){
+              data[0].metrics = JSON.parse(data[0].metrics);
+              _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+            } else {
+              that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
+            }
             resolve();
           }, function(error){
             that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
