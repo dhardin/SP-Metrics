@@ -44,8 +44,7 @@ var app_data = {
         });
 
       },
-      getthis: function(callback, errorCallback) {
-        console.log('fetching config');
+      getConfigData: function(callback, errorCallback) {
         return axios({
           url: window.location.origin + "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" + window.location.pathname + "'))",
           method: "get",
@@ -55,8 +54,6 @@ var app_data = {
           }
         }).then(function(response) {
           var data = response.data.d.results;
-          console.log('config done');
-          console.log(data);
           if (callback) {
             callback(data);
           }
