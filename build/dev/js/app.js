@@ -156,7 +156,7 @@ var app = new Vue({
         }).then(function(result){
           return new Promise(function(resolve, reject){
             that.saveConfigData(that.state_map.digest, function(data){
-              if(data.length > 0){}
+              if(data.length > 0){
                 data.metrics = JSON.parse(data.metrics);
                 _.assign(that.config, _.pick(data, _.keys(that.config)));
                 resolve();
