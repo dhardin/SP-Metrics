@@ -66,6 +66,7 @@ var app_data = {
       saveConfigData: function(digest, callback, errorCallback){
         var listName = this.listName;
         var site = this.site;
+        console.log(this.site);
         var url = site + "/_api/web/lists/GetByTitle('"+listName +"')" + (this.ID > 0 ? '/items('+this.config.ID+')' :  '/Items');
         var type = this.getItemTypeForListName(listName);
         var data = {

@@ -367,6 +367,9 @@
       <script type="text/javascript" src="/Assets/Metrics/js/testData.js"></script>
       <script type="text/javascript" src="/Assets/Metrics/js/app.js"></script>
       <script type="text/javascript">
+      if (!window.location.origin) {
+        window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+      }
       $(document).foundation();
       </script>
     </body>
