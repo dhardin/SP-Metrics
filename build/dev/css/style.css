@@ -55,6 +55,9 @@
  #metrics-config .metric {
    position: relative;
    border: 1px solid rgba(10,10,10, .25);
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   overflow: hidden;
  }
 
  #metrics-config .cell {
