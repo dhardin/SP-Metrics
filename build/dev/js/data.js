@@ -83,7 +83,7 @@ var app_data = {
             "X-HTTP-Method": "MERGE"
           });
         }
-        _.extend(data, this, { '__metadata': { 'type': type } });
+        _.extend(data, this.config, { '__metadata': { 'type': type } });
         data.metrics = JSON.stringify(this.metrics);
         //we don't need to pass in the id of the config data
         delete data.ID;

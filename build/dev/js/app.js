@@ -156,7 +156,7 @@ var app = new Vue({
           })
         }).then(function(result){
           return new Promise(function(resolve, reject){
-            that.saveConfigData(that.config, that.state_map.digest, function(data){
+            that.saveConfigData(that.state_map.digest, function(data){
               _.assign(that.config, _.pick(data, _.keys(that.config)));
               resolve();
             }, function(error){
