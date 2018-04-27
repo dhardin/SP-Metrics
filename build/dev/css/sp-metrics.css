@@ -620,16 +620,9 @@ template {
 .foundation-mq {
   font-family: "small=0em&medium=40em&large=64em&xlarge=75em&xxlarge=90em"; }
 
-html {
+#SP-Metrics {
   box-sizing: border-box;
-  font-size: 100%; }
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit; }
-
-#SP-Metrics body {
+  font-size: 100%;
   margin: 0;
   padding: 0;
   background: #fefefe;
@@ -639,6 +632,11 @@ html {
   color: #0a0a0a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
+
+#SP-Metrics *,
+#SP-Metrics *::before,
+#SP-Metrics *::after {
+  box-sizing: inherit; }
 
 #SP-Metrics img {
   display: inline-block;
@@ -1067,14 +1065,9 @@ html {
     display: none; }
   #SP-Metrics .foundation-mq {
     font-family: "small=0em&medium=40em&large=64em&xlarge=75em&xxlarge=90em"; }
-  #SP-Metrics html {
+  #SP-Metrics #SP-Metrics {
     box-sizing: border-box;
-    font-size: 100%; }
-  #SP-Metrics *,
-  #SP-Metrics *::before,
-  #SP-Metrics *::after {
-    box-sizing: inherit; }
-  #SP-Metrics #SP-Metrics body {
+    font-size: 100%;
     margin: 0;
     padding: 0;
     background: #fefefe;
@@ -1084,6 +1077,10 @@ html {
     color: #0a0a0a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale; }
+  #SP-Metrics #SP-Metrics *,
+  #SP-Metrics #SP-Metrics *::before,
+  #SP-Metrics #SP-Metrics *::after {
+    box-sizing: inherit; }
   #SP-Metrics #SP-Metrics img {
     display: inline-block;
     vertical-align: middle;
