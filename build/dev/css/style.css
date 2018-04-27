@@ -1,6 +1,8 @@
 #SP-Metrics {
   /*Dark Loader*/
   /*square*/ }
+  #SP-Metrics input[type=button], #SP-Metrics input[type=reset], #SP-Metrics input[type=sumbit], #SP-Metrics button {
+    min-width: auto; }
   #SP-Metrics .switch-wrapper {
     display: -webkit-flex;
     display: -ms-flexbox;

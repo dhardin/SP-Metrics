@@ -1,5 +1,8 @@
 
 #SP-Metrics{
+  input[type=button], input[type=reset], input[type=sumbit], button{
+    min-width: auto;
+  }
 .switch-wrapper {
   display: -webkit-flex;
   display: -ms-flexbox;
