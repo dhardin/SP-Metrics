@@ -198,11 +198,13 @@ var app = new Vue({
           Vue.delete(this.config.metrics, oldName);
           Vue.set(this.config.metrics, options.name, prevSettings);
           this.setCurrentMetric([this.config.metrics[options.name], { status: { errorCode: false, message: 'Added new name to metrics.', isSaving: false } }]);
+          $(this.$refs.modal.$el).foundation('close');
         } else if (oldName != options.name && this.config.metrics.hasOwnProperty(options.name)) {
           this.setCurrentMetric([{ status: { errorCode: 0, message: 'Name already exists.', isSaving: false }}]);
         } else {
           Object.assign(this.config.metrics[options.name], options);
           this.setCurrentMetric([this.config.metrics[options.name], {status: { errorCode: false, message: 'Updated metrics.', isSaving: false }}]);
+          $(this.$refs.modal.$el).foundation('close');
         }
         return;
       }
