@@ -177,9 +177,11 @@
     -ms-appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none; }
+    appearance: none;
+    display: inline-block;
+    padding-left: 0.5rem !important; }
   .SP-Metrics .rule-filter-container select {
-    padding-right: 0.5rem; }
+    padding-right: 0.2rem; }
   .SP-Metrics .rule-filter-container select::-ms-expand {
     display: none; }
   .SP-Metrics .query-builder .rule-container .rule-filter-container, .SP-Metrics .query-builder .rule-container .rule-operator-container, .SP-Metrics .query-builder .rule-container .rule-value-container, .SP-Metrics .query-builder .error-container, .SP-Metrics .query-builder .drag-handle {
