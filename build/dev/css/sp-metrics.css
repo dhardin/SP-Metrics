@@ -620,11 +620,9 @@ template {
 .foundation-mq {
   font-family: "small=0em&medium=40em&large=64em&xlarge=75em&xxlarge=90em"; }
 
-.SP-Metrics {
+#SP-Metrics, .SP-Metrics {
   box-sizing: border-box;
   font-size: 100%;
-  margin: 0;
-  padding: 0;
   background: #fefefe;
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-weight: normal;
@@ -1065,11 +1063,9 @@ template {
     display: none; }
   .SP-Metrics .foundation-mq {
     font-family: "small=0em&medium=40em&large=64em&xlarge=75em&xxlarge=90em"; }
-  .SP-Metrics .SP-Metrics {
+  .SP-Metrics #SP-Metrics, .SP-Metrics .SP-Metrics {
     box-sizing: border-box;
     font-size: 100%;
-    margin: 0;
-    padding: 0;
     background: #fefefe;
     font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
     font-weight: normal;

@@ -95,7 +95,7 @@
     </div>
   </script>
   <script type="text/x-template" id="edit-metric">
-    <div class="reveal" id="exampleModal1" data-reveal>
+    <div class="reveal SP-Metrics" id="exampleModal1" data-reveal>
       <form class="callout">
         <label>Name
           <input type="text" placeholder="Name" v-model="editName" />
@@ -131,7 +131,7 @@
     </div>
   </script>
 
-  <div id="SP-Metrics">
+  <div id="SP-Metrics" class="SP-Metrics">
     <div class="grid-container">
       <div  id="appLoading" class="grid-x grid-margin-x grid-padding-x" v-if="false">
         <div class="cell auto">
@@ -370,7 +370,7 @@
       if (!window.location.origin) {
         window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
       }
-      $('#SP-Metrics').foundation();
+      $('.SP-Metrics').foundation();
       </script>
     </body>
 
