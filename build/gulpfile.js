@@ -33,7 +33,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('bundle-js', function() {
-  var source = ['source/js/app.js', 'source/js/data.js', 'source/js/components.js'];
+  var source = [ 'source/js/data.js', 'source/js/components.js', 'source/js/app.js'];
   return gulp.src(source)
   .pipe(concat('bundle.js'))
   .pipe(gulp.dest(getDest() + '/js'));
