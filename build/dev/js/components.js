@@ -237,7 +237,13 @@ Vue.component('filters', {
 			return filterMap;
 		},
     getFilterValueLength: function(filterMap, key){
-      return filterMap[key][0].length;
+      var valueArr = filterMap[key];
+      var longestLength = 0;
+      var i;
+      for(i = 0; i < valueArr.length; i++){
+        longestLength = valueArr[i].length > longestLength ? valueArr[i].length : longestLength;
+      }
+      return longestLength;
     },
     updateQuery: function(){
 			var filterMap = this.getFilterMap();
