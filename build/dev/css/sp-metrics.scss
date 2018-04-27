@@ -4,7 +4,7 @@
 @include foundation-switch;
 @include foundation-reveal;
 @include foundation-global-styles;
-#SP-Metrics {
+.SP-Metrics {
   @include foundation-everything;
   @include foundation-typography;
   @include foundation-forms;

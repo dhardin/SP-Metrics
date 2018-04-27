@@ -1,5 +1,5 @@
 
-#SP-Metrics{
+.SP-Metrics{
   input[type=button], input[type=reset], input[type=sumbit], button{
     min-width: auto;
   }
@@ -240,7 +240,6 @@
 	position: relative;
 	border-radius: 12px;
 	background-color: #fff;
-  display: inline-block;
 }
 
 .loader.dark {
