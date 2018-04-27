@@ -8,25 +8,23 @@ del = require('del'),
 gulpif = require('gulp-if'),
 runSequence = require('run-sequence'),
 inject = require('gulp-inject'),
-// debug = require('gulp-debug'),
+debug = require('gulp-debug'),
 include = require('gulp-include'),
-ts = require('gulp-typescript'),
 gutil = require('gulp-util'),
 rename = require('gulp-rename'),
 sass = require('gulp-sass');
 
 function getDest() {
   var destination;
-  if (argv.production) {
-    destination = '';
-  } else if (argv.staging) {
-    destination = 'staging';
+  if (argv.prod) {
+    destination = 'build/prod';
+  } else if (argv.stag) {
+    destination = 'build/stag';
   } else {
-    destination = 'development';
+    destination = 'build/dev';
   }
   return destination;
 }
-
 
 gulp.task('lint', function() {
   return gulp.src('source/js/**/*.js')
@@ -35,9 +33,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('bundle-js', function() {
-  //var negatedFiles = argv.nobundle ? argv.nobundle.split(',') : '';
-  argv.testing = ((!argv.production && !argv.staging) || argv.testing);
-  var source = [];
+  var source = ['source/js/app.js', 'source/js/data.js', 'source/js/components.js'];
   return gulp.src(source)
   .pipe(concat('bundle.js'))
   .pipe(gulp.dest(getDest() + '/js'));
@@ -83,7 +79,24 @@ gulp.task('inject-min-js', function() {
   return gulp.src(getDest() + '/index.html')
   //inject html tempaltes into index
   .pipe(inject(gulp.src(getDest() + '/js/bundle.js'), {
-    starttag: '<!-- inject:minjs -->',
+    starttag: '<!-- inject:js -->',
+    endtag: '<!-- endinject -->',
+    transform: function(filepath) {
+      //parse out destination filepath
+      filepath = filepath.replace('/' + getDest() + '/', '');
+
+      return '<script src="' + filepath + '"></script>';
+
+    }
+  }))
+  .pipe(gulp.dest(getDest() + '/'));
+});
+
+gulp.task('inject-min-js-webpart', function() {
+  return gulp.src(getDest() + '/webpart.html')
+  //inject html tempaltes into index
+  .pipe(inject(gulp.src(getDest() + '/js/bundle.js'), {
+    starttag: '<!-- inject:js -->',
     endtag: '<!-- endinject -->',
     transform: function(filepath) {
       //parse out destination filepath
@@ -98,9 +111,24 @@ gulp.task('inject-min-js', function() {
 
 gulp.task('inject-html', function() {
   return gulp.src(getDest() + '/index.html')
-  // .pipe(debug())
+    .pipe(debug())
   //inject html tempaltes into index
-  .pipe(inject(gulp.src('source/js/templates/*.html'), {
+  .pipe(inject(gulp.src('source/templates/*.html'), {
+    starttag: '<!-- inject:templates -->',
+    endtag: '<!-- endinject -->',
+    transform: function(filePath, file) {
+      // return file contents as string
+      return file.contents.toString('utf8');
+    }
+  }))
+  .pipe(gulp.dest(getDest() + '/'));
+});
+
+gulp.task('inject-html-webpart', function() {
+  return gulp.src(getDest() + '/webpart.html')
+    .pipe(debug())
+  //inject html tempaltes into index
+  .pipe(inject(gulp.src('source/templates/*.html'), {
     starttag: '<!-- inject:templates -->',
     endtag: '<!-- endinject -->',
     transform: function(filePath, file) {
@@ -116,7 +144,28 @@ gulp.task('inject-js', function() {
   argv.testing = ((!argv.production && !argv.staging) || argv.testing);
   var source = [destination + '/js/*.js'];
   return gulp.src(getDest() + '/index.html')
-  //.pipe(debug())
+  .pipe(debug())
+  //inject html tempaltes into index
+  .pipe(inject(gulp.src(source), {
+    starttag: '<!-- inject:js -->',
+    endtag: '<!-- endinject -->',
+    transform: function(filepath) {
+      //parse out destination filepath
+      filepath = filepath.replace('/' + getDest() + '/', '');
+
+      return '<script src="' + filepath + '"></script>';
+
+    }
+  }))
+  .pipe(gulp.dest(getDest() + '/'));
+});
+
+gulp.task('inject-js-webpart', function() {
+  var destination = getDest();
+  argv.testing = ((!argv.production && !argv.staging) || argv.testing);
+  var source = [destination + '/js/*.js'];
+  return gulp.src(getDest() + '/webpart.html')
+  .pipe(debug())
   //inject html tempaltes into index
   .pipe(inject(gulp.src(source), {
     starttag: '<!-- inject:js -->',
@@ -137,7 +186,7 @@ gulp.task('inject-lib-js', function() {
   argv.testing = ((!argv.production && !argv.staging) || argv.testing);
   var source = [destination + '/lib/*.js'];
   return gulp.src(getDest() + '/index.html')
-  //.pipe(debug())
+  .pipe(debug())
   //inject html tempaltes into index
   .pipe(inject(gulp.src(source), {
     starttag: '<!-- inject:lib-js -->',
@@ -172,9 +221,8 @@ gulp.task('delete-js', function() {
 });
 
 //copy all files in source directory to destination directory
-//do not copy qasp source or templates (these are injected into ContractorSurveillance.cshtml)
 gulp.task('copy', function() {
-  return gulp.src(['source/**/*', '!source/js/templates/**/*'])
+  return gulp.src(['source/**/*',  '!source/templates/', '!source/templates/**/*', '!source/css/*.scss'])
   .pipe(gulp.dest(getDest()));
 });
 
@@ -184,17 +232,17 @@ gulp.task('copy-html', function(){
 });
 
 gulp.task('foundation-scss', function(){
-  gulp.src('dev/css/sp-metrics.scss')
+  gulp.src('source/css/sp-metrics.scss')
   .pipe(sass({
     includePaths: ['node_modules/foundation-sites/scss']
   }))
-  .pipe(gulp.dest('dev/css'));
+  .pipe(gulp.dest('source/css'));
 });
 
 gulp.task('scss', function(){
-  gulp.src('dev/css/style.scss')
+  gulp.src('source/css/style.scss')
   .pipe(sass())
-  .pipe(gulp.dest('dev/css'));
+  .pipe(gulp.dest('source/css'));
 });
 
 gulp.task('copy-assets', function(){
@@ -207,36 +255,36 @@ gulp.task('copy-css', function(){
   .pipe(gulp.dest(getDest() + '/css'));
 });
 
-
-gulp.task('build-watch', function(callback){
-  runSequence('build-min', 'watch-build-min');
-  callback();
-});
-
-//Watch tasks
-gulp.task('watch-build-min', function(){
-  gulp.watch('source/**/*', ['build-min']);
-});
-
-// Task Runners
-gulp.task('build', function(callback) {
-  runSequence('clean', 'copy', 'inject-html', 'inject-js');
-});
-
-gulp.task('build-min', function(callback) {
-  runSequence('clean', 'copy-html', 'copy-assets', 'copy-css', 'copy-lib-assets', 'bundle-js', 'bundle-lib-js', 'bundle-lib-css', 'inject-html');
-  callback();
-});
-
 gulp.task('watch-styles', function(callback){
-  gulp.watch('dev/css/*.scss', function(callback){
+  gulp.watch('source/css/*.scss', function(callback){
     runSequence('foundation-scss', 'scss');
   });
-})
-//auto update dev folder
-//When using development, testing mode is always enabled.  Not to be used with web service calls.
-gulp.task('development', function(callback) {
-  gulp.watch('source/**/*', function(callback) {
-    runSequence('copy', 'inject-html', 'inject-js');
-  });
+});
+//auto update source folder
+gulp.task('watch-source', function(){
+    gulp.watch('source/**/*', ['source']);
+});
+
+gulp.task('watch-source-min', function(){
+    gulp.watch('source/**/*', ['source-min']);
+});
+
+gulp.task('source', function(callback) {
+    runSequence('clean', 'copy', 'inject-html', 'inject-html-webpart', 'inject-js', 'inject-js-webpart');
+    callback();
+});
+
+gulp.task('source-min', function(callback) {
+    runSequence( 'clean', 'copy', 'bundle-js', 'inject-html', 'inject-html-webpart', 'inject-min-js', 'inject-min-js-webpart');
+    callback();
+});
+
+gulp.task('build-watch', function(callback){
+  runSequence('source', 'watch-source');
+  callback();
+});
+
+gulp.task('build-watch-min', function(callback){
+  runSequence('source-min', 'watch-source-min');
+  callback();
 });

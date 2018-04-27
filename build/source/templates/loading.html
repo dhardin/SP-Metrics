@@ -1,0 +1,18 @@
+<script type="text/template" id="loading-template">
+  <div  id="loading" class="grid-x grid-margin-x grid-padding-x">
+    <div class="cell auto">
+    </div>
+    <div id="loading-container" class="cell small-12 medium-10">
+      <div class="callout large secondary">
+        <h2 class="text-center">{{message}}</h2>
+        <h3 v-if="showLoading"><div class="loader large dark"></div></h3>
+        <div class="clearfix">
+        <!--<button type="button" class="button alert" v-if="canCancel == true" v-on:click="cancel">Cancel</button>-->
+        <button type="button" class="button alert float-right" v-if="canClose == true && editing" v-on:click="cancel">Close</button>
+        </div>
+      </div>
+    </div>
+    <div class="cell auto">
+    </div>
+  </div>
+</script>
