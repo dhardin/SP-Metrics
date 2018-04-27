@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="author" content="Dustin Hardin" />
   <title>Metrics</title>
-  <link href="lib/foundation/foundation.css" rel="stylesheet" />
+  <link href="css/sp-metrics.css" rel="stylesheet" />
   <link href="lib/Spectrum/spectrum.css" rel="stylesheet" />
   <link href="lib/QueryBuilder/query-builder.default.css" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet" />
@@ -16,7 +16,7 @@
   <script type="text/javascript" src="lib/vue.js"></script>
   <script type="text/javascript" src="lib/axios.min.js"></script>
   <script type="text/javascript" src="lib/jquery-2.1.0.js"></script>
-  <script type="text/javascript" src="lib/foundation/what-input.js"></script>
+  <script type="text/javascript" src="lib/what-input.js"></script>
   <script type="text/javascript" src="lib/foundation/foundation.js"></script>
   <script type="text/javascript" src="lib/Spectrum/spectrum.js"></script>
   <script type="text/javascript" src="lib/lodash.js"></script>
@@ -95,7 +95,7 @@
     </div>
   </script>
   <script type="text/x-template" id="edit-metric">
-    <div class="reveal" id="exampleModal1" data-reveal>
+    <div class="reveal" id="SP-Metrics" data-reveal>
       <form class="callout">
         <label>Name
           <input type="text" placeholder="Name" v-model="editName" />
@@ -131,7 +131,7 @@
     </div>
   </script>
 
-  <div id="app">
+  <div id="SP-Metrics">
     <div class="grid-container">
       <div  id="appLoading" class="grid-x grid-margin-x grid-padding-x" v-if="false">
         <div class="cell auto">

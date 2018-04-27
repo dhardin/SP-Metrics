@@ -16,7 +16,7 @@
   <script type="text/javascript" src="/Assets/Metrics/lib/es6-shim.js"></script>
   <script type="text/javascript" src="/Assets/Metrics/lib/axios.min.js"></script>
   <script type="text/javascript" src="/Assets/Metrics/lib/jquery-2.1.0.js"></script>
-  <script type="text/javascript" src="/Assets/Metrics/lib/foundation/what-input.js"></script>
+  <script type="text/javascript" src="/Assets/Metrics/lib/what-input.js"></script>
   <script type="text/javascript" src="/Assets/Metrics/lib/foundation/foundation.js"></script>
   <script type="text/javascript" src="/Assets/Metrics/lib/Spectrum/spectrum.js"></script>
   <script type="text/javascript" src="/Assets/Metrics/lib/lodash.js"></script>
@@ -131,7 +131,7 @@
     </div>
   </script>
 
-  <div id="app">
+  <div id="SP-Metrics">
     <div class="grid-container">
       <div  id="appLoading" class="grid-x grid-margin-x grid-padding-x" v-if="false">
         <div class="cell auto">
@@ -370,7 +370,7 @@
       if (!window.location.origin) {
         window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
       }
-      $('#app').foundation();
+      $('#SP-Metrics').foundation();
       </script>
     </body>
 

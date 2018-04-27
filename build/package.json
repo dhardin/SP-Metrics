@@ -1,10 +1,11 @@
 {
-  "name": "QASP",
+  "name": "SP-Metrics",
   "version": "1.0.0",
-  "description": "Tool for tracking and managing contracts and contract performance.",
+  "description": "Tool for configuring and displaying metrics in a web part in SharePoint",
   "author": "Dustin Hardin",
   "email": "hardin_dustin@bah.com",
   "license": "ISC",
+  "repository": "github:dhardin/sp-metrics",
   "devDependencies": {
     "bluebird": "^3.5.0",
     "del": "^2.2.2",
@@ -20,6 +21,7 @@
     "gulp-typescript": "^3.2.2",
     "gulp-util": "^3.0.8",
     "jasmine-core": "^2.5.2",
+    "gulp-sass": "^4.0.1",
     "jshint": "^2.9.5",
     "karma": "^1.4.0",
     "karma-chrome-launcher": "^2.0.0",

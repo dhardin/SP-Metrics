@@ -1,5 +1,5 @@
 var app = new Vue({
-  el: '#app',
+  el: '#SP-Metrics',
   mixins: [app_data, app_test_data],
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
