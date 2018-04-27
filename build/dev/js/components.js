@@ -40,8 +40,11 @@ Vue.component('edit-metric', {
         	this.editStyleObj = JSON.parse(JSON.stringify(newVal));
         },
         status: {
-            handler: function(val, oldVal) {
+            handler: function(newVal, oldVal) {
                 this.hasError = this.status.errorCode === 0;
+                if(oldVal.isSaving && !newVal.isSaving && !newVal.errorCode){
+                 this.$emit('close');
+                }
             },
             deep: true
         }

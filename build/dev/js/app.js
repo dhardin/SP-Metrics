@@ -197,10 +197,12 @@ var app = new Vue({
           Object.assign(prevSettings, options);
           Vue.delete(this.config.metrics, oldName);
           Vue.set(this.config.metrics, options.name, prevSettings);
-          this.setCurrentMetric([this.config.metrics[options.name], { status: { errorCode: false, message: 'Added new name to metrics.', isSaving: false } }]);
+          this.setCurrentMetric([this.config.metrics[options.name], { status: { errorCode: false, message: 'Added new name to metrics.'} }]);
+          this.currentMetric.status.isSaving = false;
           $(this.$refs.modal.$el).foundation('close');
         } else if (oldName != options.name && this.config.metrics.hasOwnProperty(options.name)) {
-          this.setCurrentMetric([{ status: { errorCode: 0, message: 'Name already exists.', isSaving: false }}]);
+          this.setCurrentMetric([{ status: { errorCode: 0, message: 'Name already exists.' }}]);
+          this.currentMetric.status.isSaving = false;
         } else {
           Object.assign(this.config.metrics[options.name], options);
           this.setCurrentMetric([this.config.metrics[options.name], {status: { errorCode: false, message: 'Updated metrics.', isSaving: false }}]);
@@ -215,8 +217,11 @@ var app = new Vue({
       var key;
       if (this.config.metrics.hasOwnProperty(name)) {
         this.setCurrentMetric([this.config.metrics[name], {status: { errorCode: false, message: '', isSaving: false }}]);
-        $(this.$refs.modal.$el).foundation('open')
+        $(this.$refs.modal.$el).foundation('open');
       }
+    },
+    onMetricClose: function(){
+        $(this.$refs.modal.$el).foundation('close');
     },
     onMetricDelete: function(name) {
       if(this.config.metrics.hasOwnProperty(name)){

@@ -150,7 +150,7 @@
         <div class="cell auto">
         </div>
         <div class="cell small-12 medium-10">
-          <edit-metric @save="onMetricUpdate" v-bind="currentMetric" ref="modal"></edit-metric>
+          <edit-metric @save="onMetricUpdate" @close="onMetricClose" v-bind="currentMetric" ref="modal"></edit-metric>
           <div v-if="editing">
             <form class="callout" data-abide="ajax" ref="form">
               <span class="label float-right success" v-if="config.ID > 0">Config Data Loaded</span>
