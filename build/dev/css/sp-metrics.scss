@@ -3,7 +3,7 @@
   // These have to be root-level
 @include foundation-switch;
 @include foundation-reveal;
-//@include foundation-global-styles;
+@include foundation-global-styles;
 #SP-Metrics {
   @include foundation-everything;
   @include foundation-typography;
