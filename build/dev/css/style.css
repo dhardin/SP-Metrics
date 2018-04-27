@@ -164,13 +164,15 @@
   .SP-Metrics .loader.dark:after {
     -webkit-animation: loaderdd 3s ease-in-out infinite;
     animation: loaderdd 3s ease-in-out infinite; }
-  .SP-Metrics .query-builder .rules-group-container {
+  .SP-Metrics .query-builder > .rules-group-container {
     background-color: #d7ecfa;
     border: 1px solid rgba(10, 10, 10, 0.25);
     border-radius: 0;
     font-family: Consolas, "Liberation Mono", Courier, monospace !important; }
   .SP-Metrics .query-builder .rule-container, .SP-Metrics .query-builder .rule-placeholder {
-    background: rgba(255, 255, 255, 0.5); }
+    background: rgba(255, 255, 255, 0.8); }
+  .SP-Metrics .rules-group-container .rules-group-container {
+    background-color: rgba(255, 255, 255, 0.4); }
   .SP-Metrics .rule-filter-container select, .SP-Metrics .rule-value-container input {
     margin-bottom: 0;
     -o-appearance: none;
