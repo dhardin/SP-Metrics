@@ -1,6 +1,6 @@
 var app = new Vue({
   el: '#SP-Metrics',
-  mixins: [app_data, app_test_data],
+  mixins: [app_data],
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
     site: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: ''), //site where the SharePoint configuration list is located
