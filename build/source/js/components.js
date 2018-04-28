@@ -224,7 +224,7 @@ Vue.component('filters', {
   methods: {
     getFilterMap: function(){
 			var filterMap = {};
-			var regex = /(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/g;
+			var regex = /(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/gi;
       //FilterField0%3DStatus-FilterValue0%3DStuff
 			var hash = window.location.hash;
 			var matches = [];

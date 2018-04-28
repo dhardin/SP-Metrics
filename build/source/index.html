@@ -40,7 +40,7 @@
         <div class="cell auto">
         </div>
       </div>
-      <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" v-bind:editing="editing" @cancel="onCancelLoading"></loading>
+      <loading v-show="state_map.loading.isloading && orderedDisplayMetrics.length == 0" v-bind="state_map.loading" v-bind:editing="editing" @cancel="onCancelLoading"></loading>
       <div class="grid-x grid-margin-x grid-padding-x" v-cloak v-show="!state_map.loading.isloading">
         <div class="cell auto">
         </div>
@@ -247,7 +247,7 @@
           <div class="cell auto">
           </div>
         </div>
-        <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading">
+        <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading || orderedDisplayMetrics.length > 0">
           <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth"></metric>
         </div>
         <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">

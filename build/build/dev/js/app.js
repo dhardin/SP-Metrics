@@ -129,7 +129,7 @@ var app = new Vue({
       (function(that){
         if(that.testing){
           that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
-          that.populateMetrics(that.metricData);
+          that.populateMetrics([]);
         } else {
           that.getData(function(data){
             that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
@@ -331,7 +331,7 @@ var app = new Vue({
             });
           } else {
             if(that.testing){
-              that.populateMetrics(that.metricData);
+              that.populateMetrics([]);
               resolve();
             } else {
               resolve();
