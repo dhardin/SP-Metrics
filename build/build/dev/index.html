@@ -11,6 +11,7 @@
   <link href="lib/Spectrum/spectrum.css" rel="stylesheet" />
   <link href="lib/QueryBuilder/query-builder.default.css" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet" />
+  <!-- build:js -->
   <script type="text/javascript" src="lib/es5-shim.js"></script>
   <script type="text/javascript" src="lib/es6-shim.js"></script>
   <script type="text/javascript" src="lib/vue.js"></script>
@@ -20,7 +21,8 @@
   <script type="text/javascript" src="lib/foundation/foundation.js"></script>
   <script type="text/javascript" src="lib/Spectrum/spectrum.js"></script>
   <script type="text/javascript" src="lib/lodash.js"></script>
-  <script type="text/javascript" src="lib/QueryBuilder/query-builder.standalone.min.js"></script>
+  <script type="text/javascript" src="lib/QueryBuilder/query-builder.standalne.min.js"></script>
+  <!-- endbuild -->
 </head>
 
 <body>
@@ -151,7 +153,7 @@
         <div class="cell auto">
         </div>
       </div>
-      <loading v-show="state_map.loading.isloading" v-bind="state_map.loading" v-bind:editing="editing" @cancel="onCancelLoading"></loading>
+      <loading v-show="state_map.loading.isloading && orderedDisplayMetrics.length == 0" v-bind="state_map.loading" v-bind:editing="editing" @cancel="onCancelLoading"></loading>
       <div class="grid-x grid-margin-x grid-padding-x" v-cloak v-show="!state_map.loading.isloading">
         <div class="cell auto">
         </div>
@@ -358,7 +360,7 @@
           <div class="cell auto">
           </div>
         </div>
-        <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading">
+        <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading || orderedDisplayMetrics.length > 0">
           <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth"></metric>
         </div>
         <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">

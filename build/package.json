@@ -32,5 +32,8 @@
     "run-sequence": "^1.2.2",
     "typescript": "^2.5.2",
     "yargs": "^6.6.0"
+  },
+  "dependencies": {
+    "gulp-html-replace": "^1.6.2"
   }
 }

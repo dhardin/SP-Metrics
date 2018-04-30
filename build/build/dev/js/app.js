@@ -69,6 +69,11 @@ var app = new Vue({
       return _.orderBy(this.metrics, 'sortOrder');
     }
   },
+  watch: {
+    config: function(newVal, oldVal){
+      console.log('config updated');
+    }
+  },
   methods: {
     setCurrentMetric : function(optionsArr){
       var defaults = {
@@ -339,7 +344,7 @@ var app = new Vue({
           }
         });
       }).then(function(result){
-        if(Object.keys(that.config.metrics).length > 0 || that.editing){
+        if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
         } else {
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});

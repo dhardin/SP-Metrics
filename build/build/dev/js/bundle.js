@@ -371,7 +371,7 @@ Vue.component('filters', {
   methods: {
     getFilterMap: function(){
 			var filterMap = {};
-			var regex = /(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/g;
+			var regex = /(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/gi;
       //FilterField0%3DStatus-FilterValue0%3DStuff
 			var hash = window.location.hash;
 			var matches = [];
@@ -582,6 +582,11 @@ var app = new Vue({
     },
     orderedDisplayMetrics: function(){
       return _.orderBy(this.metrics, 'sortOrder');
+    }
+  },
+  watch: {
+    config: function(newVal, oldVal){
+      console.log('config updated');
     }
   },
   methods: {
@@ -854,7 +859,7 @@ var app = new Vue({
           }
         });
       }).then(function(result){
-        if(Object.keys(that.config.metrics).length > 0 || that.editing){
+        if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
         } else {
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});

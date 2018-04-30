@@ -12,7 +12,8 @@ debug = require('gulp-debug'),
 include = require('gulp-include'),
 gutil = require('gulp-util'),
 rename = require('gulp-rename'),
-sass = require('gulp-sass');
+sass = require('gulp-sass'),
+htmlreplace = require('gulp-html-replace');
 
 function getDest() {
   var destination;
@@ -87,6 +88,17 @@ gulp.task('inject-min-js', function() {
 
       return '<script src="' + filepath + '"></script>';
 
+    }
+  }))
+  .pipe(gulp.dest(getDest() + '/'));
+});
+
+gulp.task('replace-script-src', function(){
+  return gulp.src(getDest() + '/webPart.html')
+  .pipe(htmlreplace({
+    js: {
+      src: null,
+      tpl: '<script src="/Assets/Metrics/%f".js></script>'
     }
   }))
   .pipe(gulp.dest(getDest() + '/'));
