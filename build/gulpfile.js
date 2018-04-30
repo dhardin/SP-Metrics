@@ -10,21 +10,46 @@ runSequence = require('run-sequence'),
 inject = require('gulp-inject'),
 debug = require('gulp-debug'),
 include = require('gulp-include'),
-gutil = require('gulp-util'),
 rename = require('gulp-rename'),
 sass = require('gulp-sass'),
 htmlreplace = require('gulp-html-replace');
 
 function getDest() {
-  var destination;
-  if (argv.prod) {
-    destination = 'build/prod';
-  } else if (argv.stag) {
-    destination = 'build/stag';
-  } else {
-    destination = 'build/dev';
+  var destination = 'build/';
+  switch(argv.env){
+    case 'prod':
+      destination += 'prod';
+      break;
+    case 'stag':
+      destination += 'stag';
+      break;
+    default:
+      destination += 'dev';
+      break;
   }
   return destination;
+}
+
+function isBundled(){
+  var bundled = argv && argv.hasOwnProperty('bundle');
+  return bundled;
+}
+
+function getAppSrcArr(source){
+  source = source || '';
+  return [source + '/js/data.js', source + '/js/components.js', source + '/js/app.js'];
+}
+
+function getLibSrcArr(source){
+  source = source || '';
+  return  [source + '/lib/es5-shim.js', source + '/lib/vue.js', source + '/lib/es6-shim.js', source + '/lib/axios.min.js', source + '/lib/jquery-2.1.0.js',
+            source + '/lib/what-input.js', source + '/lib/foundation/foundation.js', source + '/lib/spectrum/spectrum.js', source + '/lib/lodash.js',
+            source + '/lib/QueryBuilder/query-builder.standalone.min.js'];
+}
+
+function getStyleArr(source){
+  source = source || '';
+  return [source + '/css/sp-metrics.css', source + '/lib/Spectrum/spectrum.css', source + '/lib/QueryBuilder/query-builder.default.css', source + '/css/style.css'];
 }
 
 gulp.task('lint', function() {
@@ -33,15 +58,22 @@ gulp.task('lint', function() {
   .pipe(jshint.reporter('jshint-stylish'));
 });
 
+gulp.task('bundle-css', function() {
+  var source = getStyleArr('source');
+  return gulp.src(source)
+  .pipe(concat('bundle.css'))
+  .pipe(gulp.dest(getDest() + '/css'));
+});
+
 gulp.task('bundle-js', function() {
-  var source = [ 'source/js/data.js', 'source/js/components.js', 'source/js/app.js'];
+  var source = getAppSrcArr('source');
   return gulp.src(source)
   .pipe(concat('bundle.js'))
   .pipe(gulp.dest(getDest() + '/js'));
 });
 
 gulp.task('bundle-lib-js', function() {
-  var sourceFiles = [];
+  var sourceFiles = getLibSrcArr('source');
   return gulp.src(sourceFiles)
   .pipe(concat('bundle.lib.js'))
   .pipe(gulp.dest(getDest() + '/lib'));
@@ -57,68 +89,6 @@ gulp.task('copy-lib-assets', function(){
   return gulp.src(['source/lib/**/*.{ttf,woff,eof,png,jpg,gif,svg}'])
   .pipe(rename({dirname:'images'}))
   .pipe(gulp.dest(getDest() + '/lib'));
-});
-
-gulp.task('inject-min-lib-js', function() {
-  return gulp.src(getDest() + 'index.html')
-  //inject html tempaltes into index
-  .pipe(inject(gulp.src(getDest() + '/lib/bundle.lib.js'), {
-    starttag: '<!-- inject:libjs -->',
-    endtag: '<!-- endinject -->',
-    transform: function(filepath) {
-      //parse out destination filepath
-      filepath = filepath.replace('/' + getDest() + '/', '');
-
-      return '<script src="' + filepath + '"></script>';
-
-    }
-  }))
-  .pipe(gulp.dest(getDest() + '/'));
-});
-
-gulp.task('inject-min-js', function() {
-  return gulp.src(getDest() + '/index.html')
-  //inject html tempaltes into index
-  .pipe(inject(gulp.src(getDest() + '/js/bundle.js'), {
-    starttag: '<!-- inject:js -->',
-    endtag: '<!-- endinject -->',
-    transform: function(filepath) {
-      //parse out destination filepath
-      filepath = filepath.replace('/' + getDest() + '/', '');
-
-      return '<script src="' + filepath + '"></script>';
-
-    }
-  }))
-  .pipe(gulp.dest(getDest() + '/'));
-});
-
-gulp.task('replace-script-src', function(){
-  return gulp.src(getDest() + '/webPart.html')
-  .pipe(htmlreplace({
-    js: {
-      src: null,
-      tpl: '<script src="/Assets/Metrics/%f".js></script>'
-    }
-  }))
-  .pipe(gulp.dest(getDest() + '/'));
-});
-
-gulp.task('inject-min-js-webpart', function() {
-  return gulp.src(getDest() + '/webpart.html')
-  //inject html tempaltes into index
-  .pipe(inject(gulp.src(getDest() + '/js/bundle.js'), {
-    starttag: '<!-- inject:js -->',
-    endtag: '<!-- endinject -->',
-    transform: function(filepath) {
-      //parse out destination filepath
-      filepath = filepath.replace('/' + getDest() + '/', '');
-
-      return '<script src="' + filepath + '"></script>';
-
-    }
-  }))
-  .pipe(gulp.dest(getDest() + '/'));
 });
 
 gulp.task('inject-html', function() {
@@ -151,10 +121,52 @@ gulp.task('inject-html-webpart', function() {
   .pipe(gulp.dest(getDest() + '/'));
 });
 
+gulp.task('inject-css', function() {
+  var destination = getDest();
+  argv.testing = ((!argv.production && !argv.staging) || argv.testing);
+  var source = (isBundled() ? [destination + '/css/bundle.css'] : getStyleArr(destination));
+  return gulp.src(getDest() + '/index.html')
+  .pipe(debug())
+  //inject html tempaltes into index
+  .pipe(inject(gulp.src(source), {
+    starttag: '<!-- inject:css -->',
+    endtag: '<!-- endinject -->',
+    transform: function(filepath) {
+      //parse out destination filepath
+      filepath = filepath.replace('/' + getDest() + '/', '');
+
+      return '<link rel="stylesheet" href="' + filepath + '"></script>';
+
+    }
+  }))
+  .pipe(gulp.dest(getDest() + '/'));
+});
+
+gulp.task('inject-css-webpart', function() {
+  var destination = getDest();
+  argv.testing = ((!argv.production && !argv.staging) || argv.testing);
+  var source = (isBundled() ? [destination + '/css/bundle.css'] : getStyleArr(destination));
+  return gulp.src(getDest() + '/webpart.html')
+  .pipe(debug())
+  //inject html tempaltes into index
+  .pipe(inject(gulp.src(source), {
+    starttag: '<!-- inject:css -->',
+    endtag: '<!-- endinject -->',
+    transform: function(filepath) {
+      //parse out destination filepath
+      filepath = filepath.replace('/' + getDest() + '/', '');
+
+      return '<link rel="stylesheet" href="/Assets/Metrics/' + filepath + '"></script>';
+
+    }
+  }))
+  .pipe(gulp.dest(getDest() + '/'));
+});
+
 gulp.task('inject-js', function() {
   var destination = getDest();
   argv.testing = ((!argv.production && !argv.staging) || argv.testing);
-  var source = [destination + '/js/*.js'];
+  var source = (isBundled() ? [destination + '/js/bundle.js'] : getAppSrcArr(destination));
   return gulp.src(getDest() + '/index.html')
   .pipe(debug())
   //inject html tempaltes into index
@@ -175,7 +187,7 @@ gulp.task('inject-js', function() {
 gulp.task('inject-js-webpart', function() {
   var destination = getDest();
   argv.testing = ((!argv.production && !argv.staging) || argv.testing);
-  var source = [destination + '/js/*.js'];
+  var source =  (isBundled() ? [destination + '/js/bundle.js'] : getAppSrcArr(destination));
   return gulp.src(getDest() + '/webpart.html')
   .pipe(debug())
   //inject html tempaltes into index
@@ -186,7 +198,7 @@ gulp.task('inject-js-webpart', function() {
       //parse out destination filepath
       filepath = filepath.replace('/' + getDest() + '/', '');
 
-      return '<script src="' + filepath + '"></script>';
+      return '<script src="/Assets/Metrics/'  + filepath + '"></script>';
 
     }
   }))
@@ -195,9 +207,8 @@ gulp.task('inject-js-webpart', function() {
 
 gulp.task('inject-lib-js', function() {
   var destination = getDest();
-  argv.testing = ((!argv.production && !argv.staging) || argv.testing);
-  var source = [destination + '/lib/*.js'];
-  return gulp.src(getDest() + '/index.html')
+  var source =  (isBundled() ? [destination + '/lib/bundle.lib.js'] : getLibSrcArr(destination));
+  return gulp.src(destination+ '/index.html')
   .pipe(debug())
   //inject html tempaltes into index
   .pipe(inject(gulp.src(source), {
@@ -205,13 +216,35 @@ gulp.task('inject-lib-js', function() {
     endtag: '<!-- endinject -->',
     transform: function(filepath) {
       //parse out destination filepath
-      filepath = filepath.replace('/' + getDest() + '/', '');
-
+      filepath = filepath.replace('/' + destination + '/', '');
       return '<script src="' + filepath + '"></script>';
+    }
+  }))
+  .pipe(gulp.dest(destination + '/'));
+});
+
+
+gulp.task('inject-lib-js-webpart', function() {
+  var destination = getDest();
+  var libSrcArr = getLibSrcArr(destination);
+  var jqueryIndex = libSrcArr.indexOf(destination + '/lib/jquery-2.1.0.js');
+  libSrcArr.splice(jqueryIndex, 1);
+  var source =  (isBundled() ? [destination + '/lib/bundle.lib.js'] : libSrcArr);
+  return gulp.src(getDest() + '/webpart.html')
+  .pipe(debug())
+  //inject html tempaltes into index
+  .pipe(inject(gulp.src(source), {
+    starttag: '<!-- inject:lib-js -->',
+    endtag: '<!-- endinject -->',
+    transform: function(filepath) {
+      //parse out destination filepath
+      filepath = filepath.replace('/' + destination + '/', '');
+
+      return '<script src="/Assets/Metrics/' + filepath + '"></script>';
 
     }
   }))
-  .pipe(gulp.dest(getDest() + '/'));
+  .pipe(gulp.dest(destination + '/'));
 });
 
 gulp.task('prettify', function() {
@@ -277,26 +310,18 @@ gulp.task('watch-source', function(){
     gulp.watch('source/**/*', ['source']);
 });
 
-gulp.task('watch-source-min', function(){
-    gulp.watch('source/**/*', ['source-min']);
-});
-
 gulp.task('source', function(callback) {
-    runSequence('clean', 'copy', 'inject-html', 'inject-html-webpart', 'inject-js', 'inject-js-webpart');
-    callback();
-});
-
-gulp.task('source-min', function(callback) {
-    runSequence( 'clean', 'copy', 'bundle-js', 'inject-html', 'inject-html-webpart', 'inject-min-js', 'inject-min-js-webpart');
+    var tasks = ['clean', 'copy'];
+    var bundled = isBundled();
+    if(bundled){
+      tasks.push('bundle-js', 'bundle-lib-js', 'bundle-css');
+    }
+    tasks.push( 'inject-html', 'inject-html-webpart', 'inject-css', 'inject-css-webpart', 'inject-js', 'inject-js-webpart', 'inject-lib-js','inject-lib-js-webpart');
+    runSequence.apply(null, tasks);
     callback();
 });
 
 gulp.task('build-watch', function(callback){
   runSequence('source', 'watch-source');
-  callback();
-});
-
-gulp.task('build-watch-min', function(callback){
-  runSequence('source-min', 'watch-source-min');
   callback();
 });
