@@ -71,7 +71,6 @@ var app = new Vue({
   },
   watch: {
     config: function(newVal, oldVal){
-      console.log('config updated');
     }
   },
   methods: {
@@ -286,7 +285,6 @@ var app = new Vue({
         SP.Ribbon.PageState.Handlers.isPublishEnabled();
         this.editing = SP.Ribbon.PageState.Handlers.isInEditMode();
       }catch(err){
-        console.log('MSOWebPartPageFormName: ' + window.hasOwnProperty('MSOWebPartPageFormName'));
         if(window.hasOwnProperty('MSOWebPartPageFormName')){
           this.editing = document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode.value == '1';
         }
