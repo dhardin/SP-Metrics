@@ -676,7 +676,7 @@ var app = new Vue({
       var key;
       for(key in this.config.metrics){
         if(this.metrics.hasOwnProperty(key) && this.config.metrics[key].visible){
-          this.metrics[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
+          Object.assign(this.metrics[key], {sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth});
         }
       }
     },
