@@ -9,7 +9,7 @@ var app = new Vue({
     delayedFetch: false,
     isValidated: false,
     currentMetric: {},
-    testing: window.location.host.indexOf('localhost') > -1,
+    testing: window.location.host.indexOf('localhost') > -1 || window.location.hash.indexOf('testing=true') > -1),
     currentMetricIndex: -1,
     editingMetric: false,
     state_map: {
@@ -133,6 +133,14 @@ var app = new Vue({
       }
       return dataMap;
     },
+    updateMetrics: function() {
+      var key;
+      for(key in this.config.metrics){
+        if(!this.metrics.hasOwnProperty(key) && this.config.metrics[key].visible){
+          this.metrics[key] = {name: key, count: 0, sortOrder: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].sortOrder : 0, styleObj: this.config.metrics.hasOwnProperty(key) ? this.config.metrics[key].styleObj : {}, minColumnWidth: this.config.minColumnWidth};
+        }
+      }
+    },
     generateMetrics: function(){
       this.toggleGenerating({isgenerating: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       (function(that){
@@ -154,6 +162,10 @@ var app = new Vue({
     },
     saveConfig: function(){
       this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
+      if(this.testing){
+          this.updateMetrics();
+          this.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
+      } else {
       (function(that){
         new Promise(function(resolve, reject){
           that.getDigest(function(digest){
@@ -168,6 +180,7 @@ var app = new Vue({
               if(Object.keys(data).length > 0){
                 data.metrics = JSON.parse(data.metrics);
                 _.assign(that.config, _.pick(data, _.keys(that.config)));
+                that.updateMetrics();
                 resolve();
               } else {
                 resolve('No changes.');
@@ -182,6 +195,7 @@ var app = new Vue({
           that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
         });
       })(this);
+            }
     },
     addMetric: function() {
       var number = 1;
