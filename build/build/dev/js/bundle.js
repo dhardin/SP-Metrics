@@ -702,7 +702,7 @@ var app = new Vue({
     saveConfig: function(){
       this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       if(this.testing){
-        this.updateMetrics();
+        this.generateMetrics();
         this.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
       } else {
         (function(that){
@@ -719,7 +719,7 @@ var app = new Vue({
                 if(Object.keys(data).length > 0){
                   data.metrics = JSON.parse(data.metrics);
                   _.assign(that.config, _.pick(data, _.keys(that.config)));
-                  that.updateMetrics();
+                  that.generateMetrics();
                   resolve();
                 } else {
                   resolve('No changes.');
