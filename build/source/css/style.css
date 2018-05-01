@@ -60,6 +60,9 @@
     overflow: hidden; }
   .SP-Metrics #metrics-container .cell, .SP-Metrics #metrics-config .cell {
     padding: 5px; }
+  .SP-Metrics .metric.filter {
+    cursor: pointer;
+  }
   .SP-Metrics .metric {
     text-align: center;
     padding: 5px; }
