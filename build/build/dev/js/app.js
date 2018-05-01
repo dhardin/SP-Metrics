@@ -246,9 +246,10 @@ var app = new Vue({
     },
     onFilterUpdate: function(options){
       Object.assign(this.state_map.filters, options);
+      this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
       (function(that){
         that.getData(function(data){
-          that.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
+          that.toggleLoading({isloading: false, showLoading: false, message: "", canCancel:true, canClose: false});
           that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
           that.populateMetrics(data);
         }, function(error){
