@@ -42,7 +42,7 @@ function getAppSrcArr(source){
 
 function getLibSrcArr(source){
   source = source || '';
-  return  [source + '/lib/es5-shim.js', source + '/lib/vue.js', source + '/lib/es6-shim.js', source + '/lib/axios.min.js', source + '/lib/jquery-2.1.0.js',
+  return  [source + '/lib/es5-shim.js', (argv.env == 'prod' ? source + '/lib/vue.min.js' : source + '/lib/vue.js'), source + '/lib/es6-shim.js', source + '/lib/axios.min.js', source + '/lib/jquery-2.1.0.js',
             source + '/lib/what-input.js', source + '/lib/foundation/foundation.js', source + '/lib/spectrum/spectrum.js', source + '/lib/lodash.js',
             source + '/lib/QueryBuilder/query-builder.standalone.min.js'];
 }
