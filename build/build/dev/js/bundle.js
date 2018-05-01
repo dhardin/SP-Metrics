@@ -95,7 +95,7 @@ var app_data = {
         }).then(function(response) {
           var data = (response.data.length > 0 ? response.data : JSON.parse(response.config.data));
           if (callback) {
-            callback(response.data.hasOwnProperty('d') ? response.data.d : []);
+            callback(data);
           }
         }).catch(function(error) {
           if (errorCallback) {
