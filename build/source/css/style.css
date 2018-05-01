@@ -126,7 +126,7 @@
     opacity: 0.25;
     cursor: not-allowed; }
   .SP-Metrics #loading .loader, .SP-Metrics #loading-container .loader {
-    left: 50%; }
+    left: 49%; }
   .SP-Metrics #config-btns .button:disabled, .SP-Metrics #config-btns .button[disabled] {
     opacity: 1; }
   .SP-Metrics #config-btns .loader {
