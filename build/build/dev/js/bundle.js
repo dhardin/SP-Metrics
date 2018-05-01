@@ -93,7 +93,7 @@ var app_data = {
           headers: headers,
           data: data
         }).then(function(response) {
-          var data = response.data;
+          var data = (response.data.length > 0 ? response.data : JSON.parse(response.config.data));
           if (callback) {
             callback(response.data.hasOwnProperty('d') ? response.data.d : []);
           }
