@@ -13,6 +13,7 @@ var app = new Vue({
     editingMetric: false,
     state_map: {
       isFiltered: false,
+      listUrl: '',
       saving: {
         issaving: false,
         message: '',
@@ -105,6 +106,9 @@ var app = new Vue({
       Object.assign(this.state_map.generating, options);
     },
     populateMetrics: function(data){
+      if(data.length > 0 && data[0].hasOwnProperty('EncodedAbsUrl')){
+        this.state_map.listUrl = data[0].EncodedAbsUrl.substring(0, data[0].EncodedAbsUrl.lastIndexOf('/'));
+      }
       Vue.set(this, 'metrics', this.buildDataMap(data));
     },
     buildDataMap: function(data){

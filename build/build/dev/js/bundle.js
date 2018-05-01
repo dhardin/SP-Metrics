@@ -496,13 +496,38 @@ Vue.component('metric', {
         hasdynamicwidth: {
           type: Boolean,
           default: true
+        },
+        hasfiltering: {
+          type: Boolean,
+          default: false
+        },
+        listurl: {
+          type: String,
+          default: ''
+        },
+        filterviewname: {
+          type: String,
+          default: ''
+        },
+        fieldname: {
+          type: String,
+          default: ''
         }
+    },
+    methods: {
+      onClick: function(e){
+        var url = '';
+        if(this.hasfiltering){
+          url = this.listurl + (this.filterviewname != '' ? '/' + this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name
+          window.open(url);
+        }
+      }
     },
     computed: {
       calcClassObj: function(){
-        var className = this.hasdynamicwidth ? 'medium-auto' : 'small-' + this.mincolumnwidth;
+        var classDynamicWidth = this.hasdynamicwidth ? 'medium-auto' : 'small-' + this.mincolumnwidth;
         var classObj = {};
-        classObj[className] = true;
+        classObj[classDynamicWidth] = true;
         return classObj;
       }
     },
@@ -527,6 +552,7 @@ var app = new Vue({
     editingMetric: false,
     state_map: {
       isFiltered: false,
+      listUrl: '',
       saving: {
         issaving: false,
         message: '',
@@ -619,6 +645,9 @@ var app = new Vue({
       Object.assign(this.state_map.generating, options);
     },
     populateMetrics: function(data){
+      if(data.length > 0 && data[0].hasOwnProperty('EncodedAbsUrl')){
+        this.state_map.listUrl = data[0].EncodedAbsUrl.substring(0, data[0].EncodedAbsUrl.lastIndexOf('/'));
+      }
       Vue.set(this, 'metrics', this.buildDataMap(data));
     },
     buildDataMap: function(data){

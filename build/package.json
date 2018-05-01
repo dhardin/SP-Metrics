@@ -19,7 +19,6 @@
     "gulp-jshint": "^2.0.4",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^4.0.1",
-    "gulp-typescript": "^3.2.2",
     "gulp-util": "^3.0.8",
     "jasmine-core": "^2.5.2",
     "jshint": "^2.9.5",
@@ -30,10 +29,6 @@
     "karma-requirejs": "^1.1.0",
     "requirejs": "^2.3.2",
     "run-sequence": "^1.2.2",
-    "typescript": "^2.5.2",
     "yargs": "^6.6.0"
-  },
-  "dependencies": {
-    "gulp-html-replace": "^1.6.2"
   }
 }

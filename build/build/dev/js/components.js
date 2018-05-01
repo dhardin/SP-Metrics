@@ -350,13 +350,38 @@ Vue.component('metric', {
         hasdynamicwidth: {
           type: Boolean,
           default: true
+        },
+        hasfiltering: {
+          type: Boolean,
+          default: false
+        },
+        listurl: {
+          type: String,
+          default: ''
+        },
+        filterviewname: {
+          type: String,
+          default: ''
+        },
+        fieldname: {
+          type: String,
+          default: ''
         }
+    },
+    methods: {
+      onClick: function(e){
+        var url = '';
+        if(this.hasfiltering){
+          url = this.listurl + (this.filterviewname != '' ? '/' + this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name
+          window.open(url);
+        }
+      }
     },
     computed: {
       calcClassObj: function(){
-        var className = this.hasdynamicwidth ? 'medium-auto' : 'small-' + this.mincolumnwidth;
+        var classDynamicWidth = this.hasdynamicwidth ? 'medium-auto' : 'small-' + this.mincolumnwidth;
         var classObj = {};
-        classObj[className] = true;
+        classObj[classDynamicWidth] = true;
         return classObj;
       }
     },
