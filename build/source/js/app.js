@@ -9,7 +9,7 @@ var app = new Vue({
     delayedFetch: false,
     isValidated: false,
     currentMetric: {},
-    testing: window.location.host.indexOf('localhost') > -1 || window.location.hash.indexOf('testing=true') > -1),
+    testing: window.location.host.indexOf('localhost') > -1 || window.location.hash.indexOf('testing=true') > -1,
     currentMetricIndex: -1,
     editingMetric: false,
     state_map: {
@@ -163,39 +163,39 @@ var app = new Vue({
     saveConfig: function(){
       this.toggleSaving({issaving: true, showMessage: false, messageTitle: '', message: '', isError: false, isSuccess: false});
       if(this.testing){
-          this.updateMetrics();
-          this.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
+        this.updateMetrics();
+        this.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
       } else {
-      (function(that){
-        new Promise(function(resolve, reject){
-          that.getDigest(function(digest){
-            that.state_map.digest = digest;
-            resolve();
-          }, function(error){
-            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error: Saving Config', message: error.message, isError: true, isSuccess: false});
-          })
-        }).then(function(result){
-          return new Promise(function(resolve, reject){
-            that.saveConfigData(that.state_map.digest, function(data){
-              if(Object.keys(data).length > 0){
-                data.metrics = JSON.parse(data.metrics);
-                _.assign(that.config, _.pick(data, _.keys(that.config)));
-                that.updateMetrics();
-                resolve();
-              } else {
-                resolve('No changes.');
-              }
+        (function(that){
+          new Promise(function(resolve, reject){
+            that.getDigest(function(digest){
+              that.state_map.digest = digest;
+              resolve();
             }, function(error){
-              //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
               that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error: Saving Config', message: error.message, isError: true, isSuccess: false});
-            });
-          })
-        }).then(function(result){
-          //hat.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-          that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
-        });
-      })(this);
-            }
+            })
+          }).then(function(result){
+            return new Promise(function(resolve, reject){
+              that.saveConfigData(that.state_map.digest, function(data){
+                if(Object.keys(data).length > 0){
+                  data.metrics = JSON.parse(data.metrics);
+                  _.assign(that.config, _.pick(data, _.keys(that.config)));
+                  that.updateMetrics();
+                  resolve();
+                } else {
+                  resolve('No changes.');
+                }
+              }, function(error){
+                //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+                that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Error: Saving Config', message: error.message, isError: true, isSuccess: false});
+              });
+            })
+          }).then(function(result){
+            //hat.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+            that.toggleSaving({issaving: false, showMessage: true, messageTitle: 'Success: Saving Config', message: result, isError: false, isSuccess: true});
+          });
+        })(this);
+      }
     },
     addMetric: function() {
       var number = 1;
