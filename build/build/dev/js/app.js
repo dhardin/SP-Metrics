@@ -170,7 +170,7 @@ var app = new Vue({
                 _.assign(that.config, _.pick(data, _.keys(that.config)));
                 resolve();
               } else {
-                  resolve('No changes.');
+                resolve('No changes.');
               }
             }, function(error){
               //that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
@@ -230,7 +230,7 @@ var app = new Vue({
       }
     },
     onMetricClose: function(){
-        $(this.$refs.modal.$el).foundation('close');
+      $(this.$refs.modal.$el).foundation('close');
     },
     onMetricDelete: function(name) {
       if(this.config.metrics.hasOwnProperty(name)){
@@ -349,15 +349,13 @@ var app = new Vue({
             }, function(error){
               that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
             });
-          } else {
-            if(that.testing){
-              that.populateMetrics([]);
-              resolve();
-            } else {
-              resolve();
-            }
-          } else {
+          } else if (that.config.hasFilterDetection){
             that.delayedFetch = true;
+            resolve();
+          } else if(that.testing){
+            that.populateMetrics([]);
+            resolve();
+          } else {
             resolve();
           }
         });
