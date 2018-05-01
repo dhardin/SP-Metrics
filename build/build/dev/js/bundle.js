@@ -902,7 +902,7 @@ var app = new Vue({
       }).then(function(result){
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-        } else if(!delayedFetch){
+        } else if(!that.delayedFetch){
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
         }
       });
