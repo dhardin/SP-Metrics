@@ -106,7 +106,6 @@
     left: -100px;
     bottom: 5px; }
   .SP-Metrics #loading {
-    height: 300px;
     width: 100%; }
   .SP-Metrics #metrics-config .metric:hover .increaseSort {
     transition: .2s;
