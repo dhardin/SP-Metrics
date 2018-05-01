@@ -79,6 +79,15 @@ gulp.task('bundle-lib-js', function() {
   .pipe(gulp.dest(getDest() + '/lib'));
 });
 
+gulp.task('bundle-lib-js-no-jquey', function() {
+  var libSrcArr = getLibSrcArr('source');
+  var jqueryIndex = libSrcArr.indexOf('source/lib/jquery-2.1.0.js');
+  libSrcArr.splice(jqueryIndex, 1);
+  return gulp.src(libSrcArr)
+  .pipe(concat('bundle.lib.no.jquery.js'))
+  .pipe(gulp.dest(getDest() + '/lib'));
+});
+
 gulp.task('bundle-lib-css', function() {
   return gulp.src('source/lib/**/*.css')
   .pipe(concat('bundle.lib.css'))
