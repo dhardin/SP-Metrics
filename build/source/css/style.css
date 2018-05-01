@@ -48,6 +48,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; }
+    .SP-Metrics #loading-container .callout {
+      padding: 2rem;
+    }
+
   .SP-Metrics #metrics-container .metric {
     padding: 1em;
     border: 1px solid rgba(10, 10, 10, 0.25);
