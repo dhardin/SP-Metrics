@@ -239,7 +239,7 @@
         </div>
       </div>
       <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading || orderedDisplayMetrics.length > 0">
-        <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth" v-bind:hasfiltering="config.hasFiltering" v-bind:listurl="state_map.listUrl" v-bind:filterviewname="config.filterViewName" v-bind:fieldname="config.fieldName"></metric>
+        <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:count="orderedDisplayMetrics.length" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth" v-bind:hasfiltering="config.hasFiltering" v-bind:listurl="state_map.listUrl" v-bind:filterviewname="config.filterViewName" v-bind:fieldname="config.fieldName"></metric>
       </div>
       <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">
         <div class="cell small-12">
