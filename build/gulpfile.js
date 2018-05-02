@@ -37,7 +37,7 @@ function isBundled(){
 
 function getAppSrcArr(source){
   source = source || '';
-  return [source + '/js/data.js', source + '/js/components.js', source + '/js/app.js'];
+  return [source + '/js/data.js', source + '/js/components/*.js', source + '/js/app.js'];
 }
 
 function getLibSrcArr(source){

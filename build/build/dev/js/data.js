@@ -22,7 +22,7 @@ var app_data = {
       url = this.config.siteUrl + "/_api/web/lists/GetByTitle('" + this.config.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ this.config.fieldName
       + (this.config.isLookupField ? "/"+ this.config.lookupFieldName+"&$expand="+ this.config.fieldName : "")
       + (this.state_map.filters.hasFilters
-        ? '&$filter=' + filters + (this.config.isDocumentLibrary ? ' and FSObjType ' + this.config.fileObjectType : '')
+        ? '&$filter=' + filters + (this.config.isDocumentLibrary ? ' and FSObjType eq ' + this.config.fileObjectType : '')
         : (this.config.isDocumentLibrary ? '&$filter=(FSObjType eq ' + this.config.fileObjectType + ')' : '')) + '&$top=5000';
 
         return axios({
@@ -93,7 +93,7 @@ var app_data = {
           headers: headers,
           data: data
         }).then(function(response) {
-          var data = (response.data.length > 0 ? response.data : JSON.parse(response.config.data));
+          var data = (response.data.hasOwnProperty('d') ? response.data.d : JSON.parse(response.config.data));
           if (callback) {
             callback(data);
           }

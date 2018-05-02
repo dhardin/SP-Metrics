@@ -8,10 +8,22 @@
   <meta name="author" content="Dustin Hardin" />
   <title>Metrics</title>
   <!-- inject:css -->
-  <link rel="stylesheet" href="css/bundle.css"></script>
+  <link rel="stylesheet" href="css/sp-metrics.css"></script>
+  <link rel="stylesheet" href="lib/Spectrum/spectrum.css"></script>
+  <link rel="stylesheet" href="lib/QueryBuilder/query-builder.default.css"></script>
+  <link rel="stylesheet" href="css/style.css"></script>
   <!-- endinject -->
   <!-- inject:lib-js -->
-  <script src="lib/bundle.lib.js"></script>
+  <script src="lib/es5-shim.js"></script>
+  <script src="lib/vue.js"></script>
+  <script src="lib/es6-shim.js"></script>
+  <script src="lib/axios.min.js"></script>
+  <script src="lib/jquery-2.1.0.js"></script>
+  <script src="lib/what-input.js"></script>
+  <script src="lib/foundation/foundation.js"></script>
+  <script src="lib/spectrum/spectrum.js"></script>
+  <script src="lib/lodash.js"></script>
+  <script src="lib/QueryBuilder/query-builder.standalone.min.js"></script>
   <!-- endinject -->
 </head>
 
@@ -239,7 +251,7 @@
         </div>
       </div>
       <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading || orderedDisplayMetrics.length > 0">
-        <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth" v-bind:hasfiltering="config.hasFiltering" v-bind:listurl="state_map.listUrl" v-bind:filterviewname="config.filterViewName" v-bind:fieldname="config.fieldName"></metric>
+        <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:numitems="orderedDisplayMetrics.length" v-bind:isdocumentlibrary="config.isDocumentLibrary" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth" v-bind:hasfiltering="config.hasFiltering" v-bind:listurl="state_map.listUrl" v-bind:filterviewname="config.filterViewName" v-bind:fieldname="config.fieldName"></metric>
       </div>
       <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">
         <div class="cell small-12">
@@ -362,7 +374,13 @@
 
       <!-- endinject -->
       <!-- inject:js -->
-      <script src="js/bundle.js"></script>
+      <script src="js/data.js"></script>
+      <script src="js/components/edit-metric.js"></script>
+      <script src="js/components/filters.js"></script>
+      <script src="js/components/loading.js"></script>
+      <script src="js/components/metric-config.js"></script>
+      <script src="js/components/metric.js"></script>
+      <script src="js/app.js"></script>
       <!-- endinject -->
       <script type="text/javascript">
       if (!window.location.origin) {
