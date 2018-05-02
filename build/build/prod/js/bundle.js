@@ -512,13 +512,17 @@ Vue.component('metric', {
         fieldname: {
           type: String,
           default: ''
+        },
+        isdocumentlibrary: {
+          type: Boolean,
+          default: false
         }
     },
     methods: {
       onClick: function(e){
         var url = '';
         if(this.hasfiltering){
-          url = this.listurl + (this.filterviewname != '' ? '/' + this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
+          url = this.listurl + (this.isdocumentlibrary ? '/Forms/' : '' ) + (this.filterviewname != '' ? '/' + this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
           window.open(url);
         }
       }
