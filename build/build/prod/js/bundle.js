@@ -493,6 +493,10 @@ Vue.component('metric', {
           type: Number,
           default: 0
         },
+        numitems: {
+          type: Number,
+          default: 0
+        },
         hasdynamicwidth: {
           type: Boolean,
           default: true
@@ -529,7 +533,7 @@ Vue.component('metric', {
     },
     computed: {
       calcClassObj: function(){
-        var classDynamicWidth = this.hasdynamicwidth ? 'medium-' + this.mincolumnwidth + ' large-auto' : (this.count > 6 ? 'medium-3 ' : '') + 'large-' + this.mincolumnwidth;
+        var classDynamicWidth = this.hasdynamicwidth ? 'medium-' + this.mincolumnwidth + ' large-auto' : (this.numitems > 6 ? 'medium-3 ' : '') + 'large-' + this.mincolumnwidth;
         var classObj = {};
         classObj[classDynamicWidth] = true;
         return classObj;
