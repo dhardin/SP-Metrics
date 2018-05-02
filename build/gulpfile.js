@@ -42,7 +42,7 @@ function getAppSrcArr(source){
 
 function getLibSrcArr(source){
   source = source || '';
-  return  [source + '/lib/es5-shim.js', (argv.env == 'prod' ? source + '/lib/vue.min.js' : source + '/lib/vue.js'), source + '/lib/es6-shim.js', source + '/lib/axios.min.js', source + '/lib/jquery-2.1.0.js',
+  return  [source + '/lib/es5-shim.js', (argv.env == 'prod' ? source + '/lib/vue.min.js' : source + '/lib/vue.js'), source + '/lib/es6-shim.js', source + '/lib/axios.min.js', source + '/lib/jquery.min.js',
             source + '/lib/what-input.js', source + '/lib/foundation/foundation.js', source + '/lib/spectrum/spectrum.js', source + '/lib/lodash.js',
             source + '/lib/QueryBuilder/query-builder.standalone.min.js'];
 }
@@ -81,7 +81,7 @@ gulp.task('bundle-lib-js', function() {
 
 gulp.task('bundle-lib-js-no-jquey', function() {
   var libSrcArr = getLibSrcArr('source');
-  var jqueryIndex = libSrcArr.indexOf('source/lib/jquery-2.1.0.js');
+  var jqueryIndex = libSrcArr.indexOf('source/lib/jquery.min.js');
   libSrcArr.splice(jqueryIndex, 1);
   return gulp.src(libSrcArr)
   .pipe(concat('bundle.lib.no.jquery.js'))
@@ -236,7 +236,7 @@ gulp.task('inject-lib-js', function() {
 gulp.task('inject-lib-js-webpart', function() {
   var destination = getDest();
   var libSrcArr = getLibSrcArr(destination);
-  var jqueryIndex = libSrcArr.indexOf(destination + '/lib/jquery-2.1.0.js');
+  var jqueryIndex = libSrcArr.indexOf(destination + '/lib/jquery.min.js');
   libSrcArr.splice(jqueryIndex, 1);
   var source =  (isBundled() ? [destination + '/lib/bundle.lib.no.jquery.js'] : libSrcArr);
   return gulp.src(getDest() + '/webpart.html')
