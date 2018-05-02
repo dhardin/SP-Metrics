@@ -238,7 +238,7 @@ gulp.task('inject-lib-js-webpart', function() {
   var libSrcArr = getLibSrcArr(destination);
   var jqueryIndex = libSrcArr.indexOf(destination + '/lib/jquery-2.1.0.js');
   libSrcArr.splice(jqueryIndex, 1);
-  var source =  (isBundled() ? [destination + '/lib/bundle.lib.js'] : libSrcArr);
+  var source =  (isBundled() ? [destination + '/lib/bundle.lib.no.jquery.js'] : libSrcArr);
   return gulp.src(getDest() + '/webpart.html')
   .pipe(debug())
   //inject html tempaltes into index
@@ -323,7 +323,7 @@ gulp.task('source', function(callback) {
     var tasks = ['clean', 'copy'];
     var bundled = isBundled();
     if(bundled){
-      tasks.push('bundle-js', 'bundle-lib-js', 'bundle-css');
+      tasks.push('bundle-js', 'bundle-lib-js', 'bundle-lib-js-no-jquey', 'bundle-css');
     }
     tasks.push('inject-html', 'inject-html-webpart', 'inject-css');
     if(!bundled){
