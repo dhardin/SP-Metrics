@@ -13,7 +13,7 @@ var app_data = {
           for(key in filterMap){
             subfilter = '';
             for(i = 0; i < filterMap[key].length; i++){
-              subfilter += (subfilter.length > 0 ? ' or ' : '' ) + "startswith("+key+",'"+filterMap[key][i]+"')";
+              subfilter += (subfilter.length > 0 ? ' or ' : '' ) + "startswith("+key+(this.config.isLookupField ? '/' + this.config.lookupFieldName : '') +",'"+filterMap[key][i]+"')";
             }
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';
           }
