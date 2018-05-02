@@ -188,7 +188,7 @@ Vue.component('edit-metric', {
         status: {
             handler: function(newVal, oldVal) {
                 this.hasError = this.status.errorCode === 0;
-                if(oldVal.isSaving && !newVal.isSaving && !newVal.errorCode){
+                if(oldVal.isSaving && !newVal.isSaving && newVal.errorCode !== 0){
                  this.$emit('close');
                 }
             },
