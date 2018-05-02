@@ -325,7 +325,11 @@ gulp.task('source', function(callback) {
     if(bundled){
       tasks.push('bundle-js', 'bundle-lib-js', 'bundle-css');
     }
-    tasks.push('inject-html', 'inject-html-webpart', 'inject-css', 'inject-css-webpart', 'inject-js', 'inject-js-webpart', 'inject-lib-js','inject-lib-js-webpart');
+    tasks.push('inject-html', 'inject-html-webpart', 'inject-css');
+    if(!bundled){
+      tasks.push('inject-css-webpart');
+    }
+    tasks.push('inject-js', 'inject-js-webpart', 'inject-lib-js','inject-lib-js-webpart');
     runSequence.apply(null, tasks);
     callback();
 });
