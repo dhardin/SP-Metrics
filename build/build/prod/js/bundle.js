@@ -370,7 +370,7 @@ var app = new Vue({
           this.currentMetric.status.isSaving = false;
           $(this.$refs.modal.$el).foundation('close');
         } else if (oldName != options.name && this.config.metrics.hasOwnProperty(options.name)) {
-          this.setCurrentMetric([{ status: { errorCode: 0, message: 'Name already exists.' }}]);
+          this.setCurrentMetric([options, { status: { errorCode: 0, message: 'Name already exists.' }}]);
           this.currentMetric.status.isSaving = false;
         } else {
           Object.assign(this.config.metrics[options.name], options);
