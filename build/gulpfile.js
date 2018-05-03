@@ -37,19 +37,19 @@ function isBundled(){
 
 function getAppSrcArr(source){
   source = source || '';
-  return [source + '/js/data.js', source + '/js/components/*.js', source + '/js/app.js'];
+  return [source + '/js/data.js', source + '/js/**/*.js', source + '/js/app.js'];
 }
 
 function getLibSrcArr(source){
   source = source || '';
   return  [source + '/lib/es5-shim.min.js', (argv.env == 'prod' ? source + '/lib/vue.min.js' : source + '/lib/vue.js'), source + '/lib/es6-shim.min.js', source + '/lib/axios.min.js', source + '/lib/jquery.min.js',
-            source + '/lib/what-input.js', source + '/lib/foundation/foundation.js', source + '/lib/spectrum/spectrum.js', source + '/lib/lodash.js',
-            source + '/lib/QueryBuilder/query-builder.standalone.min.js'];
+            source + '/lib/what-input.js', source + '/lib/**/foundation.js', source + '/lib/**/spectrum.js', source + '/lib/lodash.js',
+            source + '/lib/**/query-builder.standalone.min.js'];
 }
 
 function getStyleArr(source){
   source = source || '';
-  return [source + '/css/sp-metrics.css', source + '/lib/Spectrum/spectrum.css', source + '/lib/QueryBuilder/query-builder.default.css', source + '/css/style.css'];
+  return [source + '/css/sp-metrics.css', source + '/lib/**/*.css', source + '/css/style.css'];
 }
 
 gulp.task('lint', function() {
@@ -155,6 +155,7 @@ gulp.task('inject-css-webpart', function() {
   var destination = getDest();
   argv.testing = ((!argv.production && !argv.staging) || argv.testing);
   var source = (isBundled() ? [destination + '/css/bundle.css'] : getStyleArr(destination));
+  console.log(source);
   return gulp.src(getDest() + '/webpart.html')
   .pipe(debug())
   //inject html tempaltes into index
@@ -276,12 +277,12 @@ gulp.task('delete-js', function() {
 
 //copy all files in source directory to destination directory
 gulp.task('copy', function() {
-  return gulp.src(['source/**/*',  '!source/templates/', '!source/templates/**/*', '!source/css/*.scss'])
-  .pipe(gulp.dest(getDest()));
-});
-
-gulp.task('copy-html', function(){
-  return gulp.src('index.html')
+  source = [];
+//  if(isBundled()){
+    source = ['source/*.html'];
+//  } else {
+//        source = ['source/**/*',  '!source/templates/', '!source/templates/**/*', '!source/css/*.scss'];
+  return gulp.src(source)
   .pipe(gulp.dest(getDest()));
 });
 
@@ -305,8 +306,25 @@ gulp.task('copy-assets', function(){
 });
 
 gulp.task('copy-css', function(){
-  return gulp.src(['source/css/**/*'])
+  var source = ['source/css/*.css'];
+  return gulp.src(source)
   .pipe(gulp.dest(getDest() + '/css'));
+});
+
+gulp.task('copy-lib-css', function(){
+  var source = ['source/lib/**/*.css', '!source/lib/**/query-builder.dark.css'];
+  return gulp.src(source)
+  .pipe(gulp.dest(getDest() + '/lib'));
+});
+
+gulp.task('copy-js', function(){
+  return gulp.src(getAppSrcArr('source'))
+  .pipe(gulp.dest(getDest() + '/js'));
+});
+
+gulp.task('copy-lib', function(){
+  return gulp.src(getLibSrcArr('source'))
+  .pipe(gulp.dest(getDest() + '/lib'));
 });
 
 gulp.task('watch-styles', function(callback){
@@ -324,6 +342,8 @@ gulp.task('source', function(callback) {
     var bundled = isBundled();
     if(bundled){
       tasks.push('bundle-js', 'bundle-lib-js', 'bundle-lib-js-no-jquey', 'bundle-css');
+    } else {
+      tasks.push( 'copy-css', 'copy-lib-css', 'copy-js', 'copy-lib');
     }
     tasks.push('inject-html', 'inject-html-webpart', 'inject-css');
     if(!bundled){
