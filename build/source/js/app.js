@@ -355,7 +355,7 @@ var app = new Vue({
           });
         }
       }).then(function(result){
-        new Promise(function(resolve, reject){
+      return new Promise(function(resolve, reject){
           if(that.testing){
             resolve();
           } else {
@@ -372,7 +372,8 @@ var app = new Vue({
               that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
             });
           }
-        }).then(function(result){
+        });
+      }).then(function(result){
         return new Promise(function(resolve, reject){
           if(that.config.ID > 0 && !that.config.hasFilterDetection){
             //we'll want to wait on filters to be generated from out filter component first if they're needed
