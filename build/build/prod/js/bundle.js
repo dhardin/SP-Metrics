@@ -312,13 +312,26 @@ Vue.component('filters', {
           displayFieldMap: {}
         };
       }
+    },
+    configfetched: {
+      type: Boolean,
+      default: false
     }
+  },
+  watch: {
+      configfetched: function(newVal, oldVal) {
+          if(newVal == true && oldVal == false){
+            this.updateQuery();
+          }
+      }
   },
   mounted: function(){
     (function(that){
       $(that.$parent.$options.el).foundation();
       $(window).on('hashchange', function(){
-        that.updateQuery();
+        if(this.configfetched){
+          that.updateQuery();
+        }
       });
     })(this);
     //run filters first time during init
@@ -1007,9 +1020,6 @@ var app = new Vue({
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
           //trigger hashchange to populate filter population
-          if(this.config.hasFilterDetection){
-              $(window).trigger('hashchange');
-          }
         } else {
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
         }

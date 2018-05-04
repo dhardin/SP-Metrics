@@ -10,13 +10,26 @@ Vue.component('filters', {
           displayFieldMap: {}
         };
       }
+    },
+    configfetched: {
+      type: Boolean,
+      default: false
     }
+  },
+  watch: {
+      configfetched: function(newVal, oldVal) {
+          if(newVal == true && oldVal == false){
+            this.updateQuery();
+          }
+      }
   },
   mounted: function(){
     (function(that){
       $(that.$parent.$options.el).foundation();
       $(window).on('hashchange', function(){
-        that.updateQuery();
+        if(this.configfetched){
+          that.updateQuery();
+        }
       });
     })(this);
     //run filters first time during init
