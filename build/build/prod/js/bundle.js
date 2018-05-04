@@ -12,6 +12,9 @@ var app_data = {
           filterMap = this.state_map.filters.filterMap;
           for(key in filterMap){
             subfilter = '';
+              if(!this.state_map.fieldMap.hasOwnProperty(key)){
+                continue;
+              }
             for(i = 0; i < filterMap[key].length; i++){
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
                 (this.state_map.fieldMap[key].TypeAsString != 'DateTime'
