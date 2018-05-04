@@ -397,7 +397,7 @@ var app = new Vue({
         that.configFetched = true;
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-        } else if(!that.delayedFetch){
+        } else {
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
         }
       });
