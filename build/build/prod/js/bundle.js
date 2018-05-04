@@ -110,7 +110,7 @@ var app_data = {
           }
         });
       },
-      getListFileds: function(callback, errorCallback){
+      getListFields: function(callback, errorCallback){
         return axios({
           url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/Fields?$filter=Hidden eq false and ReadOnlyField eq false",
           method: "get",
@@ -580,7 +580,6 @@ var app = new Vue({
     site: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: ''), //site where the SharePoint configuration list is located
     editing: false,
     configFetched: true,
-    delayedFetch: false,
     isValidated: false,
     currentMetric: {},
     testing: window.location.host.indexOf('localhost') > -1 || window.location.hash.indexOf('testing=true') > -1,
@@ -835,6 +834,9 @@ var app = new Vue({
     },
     onFilterUpdate: function(options){
       Object.assign(this.state_map.filters, options);
+      if(!this.configFetched){
+        return;
+      }
       this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
       (function(that){
         that.getData(function(data){
@@ -905,11 +907,11 @@ var app = new Vue({
       $(window).on('hashchange', function(e){
         that.checkEditMode();
       });
-
     })(this);
   },
 
   created: function() {
+    this.configFetched = false;
     this.checkEditMode();
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
@@ -933,7 +935,7 @@ var app = new Vue({
             if(that.testing){
               resolve();
             } else {
-              that.getListFileds(function(data){
+              that.getListFields(function(data){
                 if(data.length > 0){
                   fieldMap = data.reduce(function(map, obj) {
                       map[obj.Title] = obj;
@@ -947,7 +949,7 @@ var app = new Vue({
               });
             }
           }).then(function(result){
-            if(that.config.ID > 0 && !that.config.hasFilterDetection){
+            if(that.config.ID > 0){
               //we'll want to wait on filters to be generated from out filter component first if they're needed
               //this way we avoid more web service calls.
               that.getData(function(data){
@@ -956,9 +958,6 @@ var app = new Vue({
               }, function(error){
                 that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
               });
-            } else if (that.config.hasFilterDetection){
-              that.delayedFetch = true;
-              resolve();
             } else if(that.testing){
               that.populateMetrics([]);
               resolve();
@@ -967,6 +966,7 @@ var app = new Vue({
             }
         })
     }).then(function(result){
+        that.configFetched = true;
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
         } else if(!that.delayedFetch){

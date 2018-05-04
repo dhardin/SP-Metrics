@@ -110,7 +110,7 @@ var app_data = {
           }
         });
       },
-      getListFileds: function(callback, errorCallback){
+      getListFields: function(callback, errorCallback){
         return axios({
           url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/Fields?$filter=Hidden eq false and ReadOnlyField eq false",
           method: "get",
