@@ -15,7 +15,7 @@ var app_data = {
             for(i = 0; i < filterMap[key].length; i++){
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
                 (this.state_map.fieldMap[key].TypeAsString != 'DateTime'
-                  ? "startswith("+key+(this.state_map.fieldMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fieldMap[key].LookupField : "")+",'"+filterMap[key][i]+"'"
+                  ? "startswith("+key+(this.state_map.fieldMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fieldMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
                   : key + " eq datetime'" +filterMap[key][i] + "'"
                 );
             }
