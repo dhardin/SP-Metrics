@@ -638,11 +638,10 @@ var app = new Vue({
         message: '',
         isloading: true
       },
-      fieldMap: {},
       fields: {
         static: {},
         display: {}
-      }
+      },
       filters: {
         filterMap: {},
         hasFilters: false
