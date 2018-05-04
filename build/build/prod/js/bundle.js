@@ -933,7 +933,7 @@ var app = new Vue({
             that.getListFileds(function(data){
               if(data.length > 0){
                 fieldMap = data.reduce(function(map, obj) {
-                    map[obj.key] = obj.Title;
+                    map[obj.Title] = obj;
                     return map;
                 }, {});
                 _.assign(that.state_map.fieldMap, fieldMap);
