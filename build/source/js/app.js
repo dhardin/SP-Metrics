@@ -369,7 +369,7 @@ var app = new Vue({
                   }, {});
                   _.assign(that.state_map.fieldMap, fieldMap);
                 }
-                return;
+                  resolve();
               }, function(error){
                 that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
               });
