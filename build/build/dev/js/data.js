@@ -109,7 +109,7 @@ var app_data = {
       },
       getListFileds: function(callback, errorCallback){
         return axios({
-          url: this.site + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/Fields?$filter=Hidden eq false and ReadOnlyField eq false",
+          url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/Fields?$filter=Hidden eq false and ReadOnlyField eq false",
           method: "get",
           headers: {
             "accept": "application/json;odata=verbose",
