@@ -11,8 +11,7 @@ inject = require('gulp-inject'),
 debug = require('gulp-debug'),
 include = require('gulp-include'),
 rename = require('gulp-rename'),
-sass = require('gulp-sass'),
-htmlreplace = require('gulp-html-replace');
+sass = require('gulp-sass');
 
 function getDest() {
   var destination = 'build/';
