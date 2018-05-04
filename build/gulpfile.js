@@ -321,6 +321,11 @@ gulp.task('copy-js', function(){
   .pipe(gulp.dest(getDest() + '/js'));
 });
 
+gulp.task('copy-jquery', function(){
+  return gulp.src(['source/lib/jquery.min.js'])
+  .pipe(gulp.dest(getDest() + '/lib'));
+});
+
 gulp.task('copy-lib', function(){
   return gulp.src(getLibSrcArr('source'))
   .pipe(gulp.dest(getDest() + '/lib'));
@@ -340,7 +345,7 @@ gulp.task('source', function(callback) {
     var tasks = ['clean', 'copy'];
     var bundled = isBundled();
     if(bundled){
-      tasks.push('bundle-js', 'bundle-lib-js', 'bundle-lib-js-no-jquey', 'bundle-css');
+      tasks.push('bundle-js', 'bundle-lib-js', 'bundle-lib-js-no-jquey', 'bundle-css', 'copy-jquery');
     } else {
       tasks.push( 'copy-css', 'copy-lib-css', 'copy-js', 'copy-lib');
     }
