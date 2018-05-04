@@ -1,5 +1,14 @@
 var app_data = {
   methods: {
+    getFieldValue(fieldName, value){
+      var type = this.state_map.fieldMap[key].TypeAsString;
+      switch(type){
+        case 'DateTime':
+          return
+        default:
+          return value;
+      }
+    },
     getData: function(callback, errorCallback){
       var filterMap = {};
       var filters = '';
@@ -13,7 +22,11 @@ var app_data = {
           for(key in filterMap){
             subfilter = '';
             for(i = 0; i < filterMap[key].length; i++){
-              subfilter += (subfilter.length > 0 ? ' or ' : '' ) + "startswith("+key+(this.config.isLookupField && this.config.fieldName == key ? '/' + this.config.lookupFieldName : '') +",'"+filterMap[key][i]+"')";
+              subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
+                (this.state_map.fieldMap[key].TypeAsString != 'DateTime'
+                  ? "startswith("+key+(this.state_map.fieldMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fieldMap[key].LookupField : "")+",'"+filterMap[key][i]+"'"
+                  : key + " eq datetime'" +filterMap[key][i] + "'"
+                );
             }
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';
           }
@@ -94,6 +107,25 @@ var app_data = {
           data: data
         }).then(function(response) {
           var data = (response.data.hasOwnProperty('d') ? response.data.d : JSON.parse(response.config.data));
+          if (callback) {
+            callback(data);
+          }
+        }).catch(function(error) {
+          if (errorCallback) {
+            errorCallback(error);
+          }
+        });
+      },
+      getListFileds: function(callback, errorCallback){
+        return axios({
+          url: this.site + "/_api/web/lists/GetByTitle('"+this.confg.listName+"')/Fields?$filter=Hidden eq false and ReadOnlyField eq false",
+          method: "get",
+          headers: {
+            "accept": "application/json;odata=verbose",
+            "content-type": "application/json;odata=verbose"
+          }
+        }).then(function(response) {
+          var data = response.data.d.results;
           if (callback) {
             callback(data);
           }
@@ -586,6 +618,7 @@ var app = new Vue({
         message: '',
         isloading: true
       },
+      fieldMap: {},
       filters: {
         filterMap: {},
         hasFilters: false
@@ -923,6 +956,24 @@ var app = new Vue({
           }
         });
       }).then(function(result){
+        new Promise(function(resolve, reject){
+          if(that.testing){
+            resolve();
+          } else {
+            that.getListFileds(function(data){
+              if(data.length > 0){
+                fieldMap = data.reduce(function(map, obj) {
+                    map[obj.key] = obj.Title;
+                    return map;
+                }, {});
+                _.assign(that.state_map.fieldMap, fieldMap);
+              }
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          }
+        }).then(function(result){
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
         } else if(!that.delayedFetch){

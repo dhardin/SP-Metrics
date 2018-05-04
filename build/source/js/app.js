@@ -38,6 +38,7 @@ var app = new Vue({
         message: '',
         isloading: true
       },
+      fieldMap: {},
       filters: {
         filterMap: {},
         hasFilters: false
@@ -375,6 +376,24 @@ var app = new Vue({
           }
         });
       }).then(function(result){
+        new Promise(function(resolve, reject){
+          if(that.testing){
+            resolve();
+          } else {
+            that.getListFileds(function(data){
+              if(data.length > 0){
+                fieldMap = data.reduce(function(map, obj) {
+                    map[obj.key] = obj.Title;
+                    return map;
+                }, {});
+                _.assign(that.state_map.fieldMap, fieldMap);
+              }
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          }
+        }).then(function(result){
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
         } else if(!that.delayedFetch){
