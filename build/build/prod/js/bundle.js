@@ -968,7 +968,7 @@ var app = new Vue({
             that.getListFields(function(data){
               if(data.length > 0){
                 staticFieldMap = data.reduce(function(map, obj) {
-                  map[obj.Title] = obj;
+                  map[obj.StaticName] = obj;
                   return map;
                 }, {});
                 displayFieldMap = data.reduce(function(map, obj) {
@@ -986,7 +986,7 @@ var app = new Vue({
         })
       }).then(function(result){
         return new Promise(function(resolve, reject){
-          if(that.config.ID > 0){
+          if(that.config.ID > 0 && !this.config.hasFilterDetection){
             //we'll want to wait on filters to be generated from out filter component first if they're needed
             //this way we avoid more web service calls.
             that.getData(function(data){
@@ -1006,6 +1006,10 @@ var app = new Vue({
         that.configFetched = true;
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
+          //trigger hashchange to populate filter population
+          if(this.config.hasFilterDetection){
+              $(window).trigger('hashchange');
+          }
         } else {
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
         }
