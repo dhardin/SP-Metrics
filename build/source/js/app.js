@@ -1,6 +1,6 @@
 var app = new Vue({
   el: '#SP-Metrics',
-  mixins: [app_data],
+  mixins: [app_data, app_helper],
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
     site: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: ''), //site where the SharePoint configuration list is located
@@ -38,6 +38,10 @@ var app = new Vue({
         isloading: true
       },
       fieldMap: {},
+      fields: {
+        static: {},
+        display: {}
+      }
       filters: {
         filterMap: {},
         hasFilters: false
@@ -363,11 +367,16 @@ var app = new Vue({
           } else {
             that.getListFields(function(data){
               if(data.length > 0){
-                fieldMap = data.reduce(function(map, obj) {
+                staticFieldMap = data.reduce(function(map, obj) {
                   map[obj.Title] = obj;
                   return map;
                 }, {});
-                _.assign(that.state_map.fieldMap, fieldMap);
+                displayFieldMap = data.reduce(function(map, obj) {
+                  map[obj.Title] = obj;
+                  return map;
+                }, {});
+                _.assign(that.state_map.fields, staticFieldMap);
+                _.assign(that.state_map.fields, displayFieldMap);
               }
               resolve();
             }, function(error){

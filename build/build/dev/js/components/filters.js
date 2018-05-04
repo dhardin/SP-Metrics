@@ -1,6 +1,16 @@
 Vue.component('filters', {
   template: '#filter-template',
-  props: [],
+    mixins: [app_helper],
+  props: [
+    fields: {
+        type: Object,
+        default: function() {
+            return {
+               staticFieldMap: {},
+               displayFieldMap: {}
+            };
+        }
+  ],
   mounted: function(){
     (function(that){
     $(that.$parent.$options.el).foundation();
@@ -23,10 +33,17 @@ Vue.component('filters', {
       //FilterField0%3DStatus-FilterValue0%3DStuff
 			var hash = window.location.hash;
 			var matches = [];
+      var staticFieldName = '';
+      var displayFieldName = '';
 			while((matches = regex.exec(hash)) != null){
 				var i;
 				for(i = 2; i < matches.length && i + 2 < matches.length; i+=2){
-						filterMap[matches[i]] = decodeURI(matches[i + 2]).split('%3B%23');
+            staticFieldName = this.decodeSharePointFieldUri(matches[i]);
+            displayFieldName = this.fields.staticFieldMap.hasOwnProperty(staticFieldName) ? this.fields.staticFieldMap[staticFieldName] : false;
+            if(!displayFieldName){
+              continue;
+            }
+						filterMap[displayFieldName] = decodeURI(matches[i + 2]).split('%3B%23');
 				}
 			}
 			return filterMap;

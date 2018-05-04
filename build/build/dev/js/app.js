@@ -1,12 +1,11 @@
 var app = new Vue({
   el: '#SP-Metrics',
-  mixins: [app_data],
+  mixins: [app_data, app_helper],
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
     site: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: ''), //site where the SharePoint configuration list is located
     editing: false,
     configFetched: true,
-    delayedFetch: false,
     isValidated: false,
     currentMetric: {},
     testing: window.location.host.indexOf('localhost') > -1 || window.location.hash.indexOf('testing=true') > -1,
@@ -39,6 +38,10 @@ var app = new Vue({
         isloading: true
       },
       fieldMap: {},
+      fields: {
+        static: {},
+        display: {}
+      }
       filters: {
         filterMap: {},
         hasFilters: false
@@ -261,6 +264,9 @@ var app = new Vue({
     },
     onFilterUpdate: function(options){
       Object.assign(this.state_map.filters, options);
+      if(!this.configFetched){
+        return;
+      }
       this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
       (function(that){
         that.getData(function(data){
@@ -331,11 +337,11 @@ var app = new Vue({
       $(window).on('hashchange', function(e){
         that.checkEditMode();
       });
-
     })(this);
   },
 
   created: function() {
+    this.configFetched = false;
     this.checkEditMode();
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);
@@ -356,46 +362,51 @@ var app = new Vue({
         }
       }).then(function(result){
         return new Promise(function(resolve, reject){
-            if(that.testing){
+          if(that.testing){
+            resolve();
+          } else {
+            that.getListFields(function(data){
+              if(data.length > 0){
+                staticFieldMap = data.reduce(function(map, obj) {
+                  map[obj.Title] = obj;
+                  return map;
+                }, {});
+                displayFieldMap = data.reduce(function(map, obj) {
+                  map[obj.Title] = obj;
+                  return map;
+                }, {});
+                _.assign(that.state_map.fields, staticFieldMap);
+                _.assign(that.state_map.fields, displayFieldMap);
+              }
               resolve();
-            } else {
-              that.getListFileds(function(data){
-                if(data.length > 0){
-                  fieldMap = data.reduce(function(map, obj) {
-                      map[obj.Title] = obj;
-                      return map;
-                  }, {});
-                  _.assign(that.state_map.fieldMap, fieldMap);
-                }
-                return;
-              }, function(error){
-                that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-              });
-            }
-          }).then(function(result){
-            if(that.config.ID > 0 && !that.config.hasFilterDetection){
-              //we'll want to wait on filters to be generated from out filter component first if they're needed
-              //this way we avoid more web service calls.
-              that.getData(function(data){
-                that.populateMetrics(data);
-                resolve();
-              }, function(error){
-                that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-              });
-            } else if (that.config.hasFilterDetection){
-              that.delayedFetch = true;
-              resolve();
-            } else if(that.testing){
-              that.populateMetrics([]);
-              resolve();
-            } else {
-              resolve();
-            }
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          }
         })
-    }).then(function(result){
+      }).then(function(result){
+        return new Promise(function(resolve, reject){
+          if(that.config.ID > 0){
+            //we'll want to wait on filters to be generated from out filter component first if they're needed
+            //this way we avoid more web service calls.
+            that.getData(function(data){
+              that.populateMetrics(data);
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          } else if(that.testing){
+            that.populateMetrics([]);
+            resolve();
+          } else {
+            resolve();
+          }
+        })
+      }).then(function(result){
+        that.configFetched = true;
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
-        } else if(!that.delayedFetch){
+        } else {
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
         }
       });

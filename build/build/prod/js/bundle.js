@@ -12,13 +12,13 @@ var app_data = {
           filterMap = this.state_map.filters.filterMap;
           for(key in filterMap){
             subfilter = '';
-              if(!this.state_map.fieldMap.hasOwnProperty(key)){
+              if(!this.state_map.fields.displayFieldMap.hasOwnProperty(key)){
                 continue;
               }
             for(i = 0; i < filterMap[key].length; i++){
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
-                (this.state_map.fieldMap[key].TypeAsString != 'DateTime'
-                  ? "startswith("+key+(this.state_map.fieldMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fieldMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
+                (this.state_map.fields.displayFieldMap[key].TypeAsString != 'DateTime'
+                  ? "startswith("+key+(this.state_map.fields.displayFieldMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayFieldMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
                   : key + " eq datetime'" +filterMap[key][i] + "'"
                 );
             }
@@ -27,7 +27,7 @@ var app_data = {
         }
       }
       url = this.config.siteUrl + "/_api/web/lists/GetByTitle('" + this.config.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ this.config.fieldName
-      + (this.state_map.fieldMap[this.config.fieldName].hasOwnProperty('LookupField') ?  "/"+ this.state_map.fieldMap[this.config.fieldName].LookupField +"&$expand="+ this.config.fieldName : "")
+      + (this.state_map.fields.displayFieldMap[this.config.fieldName].hasOwnProperty('LookupField') ?  "/"+ this.state_map.fields.displayFieldMap[this.config.fieldName].LookupField +"&$expand="+ this.config.fieldName : "")
       + (this.state_map.filters.hasFilters
         ? '&$filter=' + filters + (this.config.isDocumentLibrary ? (filters.length > 0 ? ' and ' : '') + 'FSObjType eq ' + this.config.fileObjectType : '')
         : (this.config.isDocumentLibrary ? '&$filter=(FSObjType eq ' + this.config.fileObjectType + ')' : '')) + '&$top=5000';
@@ -170,6 +170,15 @@ var app_data = {
     }
   };
 
+var app_helper = {
+  methods: {
+      decodeSharePointFieldUri: function(fieldName){
+        var decodedFieldName = decodeURIComponent(fieldName); //first initial decode from URI
+         return fieldName.replace(/%5f/g, '_');
+      }
+    }
+  };
+
 Vue.component('edit-metric', {
     template: '#edit-metric',
     props: {
@@ -293,7 +302,17 @@ Vue.component('edit-metric', {
 
 Vue.component('filters', {
   template: '#filter-template',
-  props: [],
+    mixins: [app_helper],
+  props: [
+    fields: {
+        type: Object,
+        default: function() {
+            return {
+               staticFieldMap: {},
+               displayFieldMap: {}
+            };
+        }
+  ],
   mounted: function(){
     (function(that){
     $(that.$parent.$options.el).foundation();
@@ -316,10 +335,17 @@ Vue.component('filters', {
       //FilterField0%3DStatus-FilterValue0%3DStuff
 			var hash = window.location.hash;
 			var matches = [];
+      var staticFieldName = '';
+      var displayFieldName = '';
 			while((matches = regex.exec(hash)) != null){
 				var i;
 				for(i = 2; i < matches.length && i + 2 < matches.length; i+=2){
-						filterMap[matches[i]] = decodeURI(matches[i + 2]).split('%3B%23');
+            staticFieldName = this.decodeSharePointFieldUri(matches[i]);
+            displayFieldName = this.fields.staticFieldMap.hasOwnProperty(staticFieldName) ? this.fields.staticFieldMap[staticFieldName] : false;
+            if(!displayFieldName){
+              continue;
+            }
+						filterMap[displayFieldName] = decodeURI(matches[i + 2]).split('%3B%23');
 				}
 			}
 			return filterMap;
@@ -574,7 +600,7 @@ Vue.component('metric', {
 
 var app = new Vue({
   el: '#SP-Metrics',
-  mixins: [app_data],
+  mixins: [app_data, app_helper],
   data: {
     listName: 'MetricsConfig', //name of SharePoint list where configuration is saved
     site: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: ''), //site where the SharePoint configuration list is located
@@ -612,6 +638,10 @@ var app = new Vue({
         isloading: true
       },
       fieldMap: {},
+      fields: {
+        static: {},
+        display: {}
+      }
       filters: {
         filterMap: {},
         hasFilters: false
@@ -937,11 +967,16 @@ var app = new Vue({
           } else {
             that.getListFields(function(data){
               if(data.length > 0){
-                fieldMap = data.reduce(function(map, obj) {
+                staticFieldMap = data.reduce(function(map, obj) {
                   map[obj.Title] = obj;
                   return map;
                 }, {});
-                _.assign(that.state_map.fieldMap, fieldMap);
+                displayFieldMap = data.reduce(function(map, obj) {
+                  map[obj.Title] = obj;
+                  return map;
+                }, {});
+                _.assign(that.state_map.fields, staticFieldMap);
+                _.assign(that.state_map.fields, displayFieldMap);
               }
               resolve();
             }, function(error){
