@@ -10,6 +10,7 @@ Vue.component('filters', {
                displayFieldMap: {}
             };
         }
+      }
   ],
   mounted: function(){
     (function(that){
