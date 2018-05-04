@@ -27,13 +27,15 @@ Vue.component('filters', {
     (function(that){
       $(that.$parent.$options.el).foundation();
       $(window).on('hashchange', function(){
-        if(this.configfetched){
+        if(that.configfetched){
           that.updateQuery();
         }
       });
     })(this);
     //run filters first time during init
-    this.updateQuery();
+    if(this.configfetched){
+      this.updateQuery();
+    }
   },
   computed: {
     hasFilters: function(){

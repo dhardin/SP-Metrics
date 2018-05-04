@@ -385,7 +385,7 @@ var app = new Vue({
         })
       }).then(function(result){
         return new Promise(function(resolve, reject){
-          if(that.config.ID > 0 && !this.config.hasFilterDetection){
+          if(that.config.ID > 0 && !that.config.hasFilterDetection){
             //we'll want to wait on filters to be generated from out filter component first if they're needed
             //this way we avoid more web service calls.
             that.getData(function(data){

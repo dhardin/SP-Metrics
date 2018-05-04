@@ -329,13 +329,15 @@ Vue.component('filters', {
     (function(that){
       $(that.$parent.$options.el).foundation();
       $(window).on('hashchange', function(){
-        if(this.configfetched){
+        if(that.configfetched){
           that.updateQuery();
         }
       });
     })(this);
     //run filters first time during init
-    this.updateQuery();
+    if(this.configfetched){
+      this.updateQuery();
+    }
   },
   computed: {
     hasFilters: function(){
@@ -999,7 +1001,7 @@ var app = new Vue({
         })
       }).then(function(result){
         return new Promise(function(resolve, reject){
-          if(that.config.ID > 0 && !this.config.hasFilterDetection){
+          if(that.config.ID > 0 && !that.config.hasFilterDetection){
             //we'll want to wait on filters to be generated from out filter component first if they're needed
             //this way we avoid more web service calls.
             that.getData(function(data){
