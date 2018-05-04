@@ -38,8 +38,8 @@ var app = new Vue({
         isloading: true
       },
       fields: {
-        static: {},
-        display: {}
+        staticMap: {},
+        displayMap: {}
       },
       filters: {
         filterMap: {},
@@ -374,8 +374,8 @@ var app = new Vue({
                   map[obj.Title] = obj;
                   return map;
                 }, {});
-                _.assign(that.state_map.fields, staticFieldMap);
-                _.assign(that.state_map.fields, displayFieldMap);
+                _.assign(that.state_map.fields.staticMap, staticFieldMap);
+                _.assign(that.state_map.fields.displayMap, displayFieldMap);
               }
               resolve();
             }, function(error){

@@ -40,7 +40,7 @@ Vue.component('filters', {
         var i;
         for(i = 2; i < matches.length && i + 2 < matches.length; i+=2){
           staticFieldName = this.decodeSharePointFieldUri(matches[i]);
-          displayFieldName = this.fields.staticFieldMap.hasOwnProperty(staticFieldName) ? this.fields.staticFieldMap[staticFieldName] : false;
+          displayFieldName = this.fields.staticMap.hasOwnProperty(staticFieldName) ? this.fields.staticMap[staticFieldName].Title : false;
           if(!displayFieldName){
             continue;
           }

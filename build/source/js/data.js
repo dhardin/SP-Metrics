@@ -12,13 +12,13 @@ var app_data = {
           filterMap = this.state_map.filters.filterMap;
           for(key in filterMap){
             subfilter = '';
-              if(!this.state_map.fields.displayFieldMap.hasOwnProperty(key)){
+              if(!this.state_map.fields.displayMap.hasOwnProperty(key)){
                 continue;
               }
             for(i = 0; i < filterMap[key].length; i++){
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
-                (this.state_map.fields.displayFieldMap[key].TypeAsString != 'DateTime'
-                  ? "startswith("+key+(this.state_map.fields.displayFieldMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayFieldMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
+                (this.state_map.fields.displayMap[key].TypeAsString != 'DateTime'
+                  ? "startswith("+key+(this.state_map.fields.displayMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
                   : key + " eq datetime'" +filterMap[key][i] + "'"
                 );
             }
@@ -27,7 +27,7 @@ var app_data = {
         }
       }
       url = this.config.siteUrl + "/_api/web/lists/GetByTitle('" + this.config.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ this.config.fieldName
-      + (this.state_map.fields.displayFieldMap[this.config.fieldName].hasOwnProperty('LookupField') ?  "/"+ this.state_map.fields.displayFieldMap[this.config.fieldName].LookupField +"&$expand="+ this.config.fieldName : "")
+      + (this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField') ?  "/"+ this.state_map.fields.displayMap[this.config.fieldName].LookupField +"&$expand="+ this.config.fieldName : "")
       + (this.state_map.filters.hasFilters
         ? '&$filter=' + filters + (this.config.isDocumentLibrary ? (filters.length > 0 ? ' and ' : '') + 'FSObjType eq ' + this.config.fileObjectType : '')
         : (this.config.isDocumentLibrary ? '&$filter=(FSObjType eq ' + this.config.fileObjectType + ')' : '')) + '&$top=5000';
