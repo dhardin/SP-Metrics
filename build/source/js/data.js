@@ -1,14 +1,5 @@
 var app_data = {
   methods: {
-    getFieldValue(fieldName, value){
-      var type = this.state_map.fieldMap[key].TypeAsString;
-      switch(type){
-        case 'DateTime':
-          return
-        default:
-          return value;
-      }
-    },
     getData: function(callback, errorCallback){
       var filterMap = {};
       var filters = '';
