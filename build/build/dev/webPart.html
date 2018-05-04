@@ -242,7 +242,7 @@
       </div>
       <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">
         <div class="cell small-12">
-              <filters @filterupdate="onFilterUpdate" v-bind:fields="this.state_map.fields"></filters>
+              <filters @filterupdate="onFilterUpdate" v-bind:fields="state_map.fields" v-bind:configfetched="configFetched"></filters>
       </div>
     </div>
     </div>
