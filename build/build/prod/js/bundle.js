@@ -932,40 +932,42 @@ var app = new Vue({
         }
       }).then(function(result){
         return new Promise(function(resolve, reject){
-            if(that.testing){
+          if(that.testing){
+            resolve();
+          } else {
+            that.getListFields(function(data){
+              if(data.length > 0){
+                fieldMap = data.reduce(function(map, obj) {
+                  map[obj.Title] = obj;
+                  return map;
+                }, {});
+                _.assign(that.state_map.fieldMap, fieldMap);
+              }
               resolve();
-            } else {
-              that.getListFields(function(data){
-                if(data.length > 0){
-                  fieldMap = data.reduce(function(map, obj) {
-                      map[obj.Title] = obj;
-                      return map;
-                  }, {});
-                  _.assign(that.state_map.fieldMap, fieldMap);
-                }
-                  resolve();
-              }, function(error){
-                that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-              });
-            }
-          }).then(function(result){
-            if(that.config.ID > 0){
-              //we'll want to wait on filters to be generated from out filter component first if they're needed
-              //this way we avoid more web service calls.
-              that.getData(function(data){
-                that.populateMetrics(data);
-                resolve();
-              }, function(error){
-                that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-              });
-            } else if(that.testing){
-              that.populateMetrics([]);
-              resolve();
-            } else {
-              resolve();
-            }
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          }
         })
-    }).then(function(result){
+      }).then(function(result){
+        return new Promise(function(resolve, reject){
+          if(that.config.ID > 0){
+            //we'll want to wait on filters to be generated from out filter component first if they're needed
+            //this way we avoid more web service calls.
+            that.getData(function(data){
+              that.populateMetrics(data);
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
+          } else if(that.testing){
+            that.populateMetrics([]);
+            resolve();
+          } else {
+            resolve();
+          }
+        })
+      }).then(function(result){
         that.configFetched = true;
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
