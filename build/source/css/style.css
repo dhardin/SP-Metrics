@@ -48,10 +48,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; }
-    .SP-Metrics #loading-container .callout {
-      padding: 2rem;
-    }
-
   .SP-Metrics #metrics-container .metric {
     padding: 1em;
     border: 1px solid rgba(10, 10, 10, 0.25);
@@ -61,8 +57,7 @@
   .SP-Metrics #metrics-container .cell, .SP-Metrics #metrics-config .cell {
     padding: 5px; }
   .SP-Metrics .metric.filter {
-    cursor: pointer;
-  }
+    cursor: pointer; }
   .SP-Metrics .metric {
     text-align: center;
     padding: 5px; }
@@ -114,6 +109,8 @@
     bottom: 5px; }
   .SP-Metrics #loading {
     width: 100%; }
+  .SP-Metrics #loading-container .callout {
+    padding: 2rem; }
   .SP-Metrics #metrics-config .metric:hover .increaseSort {
     transition: .2s;
     right: 5px; }

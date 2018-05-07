@@ -333,7 +333,8 @@ gulp.task('copy-lib', function(){
 
 gulp.task('watch-styles', function(callback){
   gulp.watch('source/css/*.scss', function(callback){
-    runSequence('foundation-scss', 'scss');
+  //  runSequence('foundation-scss', 'scss');
+  runSequence('scss');
   });
 });
 //auto update source folder
@@ -342,7 +343,7 @@ gulp.task('watch-source', function(){
 });
 
 gulp.task('source', function(callback) {
-    var tasks = ['clean', 'copy'];
+    var tasks = ['clean', 'copy',  'scss'];
     var bundled = isBundled();
     if(bundled){
       tasks.push('bundle-js', 'bundle-lib-js', 'bundle-lib-js-no-jquey', 'bundle-css', 'copy-jquery');
