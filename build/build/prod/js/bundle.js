@@ -583,6 +583,10 @@ Vue.component('metric', {
           type: Boolean,
           default: false
         },
+        openinnewwindow: {
+          type: Boolean,
+          default: true
+        },
         listurl: {
           type: String,
           default: ''
@@ -604,7 +608,7 @@ Vue.component('metric', {
       onClick: function(e){
         var url = '';
         if(this.hasfiltering){
-          url = this.listurl + (this.isdocumentlibrary ? '/Forms/' : '' ) + (this.filterviewname != '' ? this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
+
           window.open(url);
         }
       }
@@ -615,6 +619,9 @@ Vue.component('metric', {
         var classObj = {};
         classObj[classDynamicWidth] = true;
         return classObj;
+      },
+      url: function(){
+        return this.listurl + (this.isdocumentlibrary ? '/Forms/' : '' ) + (this.filterviewname != '' ? this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
       }
     },
     data: function() {
@@ -679,6 +686,7 @@ var app = new Vue({
       hasFilterDetection: false,
       fileObjectType: 0,
       minColumnWidth: 1,
+      openInNewWindow: true,
       listName: '',
       siteUrl: '',
       fieldName: window.location.host.indexOf('localhost') > -1 ? 'Status' :  '',
@@ -743,7 +751,7 @@ var app = new Vue({
       var i;
       var key = '';
       for(i = 0; i < data.length; i ++){
-        if(this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
+        if(!this.testing && this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
           key = data[i][this.config.fieldName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
         } else {
            key = data[i][this.config.fieldName];

@@ -54,6 +54,7 @@ var app = new Vue({
       hasFilterDetection: false,
       fileObjectType: 0,
       minColumnWidth: 1,
+      openInNewWindow: true,
       listName: '',
       siteUrl: '',
       fieldName: window.location.host.indexOf('localhost') > -1 ? 'Status' :  '',
@@ -118,7 +119,7 @@ var app = new Vue({
       var i;
       var key = '';
       for(i = 0; i < data.length; i ++){
-        if(this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
+        if(!this.testing && this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
           key = data[i][this.config.fieldName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
         } else {
            key = data[i][this.config.fieldName];
