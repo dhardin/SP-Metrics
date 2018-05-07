@@ -169,30 +169,6 @@
                   </blockquote>
                 </div>
               </div>
-              <div class="medium-6 cell">
-                <div class="switch-wrapper">
-                  <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                    <input class="switch-input" id="isLookupField" type="checkbox" name="isLookupField" v-model="config.isLookupField" :disabled="state_map.saving.issaving"/>
-                    <label class="switch-paddle" for="isLookupField">
-                      <span class="switch-active" aria-hidden="true">Yes</span>
-                      <span class="switch-inactive" aria-hidden="true">No</span>
-                    </label>
-                  </div>
-                  <span class="switch-label"> Lookup Field</span>
-                </div>
-                <blockquote>
-                  Specify whether or not the field to produce metrics on is a lookup field.
-                </blockquote>
-                <div class="callout secondary" v-show="config.isLookupField">
-                  <label>Lookup Field Name <small>required</small>
-                    <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving" :required="config.isLookupField" pattern="[a-zA-Z]+"/>
-                    <small class="error">Lookup Field Name is required.</small>
-                    <blockquote>
-                      Name of the lookup field&#39;s originating field name in the lookup list.
-                    </blockquote>
-                  </label>
-                </div>
-              </div>
               <div class="cell medium-12" v-show="configFetched">
                 <p>Order/Color</p>
                 <blockquote>

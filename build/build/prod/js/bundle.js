@@ -675,7 +675,6 @@ var app = new Vue({
       ID: 0,
       hasFiltering: false,
       isDocumentLibrary: false,
-      isLookupField: false,
       hasDynamicWidth: false,
       hasFilterDetection: false,
       fileObjectType: 0,
@@ -684,7 +683,6 @@ var app = new Vue({
       siteUrl: '',
       fieldName: window.location.host.indexOf('localhost') > -1 ? 'Status' :  '',
       filterViewName: '',
-      lookupFieldName: '',
       metrics: {}
     },
     metrics: {}
@@ -745,7 +743,11 @@ var app = new Vue({
       var i;
       var key = '';
       for(i = 0; i < data.length; i ++){
-        key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
+        if(this.state_map.fields.displayFieldMap[this.config.fieldName].hasOwnProperty('LookupField')){
+          key = data[i][this.config.fieldName][this.state_map.fields.displayFieldMap[this.config.fieldName].LookupField];
+        } else {
+           key = data[i][this.config.fieldName];
+        }
         //skip non-visible items
         if(key === undefined || this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
           continue;
