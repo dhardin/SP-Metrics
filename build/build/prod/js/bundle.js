@@ -19,7 +19,7 @@ var app_data = {
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
                 (this.state_map.fields.displayMap[key].TypeAsString != 'DateTime'
                   ? "startswith("+this.state_map.fields.displayMap[key].StaticName+(this.state_map.fields.displayMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
-                  : this.state_map.fields.displayMap[key].StaticName + " eq datetime'" +(new Date(filterMap[key][i])).toISOString() + "'"
+                  : this.state_map.fields.displayMap[key].StaticName + " eq datetime'" +(new Date(decodeURIComponent(filterMap[key][i]))).toISOString() + "'"
                 );
             }
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';
