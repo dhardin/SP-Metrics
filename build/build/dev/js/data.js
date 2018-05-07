@@ -7,6 +7,8 @@ var app_data = {
       var i;
       var url;
       var subfilter = '';
+      var date = null;
+      var nextDate = null;
       if(this.config.hasFilterDetection){
         if(this.state_map.filters.hasFilters){
           filterMap = this.state_map.filters.filterMap;
@@ -16,10 +18,15 @@ var app_data = {
                 continue;
               }
             for(i = 0; i < filterMap[key].length; i++){
+              if(this.state_map.fields.displayMap[key].TypeAsString == 'DateTime'){
+                date = new Date(decodeURIComponent(filterMap[key][i]));
+                nextDate = new Date(date);
+                nextDate.setDate(nextDate.getDate() + 1);
+              }
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
                 (this.state_map.fields.displayMap[key].TypeAsString != 'DateTime'
-                  ? "startswith("+key+(this.state_map.fields.displayMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
-                  : key + " eq datetime'" +filterMap[key][i] + "'"
+                  ? "startswith("+this.state_map.fields.displayMap[key].StaticName+(this.state_map.fields.displayMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
+                  : this.state_map.fields.displayMap[key].StaticName + " ge datetime'" +date.toISOString() + "' and " + this.state_map.fields.displayMap[key].StaticName + " le datetime'" +nextDate.toISOString() + "'"
                 );
             }
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';

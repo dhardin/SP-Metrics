@@ -50,16 +50,15 @@ var app = new Vue({
       ID: 0,
       hasFiltering: false,
       isDocumentLibrary: false,
-      isLookupField: false,
       hasDynamicWidth: false,
       hasFilterDetection: false,
       fileObjectType: 0,
       minColumnWidth: 1,
+      openInNewWindow: true,
       listName: '',
       siteUrl: '',
       fieldName: window.location.host.indexOf('localhost') > -1 ? 'Status' :  '',
       filterViewName: '',
-      lookupFieldName: '',
       metrics: {}
     },
     metrics: {}
@@ -120,7 +119,11 @@ var app = new Vue({
       var i;
       var key = '';
       for(i = 0; i < data.length; i ++){
-        key = this.config.isLookupField ? data[i][this.config.fieldName][this.config.lookupFieldName] : data[i][this.config.fieldName];
+        if(!this.testing && this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
+          key = data[i][this.config.fieldName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
+        } else {
+           key = data[i][this.config.fieldName];
+        }
         //skip non-visible items
         if(key === undefined || this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
           continue;
@@ -385,7 +388,7 @@ var app = new Vue({
         })
       }).then(function(result){
         return new Promise(function(resolve, reject){
-          if(that.config.ID > 0 && !this.config.hasFilterDetection){
+          if(that.config.ID > 0 && !that.config.hasFilterDetection){
             //we'll want to wait on filters to be generated from out filter component first if they're needed
             //this way we avoid more web service calls.
             that.getData(function(data){

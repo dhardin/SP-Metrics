@@ -9,8 +9,8 @@
   <title>Metrics</title>
   <!-- inject:css -->
   <link rel="stylesheet" href="css/sp-metrics.css"></script>
-  <link rel="stylesheet" href="lib/Spectrum/spectrum.css"></script>
   <link rel="stylesheet" href="lib/QueryBuilder/query-builder.default.css"></script>
+  <link rel="stylesheet" href="lib/Spectrum/spectrum.css"></script>
   <link rel="stylesheet" href="css/style.css"></script>
   <!-- endinject -->
   <!-- inject:lib-js -->
@@ -139,6 +139,19 @@
                       The list view for the filter to be applied to.
                     </blockquote>
                   </label>
+                  <div class="switch-wrapper">
+                    <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
+                      <input class="switch-input" id="openInNewWindow" type="checkbox" name="openInNewWindow" v-model="config.openInNewWindow" :disabled="state_map.saving.issaving"/>
+                      <label class="switch-paddle" for="openInNewWindow">
+                        <span class="switch-active" aria-hidden="true">Yes</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                      </label>
+                    </div>
+                    <span class="switch-label"> Open In New Window</span>
+                  </div>
+                  <blockquote>
+                    Metrics clicked on will open in new window.  Else the current page will refresh with applied metric filters.
+                  </blockquote>
                 </div>
               </div>
               <div class="medium-6 cell">
@@ -179,30 +192,6 @@
                   <blockquote>
                     Select the type of object to perform queries against.
                   </blockquote>
-                </div>
-              </div>
-              <div class="medium-6 cell">
-                <div class="switch-wrapper">
-                  <div class="switch large"  v-bind:class="{ disabled: state_map.saving.issaving }">
-                    <input class="switch-input" id="isLookupField" type="checkbox" name="isLookupField" v-model="config.isLookupField" :disabled="state_map.saving.issaving"/>
-                    <label class="switch-paddle" for="isLookupField">
-                      <span class="switch-active" aria-hidden="true">Yes</span>
-                      <span class="switch-inactive" aria-hidden="true">No</span>
-                    </label>
-                  </div>
-                  <span class="switch-label"> Lookup Field</span>
-                </div>
-                <blockquote>
-                  Specify whether or not the field to produce metrics on is a lookup field.
-                </blockquote>
-                <div class="callout secondary" v-show="config.isLookupField">
-                  <label>Lookup Field Name <small>required</small>
-                    <input type="text" placeholder="Lookup Field Name" v-model="config.lookupFieldName" :disabled="state_map.saving.issaving" :required="config.isLookupField" pattern="[a-zA-Z]+"/>
-                    <small class="error">Lookup Field Name is required.</small>
-                    <blockquote>
-                      Name of the lookup field&#39;s originating field name in the lookup list.
-                    </blockquote>
-                  </label>
                 </div>
               </div>
               <div class="cell medium-12" v-show="configFetched">
@@ -251,7 +240,7 @@
         </div>
       </div>
       <div class="grid-x grid-padding-x align-center-middle" id="metrics-container" v-cloak v-show="!state_map.loading.isloading || orderedDisplayMetrics.length > 0">
-        <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:numitems="orderedDisplayMetrics.length" v-bind:isdocumentlibrary="config.isDocumentLibrary" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:mincolumnwidth="config.minColumnWidth" v-bind:hasfiltering="config.hasFiltering" v-bind:listurl="state_map.listUrl" v-bind:filterviewname="config.filterViewName" v-bind:fieldname="config.fieldName"></metric>
+        <metric v-bind="metric" v-for="(metric, index) in orderedDisplayMetrics" v-bind:numitems="orderedDisplayMetrics.length" v-bind:isdocumentlibrary="config.isDocumentLibrary" v-bind:hasdynamicwidth="config.hasDynamicWidth" v-bind:openinnewwindow="config.openInNewWindow" v-bind:mincolumnwidth="config.minColumnWidth" v-bind:hasfiltering="config.hasFiltering" v-bind:listurl="state_map.listUrl" v-bind:filterviewname="config.filterViewName" v-bind:fieldname="config.fieldName"></metric>
       </div>
       <div class="grid-x grid-padding-x" v-cloak v-if="config.hasFilterDetection">
         <div class="cell small-12">
@@ -364,12 +353,18 @@
 </script>
 
       <script type="text/x-template" id="metric">
-  <div class="cell" v-bind:class="calcClassObj" v-on:click="onClick">
-    <div v-bind:style="styleObj" class="metric text-center" v-bind:class="{filter: hasfiltering}">
-      <h3>{{count}}</h3>
-      <h5>{{name}}</h5>
-    </div>
+<div v-else class="cell" v-bind:class="calcClassObj">
+    <a v-if="hasfiltering" v-bind:href="url" v-bind:target="openinnewwindow ? '_blank' : '_top'">
+  <div  class="metric text-center" v-bind:style="styleObj" v-bind:class="{filter: hasfiltering}">
+    <h3>{{count}}</h3>
+    <h5>{{name}}</h5>
   </div>
+</a>
+<div v-else v-bind:style="styleObj" class="metric text-center" v-bind:class="{filter: hasfiltering}">
+  <h3>{{count}}</h3>
+  <h5>{{name}}</h5>
+</div>
+</div>
 </script>
 
       <!-- endinject -->

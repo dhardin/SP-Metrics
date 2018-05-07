@@ -27,13 +27,15 @@ Vue.component('filters', {
     (function(that){
       $(that.$parent.$options.el).foundation();
       $(window).on('hashchange', function(){
-        if(this.configfetched){
+        if(that.configfetched){
           that.updateQuery();
         }
       });
     })(this);
     //run filters first time during init
-    this.updateQuery();
+    if(this.configfetched){
+      this.updateQuery();
+    }
   },
   computed: {
     hasFilters: function(){
@@ -53,6 +55,8 @@ Vue.component('filters', {
         var i;
         for(i = 2; i < matches.length && i + 2 < matches.length; i+=2){
           staticFieldName = this.decodeSharePointFieldUri(matches[i]);
+          //remove extra encoded colon and take first split
+          staticFieldName = staticFieldName.split('_x003a_')[0];
           displayFieldName = this.fields.staticMap.hasOwnProperty(staticFieldName) ? this.fields.staticMap[staticFieldName].Title : false;
           if(!displayFieldName){
             continue;

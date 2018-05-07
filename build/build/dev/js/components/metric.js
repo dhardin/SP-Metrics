@@ -43,6 +43,10 @@ Vue.component('metric', {
           type: Boolean,
           default: false
         },
+        openinnewwindow: {
+          type: Boolean,
+          default: true
+        },
         listurl: {
           type: String,
           default: ''
@@ -64,7 +68,7 @@ Vue.component('metric', {
       onClick: function(e){
         var url = '';
         if(this.hasfiltering){
-          url = this.listurl + (this.isdocumentlibrary ? '/Forms/' : '' ) + (this.filterviewname != '' ? this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
+
           window.open(url);
         }
       }
@@ -75,6 +79,9 @@ Vue.component('metric', {
         var classObj = {};
         classObj[classDynamicWidth] = true;
         return classObj;
+      },
+      url: function(){
+        return this.listurl + (this.isdocumentlibrary ? '/Forms/' : '' ) + (this.filterviewname != '' ? this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
       }
     },
     data: function() {
