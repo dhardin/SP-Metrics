@@ -21,7 +21,7 @@ var app_data = {
               if(this.state_map.fields.displayMap[key].TypeAsString == 'DateTime'){
                 date = new Date(decodeURIComponent(filterMap[key][i]));
                 nextDate = new Date(date);
-                nextDate.setDate(nextDate.getDate + 1);
+                nextDate.setDate(nextDate.getDate() + 1);
               }
               subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
                 (this.state_map.fields.displayMap[key].TypeAsString != 'DateTime'
