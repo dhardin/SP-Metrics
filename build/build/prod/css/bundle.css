@@ -5637,6 +5637,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     margin-bottom: 1rem; }
   .SP-Metrics .switch-wrapper .switch {
     margin-bottom: 0; }
+  .SP-Metrics #metrics-container a {
+    text-decoration: none; }
   .SP-Metrics .switch {
     display: inline-block; }
   .SP-Metrics .switch-wrapper .switch-label {
