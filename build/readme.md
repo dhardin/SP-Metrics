@@ -20,7 +20,7 @@ npm install -g gulp
 4. Install project dependencies
 
 ```
-npm install jshint gulp-jshint gulp-concat gulp-inject gulp-jsbeautifier gulp-if yargs del gulp-debug run-sequence bluebird gulp-include gulp-typescript typescript gulp-rename --save-dev
+npm install --save-dev
 ```
 
 #Building Source Code
