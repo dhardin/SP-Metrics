@@ -122,7 +122,7 @@ var app = new Vue({
         if(!this.testing && this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
           key = data[i][this.config.fieldName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
         } else {
-          key = data[i][this.config.fieldName];
+          key = data[i][this.state_map.fields.displayMap[this.config.fieldName].StaticName];
         }
         //skip non-visible items
         if(key === undefined || this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
