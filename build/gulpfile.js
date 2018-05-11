@@ -338,11 +338,11 @@ gulp.task('watch-styles', function(callback){
   });
 });
 //auto update source folder
-gulp.task('watch-source', function(){
-    gulp.watch('source/**/*', ['source']);
+gulp.task('watch-build', function(){
+    gulp.watch('source/**/*', ['build']);
 });
 
-gulp.task('source', function(callback) {
+gulp.task('build', function(callback) {
     var tasks = ['clean', 'copy',  'scss'];
     var bundled = isBundled();
     if(bundled){
@@ -357,6 +357,6 @@ gulp.task('source', function(callback) {
 });
 
 gulp.task('build-watch', function(callback){
-  runSequence('source', 'watch-source');
+  runSequence('build', 'watch-build');
   callback();
 });
