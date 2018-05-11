@@ -351,10 +351,7 @@ gulp.task('source', function(callback) {
       tasks.push( 'copy-css', 'copy-lib-css', 'copy-js', 'copy-lib');
     }
     tasks.push('inject-html', 'inject-html-webpart', 'inject-css');
-    if(!bundled){
-      tasks.push('inject-css-webpart');
-    }
-    tasks.push('inject-js', 'inject-js-webpart', 'inject-lib-js','inject-lib-js-webpart');
+    tasks.push('inject-js', 'inject-js-webpart', 'inject-lib-js');
     runSequence.apply(null, tasks);
     callback();
 });
