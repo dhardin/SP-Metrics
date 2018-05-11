@@ -81,7 +81,7 @@ Vue.component('metric', {
         return classObj;
       },
       url: function(){
-        return this.listurl + (this.isdocumentlibrary ? '/Forms/' : '' ) + (this.filterviewname != '' ? this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
+        return this.listurl + (this.isdocumentlibrary ? '/Forms/' : '/' ) + (this.filterviewname != '' ? this.filterviewname + '.aspx' : '') + '?FilterField1=' + this.fieldname + '&FilterValue1='+this.name + '#FilterField1%3D' + this.fieldname + '-FilterValue1%3D'+this.name;
       }
     },
     data: function() {
