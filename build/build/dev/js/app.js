@@ -122,7 +122,7 @@ var app = new Vue({
         if(!this.testing && this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
           key = data[i][this.config.fieldName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
         } else {
-           key = data[i][this.config.fieldName];
+          key = data[i][this.config.fieldName];
         }
         //skip non-visible items
         if(key === undefined || this.config.metrics.hasOwnProperty(key) && !this.config.metrics[key].visible){
@@ -154,12 +154,33 @@ var app = new Vue({
           that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
           that.populateMetrics([]);
         } else {
-          that.getData(function(data){
-            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
-            that.populateMetrics(data);
-          }, function(error){
-            that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
-          });
+          new Promise(function(resolve, reject){
+              that.getListFields(function(data){
+                if(data.length > 0){
+                  staticFieldMap = data.reduce(function(map, obj) {
+                    map[obj.StaticName] = obj;
+                    return map;
+                  }, {});
+                  displayFieldMap = data.reduce(function(map, obj) {
+                    map[obj.Title] = obj;
+                    return map;
+                  }, {});
+                  _.assign(that.state_map.fields.staticMap, staticFieldMap);
+                  _.assign(that.state_map.fields.displayMap, displayFieldMap);
+                }
+                resolve();
+              }, function(error){
+                  that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
+              });
+            }
+          }).then(function(result){
+            that.getData(function(data){
+              that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
+              that.populateMetrics(data);
+            }, function(error){
+              that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
+            });
+          })
         }
       })(this);
     },

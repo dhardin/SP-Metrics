@@ -1,35 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Dustin Hardin" />
+    <title>Metrics</title>
+    <!-- inject:css -->
+    <link rel="stylesheet" href="css/sp-metrics.css"></script>
+    <link rel="stylesheet" href="lib/QueryBuilder/query-builder.default.css"></script>
+    <link rel="stylesheet" href="lib/Spectrum/spectrum.css"></script>
+    <link rel="stylesheet" href="css/style.css"></script>
+    <!-- endinject -->
+    <!-- inject:lib-js -->
+    <script src="lib/es5-shim.min.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="lib/es6-shim.min.js"></script>
+    <script src="lib/axios.min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/what-input.js"></script>
+    <script src="lib/foundation/foundation.js"></script>
+    <script src="lib/Spectrum/spectrum.js"></script>
+    <script src="lib/lodash.js"></script>
+    <script src="lib/QueryBuilder/query-builder.standalone.min.js"></script>
+    <!-- endinject -->
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="Dustin Hardin" />
-  <title>Metrics</title>
-  <!-- inject:css -->
-  <link rel="stylesheet" href="css/sp-metrics.css"></script>
-  <link rel="stylesheet" href="lib/QueryBuilder/query-builder.default.css"></script>
-  <link rel="stylesheet" href="lib/Spectrum/spectrum.css"></script>
-  <link rel="stylesheet" href="css/style.css"></script>
-  <!-- endinject -->
-  <!-- inject:lib-js -->
-  <script src="lib/es5-shim.min.js"></script>
-  <script src="lib/vue.js"></script>
-  <script src="lib/es6-shim.min.js"></script>
-  <script src="lib/axios.min.js"></script>
-  <script src="lib/jquery.min.js"></script>
-  <script src="lib/what-input.js"></script>
-  <script src="lib/foundation/foundation.js"></script>
-  <script src="lib/Spectrum/spectrum.js"></script>
-  <script src="lib/lodash.js"></script>
-  <script src="lib/QueryBuilder/query-builder.standalone.min.js"></script>
-  <!-- endinject -->
-</head>
-
-<body>
-      <!-- inject:templates -->
-      <div id="SP-Metrics" class="SP-Metrics">
+  <body>
+    <!-- inject:templates -->
+    <div id="SP-Metrics" class="SP-Metrics">
   <div class="grid-container">
     <div  id="appLoading" class="grid-x grid-margin-x grid-padding-x" v-if="false">
       <div class="cell auto">
@@ -250,7 +249,7 @@
     </div>
   </div>
 
-      <script type="text/x-template" id="edit-metric">
+    <script type="text/x-template" id="edit-metric">
   <div class="reveal SP-Metrics" id="exampleModal1" data-reveal>
     <form class="callout">
       <label>Name
@@ -287,7 +286,7 @@
   </div>
 </script>
 
-      <script type="text/template" id="filter-template">
+    <script type="text/template" id="filter-template">
   <ul class="accordion" data-accordion data-allow-all-closed="true" v-show="hasFilters">
     <li class="accordion-item" data-accordion-item>
       <!-- Accordion tab title -->
@@ -301,7 +300,7 @@
   </ul>
 </script>
 
-      <script type="text/template" id="loading-template">
+    <script type="text/template" id="loading-template">
   <div  id="loading" class="grid-x grid-margin-x grid-padding-x">
     <div class="cell auto">
     </div>
@@ -320,7 +319,7 @@
   </div>
 </script>
 
-      <script type="text/x-template" id="metric-config">
+    <script type="text/x-template" id="metric-config">
   <div class="cell small-6 medium-3">
     <div class="metric card" v-bind:style="styleObj" >
     <button class="close-button" aria-label="Close" type="button" v-on:click="deleteMetric">
@@ -352,7 +351,7 @@
 </div>
 </script>
 
-      <script type="text/x-template" id="metric">
+    <script type="text/x-template" id="metric">
 <div v-else class="cell" v-bind:class="calcClassObj">
     <a v-if="hasfiltering" v-bind:href="url" v-bind:target="openinnewwindow ? '_blank' : '_top'">
   <div  class="metric text-center" v-bind:style="styleObj" v-bind:class="{filter: hasfiltering}">
@@ -367,23 +366,23 @@
 </div>
 </script>
 
-      <!-- endinject -->
-      <!-- inject:js -->
-      <script src="js/data.js"></script>
-      <script src="js/helper.js"></script>
-      <script src="js/components/edit-metric.js"></script>
-      <script src="js/components/filters.js"></script>
-      <script src="js/components/loading.js"></script>
-      <script src="js/components/metric-config.js"></script>
-      <script src="js/components/metric.js"></script>
-      <script src="js/app.js"></script>
-      <!-- endinject -->
-      <script type="text/javascript">
-      if (!window.location.origin) {
-        window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
-      }
-      $('.SP-Metrics').foundation();
-      </script>
-    </body>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="js/data.js"></script>
+    <script src="js/helper.js"></script>
+    <script src="js/components/edit-metric.js"></script>
+    <script src="js/components/filters.js"></script>
+    <script src="js/components/loading.js"></script>
+    <script src="js/components/metric-config.js"></script>
+    <script src="js/components/metric.js"></script>
+    <script src="js/app.js"></script>
+    <!-- endinject -->
+    <script type="text/javascript">
+    if (!window.location.origin) {
+      window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+    }
+    $('.SP-Metrics').foundation();
+    </script>
+  </body>
 
-    </html>
+</html>
