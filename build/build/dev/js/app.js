@@ -172,7 +172,7 @@ var app = new Vue({
               }, function(error){
                   that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
               });
-            }
+
           }).then(function(result){
             that.getData(function(data){
               that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
@@ -180,7 +180,7 @@ var app = new Vue({
             }, function(error){
               that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
             });
-          })
+          });
         }
       })(this);
     },
