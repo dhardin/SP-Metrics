@@ -1054,7 +1054,7 @@ var app = new Vue({
         if(Object.keys(that.metrics).length > 0 || that.editing){
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
           //trigger hashchange to populate filter population
-        } else {
+        } else if (!that.config.hasFilterDetection){
           that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
         }
       });
