@@ -385,7 +385,7 @@ var app = new Vue({
         }
       }).then(function(result){
         return new Promise(function(resolve, reject){
-          if(that.testing){
+          if(that.testing || that.config.ID == 0){
             resolve();
           } else {
             that.getListFields(function(data){
