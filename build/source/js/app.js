@@ -290,17 +290,7 @@ var app = new Vue({
       if(!this.configFetched){
         return;
       }
-      this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
-      (function(that){
-        that.getData(function(data){
-          that.toggleLoading({isloading: false, showLoading: false, message: "", canCancel:true, canClose: false});
-          that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Success: Generating Metrics', message: '', isError: false, isSuccess: true});
-          that.populateMetrics(data);
-        }, function(error){
-          that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
-          that.toggleGenerating({isgenerating: false, showMessage: true, messageTitle: 'Error: Generating Metrics', message: error.message, isError: true, isSuccess: false});
-        });
-      })(this);
+      this.generateMetrics();
     },
     onIncreaseOrder: function(name, index){
       var currentMetric = this.orderedMetrics[index];
