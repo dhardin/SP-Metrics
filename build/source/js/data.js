@@ -23,11 +23,13 @@ var app_data = {
                 nextDate = new Date(date);
                 nextDate.setDate(nextDate.getDate() + 1);
               }
-              subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
-                (this.state_map.fields.displayMap[key].TypeAsString != 'DateTime'
-                  ? "startswith("+this.state_map.fields.displayMap[key].StaticName+(this.state_map.fields.displayMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
-                  : this.state_map.fields.displayMap[key].StaticName + " ge datetime'" +date.toISOString() + "' and " + this.state_map.fields.displayMap[key].StaticName + " le datetime'" +nextDate.toISOString() + "'"
-                );
+              if(this.state_map.fields.displayMap.hasOwnProperty(key)){
+                subfilter += (subfilter.length > 0 ? ' or ' : '' ) +
+                  (this.state_map.fields.displayMap[key].TypeAsString != 'DateTime'
+                    ? "startswith("+this.state_map.fields.displayMap[key].StaticName+(this.state_map.fields.displayMap[key].hasOwnProperty('LookupField') ? "/" + this.state_map.fields.displayMap[key].LookupField : "")+",'"+filterMap[key][i]+"')"
+                    : this.state_map.fields.displayMap[key].StaticName + " ge datetime'" +date.toISOString() + "' and " + this.state_map.fields.displayMap[key].StaticName + " le datetime'" +nextDate.toISOString() + "'"
+                  );
+                }
             }
             filters += (filters.length > 0 ? ' and ' : '') + '(' + subfilter + ')';
           }
