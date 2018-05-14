@@ -65,6 +65,8 @@
     padding: 5px; }
   .SP-Metrics .metric h4 {
     line-height: 165px; }
+  .SP-Metrics .is-active .accordion-title::before {
+    content: '-'; }
   .SP-Metrics #addMetricBtn {
     color: #fff;
     height: 100%;

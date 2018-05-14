@@ -100,6 +100,10 @@
 	line-height: 165px;
 }
 
+.is-active .accordion-title::before {
+  content: '-';
+}
+
 #addMetricBtn {
 	color: #fff;
   height: 100%;
