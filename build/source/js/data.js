@@ -44,6 +44,7 @@ var app_data = {
       } catch(error){
         if (errorCallback) {
           errorCallback(error);
+          return;
         }
       }
         return axios({
