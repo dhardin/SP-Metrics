@@ -418,12 +418,16 @@ var app = new Vue({
         })
       }).then(function(result){
         return new Promise(function(resolve, reject){
+              if(that.config.ID > 0){
             that.getListData(function(data){
               that.state_map.listUrl = data.RootFolder.ServerRelativeUrl;
               resolve();
             }, function(error){
               that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
             });
+          } else{
+            resolve();
+          }
         })
       }).then(function(result){
         that.configFetched = true;
@@ -431,7 +435,7 @@ var app = new Vue({
           that.toggleLoading({isloading: false, message: '', canCancel:false, canClose: false});
           //trigger hashchange to populate filter population
         } else if (!that.config.hasFilterDetection){
-          that.toggleLoading({isloading: true, message: 'No Data Available', canCancel:false, canClose: false});
+          that.toggleLoading({isloading: true, message: that.config.ID > 0 ? 'No Data Available' : 'No configuration data found.', canCancel:false, canClose: false});
         }
       });
     })(this);
