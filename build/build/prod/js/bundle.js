@@ -775,7 +775,7 @@ var app = new Vue({
       var key = '';
       for(i = 0; i < data.length; i ++){
         if(!this.testing && this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField')){
-          key = data[i][this.config.fieldName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
+          key = data[i][ this.state_map.fields.displayMap[this.config.fieldName].StaticName][this.state_map.fields.displayMap[this.config.fieldName].LookupField];
         } else {
           key = data[i][this.state_map.fields.displayMap[this.config.fieldName].StaticName];
         }
