@@ -60,6 +60,25 @@ var app_data = {
         });
 
       },
+      getListData: function(callback, errorCallback){
+        return axios({
+          url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/?$select=Title,RootFolder/ServerRelativeUrl&expand=RootFolder",
+          method: "get",
+          headers: {
+            "accept": "application/json;odata=verbose",
+            "content-type": "application/json;odata=verbose"
+          }
+        }).then(function(response) {
+          var data = response.data.d;
+          if (callback) {
+            callback(data);
+          }
+        }).catch(function(error) {
+          if (errorCallback) {
+            errorCallback(error);
+          }
+        });
+      },
       getConfigData: function(callback, errorCallback) {
         return axios({
           url: this.site + "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" + window.location.pathname + "'))",
@@ -610,7 +629,6 @@ Vue.component('metric', {
       onClick: function(e){
         var url = '';
         if(this.hasfiltering){
-
           window.open(url);
         }
       }
@@ -989,6 +1007,10 @@ var app = new Vue({
 
   created: function() {
     this.configFetched = false;
+    //clear hash filters if in query string
+    if(window.location.search.indexOf('FilterClear=1') > -1){
+      window.location.hash = window.location.hash.replace(/(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/gi, '');
+    }
     this.checkEditMode();
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);

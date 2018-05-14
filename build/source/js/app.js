@@ -355,6 +355,10 @@ var app = new Vue({
 
   created: function() {
     this.configFetched = false;
+    //clear hash filters if in query string
+    if(window.location.search.indexOf('FilterClear=1') > -1){
+      window.location.hash = window.location.hash.replace(/(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/gi, '');
+    }
     this.checkEditMode();
     this.toggleLoading({isloading: true, showLoading: true, message: "Loading", canCancel:true, canClose: false});
     this.setCurrentMetric([]);

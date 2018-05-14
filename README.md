@@ -1,4 +1,3 @@
-
 # Development Configuration
 1. Install Node JS
 [Node JS Install](https://nodejs.org/en/)

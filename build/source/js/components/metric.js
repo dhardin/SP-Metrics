@@ -68,7 +68,6 @@ Vue.component('metric', {
       onClick: function(e){
         var url = '';
         if(this.hasfiltering){
-
           window.open(url);
         }
       }

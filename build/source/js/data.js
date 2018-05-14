@@ -60,6 +60,25 @@ var app_data = {
         });
 
       },
+      getListData: function(callback, errorCallback){
+        return axios({
+          url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/?$select=Title,RootFolder/ServerRelativeUrl&expand=RootFolder",
+          method: "get",
+          headers: {
+            "accept": "application/json;odata=verbose",
+            "content-type": "application/json;odata=verbose"
+          }
+        }).then(function(response) {
+          var data = response.data.d;
+          if (callback) {
+            callback(data);
+          }
+        }).catch(function(error) {
+          if (errorCallback) {
+            errorCallback(error);
+          }
+        });
+      },
       getConfigData: function(callback, errorCallback) {
         return axios({
           url: this.site + "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" + window.location.pathname + "'))",
