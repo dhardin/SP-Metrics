@@ -761,9 +761,6 @@ var app = new Vue({
       Object.assign(this.state_map.generating, options);
     },
     populateMetrics: function(data){
-      if(data.length > 0 && data[0].hasOwnProperty('EncodedAbsUrl')){
-        this.state_map.listUrl = data[0].EncodedAbsUrl.substring(0, data[0].EncodedAbsUrl.lastIndexOf('/'));
-      }
       Vue.set(this, 'metrics', this.buildDataMap(data));
     },
     buildDataMap: function(data){
@@ -1070,6 +1067,15 @@ var app = new Vue({
           } else {
             resolve();
           }
+        })
+      }).then(function(result){
+        return new Promise(function(resolve, reject){
+            that.getListData(function(data){
+              that.state_map.listUrl = data.RootFolder.ServerRelativeUrl;
+              resolve();
+            }, function(error){
+              that.toggleLoading({isloading: true, message: error.message, canCancel:false, canClose: true});
+            });
         })
       }).then(function(result){
         that.configFetched = true;
