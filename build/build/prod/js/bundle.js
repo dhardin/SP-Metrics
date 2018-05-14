@@ -68,7 +68,7 @@ var app_data = {
       },
       getListData: function(callback, errorCallback){
         return axios({
-          url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/?$select=Title,RootFolder/ServerRelativeUrl&expand=RootFolder",
+          url: this.config.siteUrl + "/_api/web/lists/GetByTitle('"+this.config.listName+"')/?$select=Title,RootFolder/ServerRelativeUrl&$expand=RootFolder",
           method: "get",
           headers: {
             "accept": "application/json;odata=verbose",
