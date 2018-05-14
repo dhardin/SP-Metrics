@@ -37,7 +37,7 @@ var app_data = {
       }
       try {
       url = this.config.siteUrl + "/_api/web/lists/GetByTitle('" + this.config.listName  + "')/Items?$select=Title,EncodedAbsUrl,"+ this.state_map.fields.displayMap[this.config.fieldName].StaticName
-      + (this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField') ?  "/"+ this.state_map.fields.displayMap[this.config.fieldName].LookupField +"&$expand="+ this.config.fieldName : "")
+      + (this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty('LookupField') ?  "/"+ this.state_map.fields.displayMap[this.config.fieldName].LookupField +"&$expand="+this.state_map.fields.displayMap[this.config.fieldName].StaticName : "")
       + (this.state_map.filters.hasFilters
         ? '&$filter=' + filters + (this.config.isDocumentLibrary ? (filters.length > 0 ? ' and ' : '') + 'FSObjType eq ' + this.config.fileObjectType : '')
         : (this.config.isDocumentLibrary ? '&$filter=(FSObjType eq ' + this.config.fileObjectType + ')' : '')) + '&$top=5000';
