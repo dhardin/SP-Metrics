@@ -69,9 +69,9 @@
     color: #fff;
     height: 100%;
     width: 100%;
-    background: #00c853; }
+    background: #2E7D32; }
   .SP-Metrics #addMetricBtn:hover {
-    background: #22bb5b;
+    background: #388E3C;
     cursor: pointer; }
   .SP-Metrics .metric .edit {
     position: absolute;
