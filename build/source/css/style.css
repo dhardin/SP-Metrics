@@ -151,6 +151,7 @@
     -webkit-animation: loaderg 3s ease-in-out infinite;
     animation: loaderg 3s ease-in-out infinite; }
   .SP-Metrics .loader.dark:before {
+    background-color: #00f;
     -webkit-animation: loadergd 3s ease-in-out infinite;
     animation: loadergd 3s ease-in-out infinite; }
   .SP-Metrics .loader {
@@ -158,7 +159,7 @@
     border-radius: 12px;
     background-color: #fff; }
   .SP-Metrics .loader.dark {
-    background-color: #555; }
+    background-color: #3c763d; }
   .SP-Metrics [v-cloak] {
     display: none; }
   .SP-Metrics .loader:after {
@@ -169,6 +170,7 @@
     -webkit-animation: loaderd 3s ease-in-out infinite;
     animation: loaderd 3s ease-in-out infinite; }
   .SP-Metrics .loader.dark:after {
+    background-color: #3c763d;
     -webkit-animation: loaderdd 3s ease-in-out infinite;
     animation: loaderdd 3s ease-in-out infinite; }
   .SP-Metrics .query-builder > .rules-group-container {
@@ -247,46 +249,46 @@
 @-webkit-keyframes loadergd {
   0% {
     left: -200%;
-    background-color: rgba(85, 85, 85, 0.8); }
+    background-color: rgba(217, 83, 79, 0.8); }
   50% {
     left: 0px;
-    background-color: rgba(85, 85, 85, 0.1); }
+    background-color: rgba(217, 83, 79, 0.1); }
   100% {
     left: -200%;
-    background-color: rgba(85, 85, 85, 0.8); } }
+    background-color: rgba(217, 83, 79, 0.8); } }
 
 @keyframes loadergd {
   0% {
     left: -200%;
-    background-color: rgba(85, 85, 85, 0.8); }
+    background-color: rgba(217, 83, 79, 0.8); }
   50% {
     left: 0px;
-    background-color: rgba(85, 85, 85, 0.1); }
+    background-color: rgba(217, 83, 79, 0.1); }
   100% {
     left: -200%;
-    background-color: rgba(85, 85, 85, 0.8); } }
+    background-color: rgba(217, 83, 79, 0.8); } }
 
 @-webkit-keyframes loaderdd {
   0% {
     left: 200%;
-    background-color: rgba(85, 85, 85, 0.8); }
+    background-color: rgba(49, 112, 143, 0.8); }
   50% {
     left: 0px;
-    background-color: rgba(85, 85, 85, 0.1); }
+    background-color: rgba(49, 112, 143, 0.1); }
   100% {
     left: 200%;
-    background-color: rgba(85, 85, 85, 0.8); } }
+    background-color: rgba(49, 112, 143, 0.8); } }
 
 @keyframes loaderdd {
   0% {
     left: 200%;
-    background-color: rgba(85, 85, 85, 0.8); }
+    background-color: rgba(49, 112, 143, 0.8); }
   50% {
     left: 0px;
-    background-color: rgba(85, 85, 85, 0.1); }
+    background-color: rgba(49, 112, 143, 0.1); }
   100% {
     left: 200%;
-    background-color: rgba(85, 85, 85, 0.8); } }
+    background-color: rgba(49, 112, 143, 0.8); } }
   .SP-Metrics .square {
     display: inline-block;
     width: 20px;

@@ -245,6 +245,7 @@
 }
 
 .loader.dark:before{
+  background-color: #00f;
 	-webkit-animation: loadergd 3s ease-in-out infinite;
 			animation: loadergd 3s ease-in-out infinite;
 }
@@ -256,7 +257,7 @@
 }
 
 .loader.dark {
-  background-color: #555;
+  background-color:rgba(60, 118,61, 1);
 }
 
 [v-cloak] {
@@ -267,12 +268,14 @@
 	content: "";
 	position: absolute;
 	top: 0px;
+
 	border-radius: 12px;
 	-webkit-animation: loaderd 3s ease-in-out infinite;
 			animation: loaderd 3s ease-in-out infinite;
 }
 
 .loader.dark:after{
+  background-color: rgba(60, 118,61, 1);
 	-webkit-animation: loaderdd 3s ease-in-out infinite;
 			animation: loaderdd 3s ease-in-out infinite;
 }
@@ -343,25 +346,25 @@ input:checked ~ .switch-paddle {
 
 /*Dark Loader*/
 @-webkit-keyframes loadergd{
-	0%{	left: -200%; background-color: rgba(85, 85, 85, .8); }
-	50%{ left: 0px; background-color: rgba(85, 85, 85, .1);}
-	100%{ left:-200%; background-color: rgba(85, 85, 85, .8); }
+  0%{	left: -200%; background-color: rgba(217,83,79, .8); }
+	50%{ left: 0px; background-color: rgba(217,83,79,  .1);}
+	100%{ left:-200%; background-color: rgba(217,83,79,  .8); }
 }
 @keyframes loadergd{
-	0%{	left: -200%; background-color: rgba(85, 85, 85, .8); }
-	50%{ left: 0px; background-color: rgba(85, 85, 85, .1);}
-	100%{ left:-200%; background-color: rgba(85, 85, 85, .8); }
+  0%{	left: -200%; background-color: rgba(217,83,79, .8); }
+  50%{ left: 0px; background-color: rgba(217,83,79,  .1);}
+  100%{ left:-200%; background-color: rgba(217,83,79,  .8); }
 }
 
 @-webkit-keyframes loaderdd{
-	0%{	left:200%; background-color: rgba(85, 85, 85, .8); }
-	50%{ left: 0px; background-color: rgba(85, 85, 85, .1);}
-	100%{ left:200%; background-color: rgba(85, 85, 85, .8); }
+	0%{	left:200%; background-color: rgba(49, 112, 143, .8); }
+	50%{ left: 0px; background-color: rgba(49, 112, 143, .1);}
+	100%{ left:200%; background-color: rgba(49, 112, 143, .8); }
 }
 @keyframes loaderdd{
-	0%{	left: 200%; background-color: rgba(85, 85, 85, .8); }
-	50%{ left: 0px; background-color: rgba(85, 85, 85, .1);}
-	100%{ left:200%; background-color: rgba(85, 85, 85, .8); }
+  0%{	left:200%; background-color: rgba(49, 112, 143, .8); }
+	50%{ left: 0px; background-color: rgba(49, 112, 143, .1);}
+	100%{ left:200%; background-color: rgba(49, 112, 143, .8); }
 }
 
 /*square*/
