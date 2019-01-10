@@ -3,7 +3,7 @@
     <v-app>
       <v-layout>
         <v-flex xs10 py-3 offset-sm1>
-          <Config @items-updated="updateItems" v-if="isEditing"></Config>
+          <Config @items-updated="updateItems" v-if="isEditing" :init-config="config"></Config>
           <EditableBlockList readonly :initialItems="items" v-else></EditableBlockList>
         </v-flex>
       </v-layout>
@@ -23,6 +23,7 @@ export default {
   mixins: [Data],
   data: function() {
     return {
+      configListName: "MetricsConfig",
       siteUrl: "",
       isEditing: false,
       items: [],
@@ -61,7 +62,23 @@ export default {
           filterMap: {},
           hasFilters: false
         }
-      }
+      },
+      config: {
+        ID: 0,
+        hasFiltering: false,
+        isDocumentLibrary: false,
+        hasDynamicWidth: false,
+        hasFilterDetection: false,
+        fileObjectType: 0,
+        minColumnWidth: 1,
+        openInNewWindow: true,
+        listName: "",
+        siteUrl: "",
+        fieldName: "",
+        filterViewName: "",
+        metrics: {}
+      },
+      metrics: {}
     };
   },
   methods: {

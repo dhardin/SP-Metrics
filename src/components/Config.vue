@@ -106,39 +106,39 @@
             >No</Radio>
           </v-radio-group>
           <transition name="slide-down">
-          <v-card v-if="enableFilterNavigation" color="#f9f9f9" flat class="mr-3">
-            <v-card-text>
-   <v-text-field
-            v-model="filterViewName"
-            label="Filter View Name"
-            box
-            color="blue"
-            hint="The list view for the filter to be applied to"
-            persistent-hint
-            required
-          ></v-text-field>
-           <v-radio-group
-            v-model="openInNewWindow"
-            row
-            :disabled="isSaving || isLoading"
-            color="#f00"
-            label="Open In New Window"
-            hint="Metrics clicked on will open in a new window.  Else the current page will refresh with applied metric filters."
-            persistent-hint
-          >
-            <Radio
-              :disabled="isSaving || isLoading"
-              @toggle-checked="openInNewWindow = true"
-              :isChecked="openInNewWindow == true"
-            >Yes</Radio>
-            <Radio
-              :disabled="isSaving || isLoading"
-              @toggle-checked="openInNewWindow = false"
-              :isChecked="openInNewWindow == false"
-            >No</Radio>
-          </v-radio-group>
-            </v-card-text>
-          </v-card>
+            <v-card v-if="enableFilterNavigation" color="#f9f9f9" flat class="mr-3">
+              <v-card-text>
+                <v-text-field
+                  v-model="filterViewName"
+                  label="Filter View Name"
+                  box
+                  color="blue"
+                  hint="The list view for the filter to be applied to"
+                  persistent-hint
+                  required
+                ></v-text-field>
+                <v-radio-group
+                  v-model="openInNewWindow"
+                  row
+                  :disabled="isSaving || isLoading"
+                  color="#f00"
+                  label="Open In New Window"
+                  hint="Metrics clicked on will open in a new window.  Else the current page will refresh with applied metric filters."
+                  persistent-hint
+                >
+                  <Radio
+                    :disabled="isSaving || isLoading"
+                    @toggle-checked="openInNewWindow = true"
+                    :isChecked="openInNewWindow == true"
+                  >Yes</Radio>
+                  <Radio
+                    :disabled="isSaving || isLoading"
+                    @toggle-checked="openInNewWindow = false"
+                    :isChecked="openInNewWindow == false"
+                  >No</Radio>
+                </v-radio-group>
+              </v-card-text>
+            </v-card>
           </transition>
         </v-flex>
         <v-flex xs6>
@@ -184,31 +184,31 @@
               :isChecked="isDocumentLibrary == false"
             >No</Radio>
           </v-radio-group>
-           <transition name="slide-down">
-          <v-card v-if="isDocumentLibrary" color="#f9f9f9" flat class="mr-3">
-            <v-card-text>
-           <v-radio-group
-            v-model="documentType"
-            row
-            :disabled="isSaving || isLoading"
-            color="#f00"
-            label="Document Type"
-            hint="Determines if list is a document library or not.  This will help determine the types of queries and filters to apply on web service calls."
-            persistent-hint
-          >
-            <Radio
-              :disabled="isSaving || isLoading"
-              @toggle-checked="documentType = 'File'"
-              :isChecked="documentType == 'File'"
-            >File</Radio>
-            <Radio
-              :disabled="isSaving || isLoading"
-              @toggle-checked="documentType = 'Folder'"
-              :isChecked="documentType == 'Folder'"
-            >Folder</Radio>
-          </v-radio-group>
-            </v-card-text>
-          </v-card>
+          <transition name="slide-down">
+            <v-card v-if="isDocumentLibrary" color="#f9f9f9" flat class="mr-3">
+              <v-card-text>
+                <v-radio-group
+                  v-model="documentType"
+                  row
+                  :disabled="isSaving || isLoading"
+                  color="#f00"
+                  label="Document Type"
+                  hint="Determines if list is a document library or not.  This will help determine the types of queries and filters to apply on web service calls."
+                  persistent-hint
+                >
+                  <Radio
+                    :disabled="isSaving || isLoading"
+                    @toggle-checked="documentType = 'File'"
+                    :isChecked="documentType == 'File'"
+                  >File</Radio>
+                  <Radio
+                    :disabled="isSaving || isLoading"
+                    @toggle-checked="documentType = 'Folder'"
+                    :isChecked="documentType == 'Folder'"
+                  >Folder</Radio>
+                </v-radio-group>
+              </v-card-text>
+            </v-card>
           </transition>
         </v-flex>
         <v-flex xs12>
@@ -226,11 +226,17 @@
               <div class="v-messages theme--light">
                 <div class="v-messages__wrapper">
                   <div class="v-messages__message">
-                    Order and color of the metrics displayed. Click on <AppsIcon class="small-icon"></AppsIcon> then 
-                   <EditIcon class="small-icon"></EditIcon> to edit the background color, font color, and visibility. You can also change the visibility by clicking on <AppsIcon class="small-icon"></AppsIcon> then clicking on <VisibilityIcon class="small-icon"></VisibilityIcon> or <VisibilityOffIcon class="small-icon"></VisibilityOffIcon>. 
-                   To delete a metric from being displayed, click on the
-                   <AppsIcon class="small-icon"></AppsIcon> then <DeleteIcon class="small-icon"></DeleteIcon>. To chnage the order, click on the
-                    <LeftArrowIcon class="small-icon"></LeftArrowIcon> or <RightArrowIcon class="small-icon"></RightArrowIcon> inside each metric. Click
+                    Order and color of the metrics displayed. Click on
+                    <AppsIcon class="small-icon"></AppsIcon>then
+                    <EditIcon class="small-icon"></EditIcon>to edit the background color, font color, and visibility. You can also change the visibility by clicking on
+                    <AppsIcon class="small-icon"></AppsIcon>then clicking on
+                    <VisibilityIcon class="small-icon"></VisibilityIcon>or
+                    <VisibilityOffIcon class="small-icon"></VisibilityOffIcon>.
+                    To delete a metric from being displayed, click on the
+                    <AppsIcon class="small-icon"></AppsIcon>then
+                    <DeleteIcon class="small-icon"></DeleteIcon>. To chnage the order, click on the
+                    <LeftArrowIcon class="small-icon"></LeftArrowIcon>or
+                    <RightArrowIcon class="small-icon"></RightArrowIcon>inside each metric. Click
                     <kbd>Add</kbd> to add a new metric.
                   </div>
                 </div>
@@ -243,8 +249,18 @@
     </v-container>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn flat color="blue" :loading="isLoading" :disabled="true" light>  <span slot="loader"><LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon><v-spacer></v-spacer>Generate Metrics</span>Generate Metrics</v-btn>
-      <v-btn flat color="blue" :loading="isLoading" :disabled="isLoading" @click="save" light><span slot="loader"><LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon><v-spacer></v-spacer>Save</span>Save</v-btn>
+      <v-btn flat color="blue" :loading="isLoading" :disabled="true" light>
+        <span slot="loader">
+          <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+          <v-spacer></v-spacer>Generate Metrics
+        </span>Generate Metrics
+      </v-btn>
+      <v-btn flat color="blue" :loading="isLoading" :disabled="isLoading" @click="save" light>
+        <span slot="loader">
+          <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+          <v-spacer></v-spacer>Save
+        </span>Save
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -279,7 +295,28 @@ export default {
   mixins: {
     data: Data
   },
-  props: {},
+  props: {
+    initConfig: {
+      type: Object,
+      default: function() {
+        return {
+          ID: 0,
+          hasFiltering: false,
+          isDocumentLibrary: false,
+          hasDynamicWidth: false,
+          hasFilterDetection: false,
+          fileObjectType: 0,
+          minColumnWidth: 1,
+          openInNewWindow: true,
+          listName: "",
+          siteUrl: "",
+          fieldName: "",
+          filterViewName: "",
+          metrics: {}
+        };
+      }
+    }
+  },
   watch: {
     columnWidth: function() {
       this.$refs.columnWidth.blur();
@@ -295,7 +332,7 @@ export default {
       isLoading: false,
       fieldName: "",
       siteRelativeUrl: "",
-      documentType: 'File',
+      documentType: "File",
       isColumnWidthSelected: false,
       dynamicWidth: false,
       enableFilterNavigation: false,
@@ -314,12 +351,12 @@ export default {
     };
   },
   methods: {
-    updateMetrics: function(items){
-      this.$emit('items-updated', items);
+    updateMetrics: function(items) {
+      this.$emit("items-updated", items);
     },
-    save: function(){
+    save: function() {
       this.isLoading = true;
-      setTimeout(() => this.isLoading = false, 2000);
+      setTimeout(() => (this.isLoading = false), 2000);
     }
   }
 };
@@ -407,28 +444,41 @@ svg.dropdown.active {
   padding-right: 15px;
 }
 
-
 .slide-down-enter-active,
 .slide-down-leave-active {
   max-height: 500px;
   transition: all 0.3s ease-out;
 }
 
-.slide-down-leave-to, .slide-down-enter {
+.slide-down-leave-to,
+.slide-down-enter {
   max-height: 0px;
-    opacity: 0;
+  opacity: 0;
 }
 
 .loading-icon {
-  fill: rgba(0,0,0,.61);
+  fill: rgba(0, 0, 0, 0.61);
   position: absolute;
   left: 0;
-   -webkit-animation:spin 1s ease-in-out infinite;
-    -moz-animation:spin 1s ease-in-out infinite;
-    animation:spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  -moz-animation: spin 1s ease-in-out infinite;
+  animation: spin 1s ease-in-out infinite;
 }
 
-@-moz-keyframes spin { 100% { -moz-transform: rotate(-360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(-360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
+}
 </style>

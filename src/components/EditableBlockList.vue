@@ -13,14 +13,14 @@
         @mouseover="item.isHoveringOver = true"
         @mouseleave="item.isHoveringOver = false"
       >
-       <transition name="fade" > 
-        <span
-          v-if="!item.isVisible"
-          class="font-weight-thin pa-2"
-          :style="{position:'absolute', top: '0', left: '0', color: 'rgba(0,0,0,.65)'}"
-        >
-           <VisibilityOffIcon class="icon" :style="{fill: item.fontColor.hex}"></VisibilityOffIcon>
-        </span>
+        <transition name="fade">
+          <span
+            v-if="!item.isVisible"
+            class="font-weight-thin pa-2"
+            :style="{position:'absolute', top: '0', left: '0', color: 'rgba(0,0,0,.65)'}"
+          >
+            <VisibilityOffIcon class="icon" :style="{fill: item.fontColor.hex}"></VisibilityOffIcon>
+          </span>
         </transition>
         <v-speed-dial
           v-model="item.fab"
@@ -101,8 +101,8 @@
       <v-card>
         <v-card-title></v-card-title>
         <v-card-text>
-        <v-container fluid grid-list-lg>
-    <v-layout row wrap>
+          <v-container fluid grid-list-lg>
+            <v-layout row wrap>
               <v-flex xs12>
                 <v-text-field
                   v-model="editingItem.name"
@@ -134,41 +134,46 @@
                 </v-radio-group>
               </v-flex>
               <v-flex xs12>
-                  <v-subheader class="pl-0">Font Size</v-subheader>
-                   <v-slider
-          v-model="editingItem.fontSize"
-            thumb-label="always"
-            color="blue"
-              ticks="always"
-                step="1"
-                min="4"
-                max="36"
-        tick-size="2"
-        ></v-slider>
-                  </v-flex>
+                <v-subheader class="pl-0">Font Size</v-subheader>
+                <v-slider
+                  v-model="editingItem.fontSize"
+                  thumb-label="always"
+                  color="blue"
+                  ticks="always"
+                  step="1"
+                  min="4"
+                  max="36"
+                  tick-size="2"
+                ></v-slider>
+              </v-flex>
               <v-flex xs4>
-             <v-layout align-center justify-center column fill-height>
-                <h2 class="font-weight-thin">Background Color</h2>
-                <sketch-picker v-model="editingItem.backgroundColor"/>
+                <v-layout align-center justify-center column fill-height>
+                  <h2 class="font-weight-thin">Background Color</h2>
+                  <sketch-picker v-model="editingItem.backgroundColor"/>
                 </v-layout>
               </v-flex>
               <v-flex xs4>
-                     <v-layout align-center justify-center column fill-height>
-                <h2 class="font-weight-thin">Font Color</h2>
-                <sketch-picker v-model="editingItem.fontColor"/>
+                <v-layout align-center justify-center column fill-height>
+                  <h2 class="font-weight-thin">Font Color</h2>
+                  <sketch-picker v-model="editingItem.fontColor"/>
                 </v-layout>
               </v-flex>
               <v-flex xs4>
                 <h2 class="font-weight-thin">Preview</h2>
                 <v-card
-        class="list-item"
-        style="position: relative"
-        :style="{'background-color': editingItem.backgroundColor.hex, 'color': editingItem.fontColor.hex}">  
-        <v-container fill-height grid-list-md text-xs-center>
-          <v-layout row wrap align-center>
-            <v-flex class="item-title" :style="{'font-size': editingItem.fontSize + 'px'}">{{ editingItem.name }}</v-flex>
-          </v-layout>
-        </v-container></v-card>
+                  class="list-item"
+                  style="position: relative"
+                  :style="{'background-color': editingItem.backgroundColor.hex, 'color': editingItem.fontColor.hex}"
+                >
+                  <v-container fill-height grid-list-md text-xs-center>
+                    <v-layout row wrap align-center>
+                      <v-flex
+                        class="item-title"
+                        :style="{'font-size': editingItem.fontSize + 'px'}"
+                      >{{ editingItem.name }}</v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card>
               </v-flex>
             </v-layout>
           </v-container>
@@ -213,40 +218,54 @@ export default {
     disabled: {
       type: Boolean,
       default: function() {
-        return false;
+        return {
+          ID: 0,
+          hasFiltering: false,
+          isDocumentLibrary: false,
+          hasDynamicWidth: false,
+          hasFilterDetection: false,
+          fileObjectType: 0,
+          minColumnWidth: 1,
+          openInNewWindow: true,
+          listName: "",
+          siteUrl: "",
+          fieldName: "",
+          filterViewName: "",
+          metrics: {}
+        };
       }
     },
-     readonly: Boolean,
+    readonly: Boolean,
     initialItems: {
-        type: Array,
-        default: function() {
-            return [];
-        }
+      type: Array,
+      default: function() {
+        return [];
+      }
     }
   },
   computed: {
     sortedItems: function() {
-        var items = [];
-        var i;
-        if(this.readonly){
-            for(i = 0; i < this.items.length; i++){
-                if(this.items[i].isVisible){
-                    items.push(this.items[i]);
-                }
-            }
-        } else {
-            items = this.items;
+      var items = [];
+      var i;
+      if (this.readonly) {
+        for (i = 0; i < this.items.length; i++) {
+          if (this.items[i].isVisible) {
+            items.push(this.items[i]);
+          }
         }
+      } else {
+        items = this.items;
+      }
       return items.slice().sort((a, b) => a.index - b.index);
     }
   },
   watch: {
-      sortedItems: function(newVal){
-          this.$emit('update', newVal);
-      },
-      initialItems: function(newVal){
-          this.items = Object.assign([], newVal);
-      }
+    sortedItems: function(newVal) {
+      this.$emit("update", newVal);
+    },
+    initialItems: function(newVal) {
+      this.items = Object.assign([], newVal);
+    }
   },
   data() {
     return {
@@ -396,11 +415,11 @@ export default {
 }
 
 .list-move {
-    transition: transform .2s;
+  transition: transform 0.2s;
 }
 .list-enter-active,
 .list-leave-active {
-  transition: all .2s;
+  transition: all 0.2s;
 }
 .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
   opacity: 0;
