@@ -3,48 +3,65 @@
     <v-card-title>
       <span class="headline">Metrics Configuration</span>
       <v-spacer :style="{'text-align': 'right'}">
-        <v-chip label color="green" text-color="white" v-if="isConfigDataLoaded">Config Data Loaded</v-chip>
-        <v-chip label color="red" text-color="white" v-else>No Config Data</v-chip>
+        <v-chip
+          label
+          color="green"
+          text-color="white"
+          v-if="isConfigDataLoaded && !isLoading"
+        >Config Data Loaded</v-chip>
+        <v-chip
+          label
+          color="red"
+          text-color="white"
+          v-if="!isConfigDataLoaded && !isLoading"
+        >No Config Data</v-chip>
+        <v-chip label color="primary" text-color="white" v-if="isLoading">
+          <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+          <v-spacer></v-spacer>Loading
+        </v-chip>
       </v-spacer>
     </v-card-title>
     <v-container grid-list-md fluid>
       <v-layout row wrap>
         <v-flex xs6>
           <v-text-field
-            v-model="listName"
+            v-model="config.listName"
             label="List Name"
             required
             box
             color="blue"
             hint="The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name."
             persistent-hint
+            :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
         <v-flex xs6>
           <v-text-field
-            v-model="siteRelativeUrl"
+            v-model="config.siteRelativeUrl"
             label="Site Relative URL"
             box
             color="blue"
             hint="URL of the site where the list is stored"
             persistent-hint
             required
+            :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
         <v-flex xs6>
           <v-text-field
-            v-model="fieldName"
+            v-model="config.fieldName"
             label="Field Name"
             box
             color="blue"
             hint="The field name which will be used to generate metrics on. This should be the internal name of the field, not display name."
             persistent-hint
             required
+            :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
         <v-flex xs6 :style="{position: 'relative'}">
           <v-select
-            v-model="columnWidth"
+            v-model="config.columnWidth"
             :items="columnWidthItems"
             ref="columnWidth"
             box
@@ -56,6 +73,7 @@
             @blur="isColumnWidthSelected = false"
             :hint="columnWidthHint"
             persistent-hint
+            :disabled="isSaving || isLoading"
           ></v-select>
           <dropdownIcon
             class="dropdown"
@@ -64,7 +82,7 @@
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="dynamicWidth"
+            v-model="config.dynamicWidth"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -74,19 +92,19 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="dynamicWidth = true"
-              :isChecked="dynamicWidth == true"
+              @toggle-checked="config.dynamicWidth = true"
+              :isChecked="config.dynamicWidth == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="dynamicWidth = false"
-              :isChecked="dynamicWidth == false"
+              @toggle-checked="config.dynamicWidth = false"
+              :isChecked="config.dynamicWidth == false"
             >No</Radio>
           </v-radio-group>
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="enableFilterNavigation"
+            v-model="config.enableFilterNavigation"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -96,29 +114,30 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="enableFilterNavigation = true"
-              :isChecked="enableFilterNavigation == true"
+              @toggle-checked="config.enableFilterNavigation = true"
+              :isChecked="config.enableFilterNavigation == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="enableFilterNavigation = false"
-              :isChecked="enableFilterNavigation == false"
+              @toggle-checked="config.enableFilterNavigation = false"
+              :isChecked="config.enableFilterNavigation == false"
             >No</Radio>
           </v-radio-group>
           <transition name="slide-down">
-            <v-card v-if="enableFilterNavigation" color="#f9f9f9" flat class="mr-3">
+            <v-card v-if="config.enableFilterNavigation" color="#f9f9f9" flat class="mr-3">
               <v-card-text>
                 <v-text-field
-                  v-model="filterViewName"
+                  v-model="config.filterViewName"
                   label="Filter View Name"
                   box
                   color="blue"
                   hint="The list view for the filter to be applied to"
                   persistent-hint
                   required
+                  :disabled="isSaving || isLoading"
                 ></v-text-field>
                 <v-radio-group
-                  v-model="openInNewWindow"
+                  v-model="config.openInNewWindow"
                   row
                   :disabled="isSaving || isLoading"
                   color="#f00"
@@ -128,13 +147,13 @@
                 >
                   <Radio
                     :disabled="isSaving || isLoading"
-                    @toggle-checked="openInNewWindow = true"
-                    :isChecked="openInNewWindow == true"
+                    @toggle-checked="config.openInNewWindow = true"
+                    :isChecked="config.openInNewWindow == true"
                   >Yes</Radio>
                   <Radio
                     :disabled="isSaving || isLoading"
-                    @toggle-checked="openInNewWindow = false"
-                    :isChecked="openInNewWindow == false"
+                    @toggle-checked="config.openInNewWindow = false"
+                    :isChecked="config.openInNewWindow == false"
                   >No</Radio>
                 </v-radio-group>
               </v-card-text>
@@ -143,7 +162,7 @@
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="enableFilterDetection"
+            v-model="config.enableFilterDetection"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -153,19 +172,19 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="enableFilterDetection = true"
-              :isChecked="enableFilterDetection == true"
+              @toggle-checked="config.enableFilterDetection = true"
+              :isChecked="config.enableFilterDetection == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="enableFilterDetection = false"
-              :isChecked="enableFilterDetection == false"
+              @toggle-checked="config.enableFilterDetection = false"
+              :isChecked="config.enableFilterDetection == false"
             >No</Radio>
           </v-radio-group>
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="isDocumentLibrary"
+            v-model="config.isDocumentLibrary"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -175,20 +194,20 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="isDocumentLibrary = true"
-              :isChecked="isDocumentLibrary == true"
+              @toggle-checked="config.isDocumentLibrary = true"
+              :isChecked="config.isDocumentLibrary == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="isDocumentLibrary = false"
-              :isChecked="isDocumentLibrary == false"
+              @toggle-checked="config.isDocumentLibrary = false"
+              :isChecked="config.isDocumentLibrary == false"
             >No</Radio>
           </v-radio-group>
           <transition name="slide-down">
-            <v-card v-if="isDocumentLibrary" color="#f9f9f9" flat class="mr-3">
+            <v-card v-if="config.isDocumentLibrary" color="#f9f9f9" flat class="mr-3">
               <v-card-text>
                 <v-radio-group
-                  v-model="documentType"
+                  v-model="config.documentType"
                   row
                   :disabled="isSaving || isLoading"
                   color="#f00"
@@ -198,13 +217,13 @@
                 >
                   <Radio
                     :disabled="isSaving || isLoading"
-                    @toggle-checked="documentType = 'File'"
-                    :isChecked="documentType == 'File'"
+                    @toggle-checked="config.documentType = 'File'"
+                    :isChecked="config.documentType == 'File'"
                   >File</Radio>
                   <Radio
                     :disabled="isSaving || isLoading"
-                    @toggle-checked="documentType = 'Folder'"
-                    :isChecked="documentType == 'Folder'"
+                    @toggle-checked="config.documentType = 'Folder'"
+                    :isChecked="config.documentType == 'Folder'"
                   >Folder</Radio>
                 </v-radio-group>
               </v-card-text>
@@ -251,14 +270,22 @@
       <v-spacer></v-spacer>
       <v-btn flat color="blue" :loading="isLoading" :disabled="true" light>
         <span slot="loader">
-          <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
-          <v-spacer></v-spacer>Generate Metrics
+          <v-layout row wrap>
+            <v-flex>
+              <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+            </v-flex>
+            <v-flex>Generate Metrics</v-flex>
+          </v-layout>
         </span>Generate Metrics
       </v-btn>
       <v-btn flat color="blue" :loading="isLoading" :disabled="isLoading" @click="save" light>
         <span slot="loader">
-          <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
-          <v-spacer></v-spacer>Save
+          <v-layout row wrap>
+            <v-flex>
+              <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+            </v-flex>
+            <v-flex>Save</v-flex>
+          </v-layout>
         </span>Save
       </v-btn>
     </v-card-actions>
@@ -292,10 +319,9 @@ export default {
     VisibilityOffIcon: VisibilityOffIcon,
     AppsIcon: AppsIcon
   },
-  mixins: {
-    data: Data
-  },
+  mixins: [Data],
   props: {
+    loading: Boolean,
     initConfig: {
       type: Object,
       default: function() {
@@ -320,26 +346,38 @@ export default {
   watch: {
     columnWidth: function() {
       this.$refs.columnWidth.blur();
+    },
+    initConfig: function(newVal) {
+      if (newVal.ID > 0) {
+        this.isConfigDataLoaded = true;
+      }
+      this.config = Object.assign(this.config, newVal);
+    },
+    loading: function(newVal) {
+      this.isLoading = newVal;
     }
   },
   data: function() {
     return {
       valid: true,
       columnWidthItems: ["1", "2", "3", "4", "6", "12"],
-      columnWidth: "1",
-      listName: "",
       isSaving: false,
       isLoading: false,
-      fieldName: "",
-      siteRelativeUrl: "",
-      documentType: "File",
       isColumnWidthSelected: false,
-      dynamicWidth: false,
-      enableFilterNavigation: false,
-      enableFilterDetection: false,
-      isDocumentLibrary: false,
+      config: {
+        ID: 0,
+        columnWidth: "1",
+        listName: "",
+        fieldName: "",
+        siteRelativeUrl: "",
+        documentType: "File",
+        dynamicWidth: false,
+        enableFilterNavigation: false,
+        enableFilterDetection: false,
+        isDocumentLibrary: false,
+        openInNewWindow: false
+      },
       isConfigDataLoaded: false,
-      openInNewWindow: false,
       columnWidthHint: `<blockquote>
                       Grid columns are created by specifying a number that is a factor of
                       <kbd>12</kbd> available columns you wish to span. For example, column width of
@@ -356,7 +394,27 @@ export default {
     },
     save: function() {
       this.isLoading = true;
-      setTimeout(() => (this.isLoading = false), 2000);
+      (function(that) {
+        new Promise(function(resolve) {
+          that.getDigest(function(digest) {
+            resolve(digest);
+          });
+        })
+          .then(function(digest) {
+            return new Promise(function(resolve) {
+              that.saveConfig(digest, function(result) {
+                resolve(result);
+              });
+            });
+          })
+          .then(function() {
+            that.isSaving = false;
+          })
+          .catch(function(error) {
+            that.isSaving = false;
+            console.log(error);
+          });
+      })(this);
     }
   }
 };
@@ -458,8 +516,7 @@ svg.dropdown.active {
 
 .loading-icon {
   fill: rgba(0, 0, 0, 0.61);
-  position: absolute;
-  left: 0;
+  margin-right: 8px;
   -webkit-animation: spin 1s ease-in-out infinite;
   -moz-animation: spin 1s ease-in-out infinite;
   animation: spin 1s ease-in-out infinite;

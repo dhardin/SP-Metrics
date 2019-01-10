@@ -149,7 +149,7 @@ export default {
           }
         });
     },
-    saveConfigData: function(digest, callback, errorCallback) {
+    saveConfigData: function(digest, callback) {
       var listName = this.listName;
       var site = this.siteUrl;
       var url =
@@ -183,20 +183,14 @@ export default {
         method: "post",
         headers: headers,
         data: data
-      })
-        .then(function(response) {
-          var data = response.data.hasOwnProperty("d")
-            ? response.data.d
-            : JSON.parse(response.config.data);
-          if (callback) {
-            callback(data);
-          }
-        })
-        .catch(function(error) {
-          if (errorCallback) {
-            errorCallback(error);
-          }
-        });
+      }).then(function(response) {
+        var data = response.data.hasOwnProperty("d")
+          ? response.data.d
+          : JSON.parse(response.config.data);
+        if (callback) {
+          callback(data);
+        }
+      });
     },
     getListFields: function(callback, errorCallback) {
       return axios({

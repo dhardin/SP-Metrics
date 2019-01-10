@@ -215,26 +215,7 @@ export default {
     Radio: Radio
   },
   props: {
-    disabled: {
-      type: Boolean,
-      default: function() {
-        return {
-          ID: 0,
-          hasFiltering: false,
-          isDocumentLibrary: false,
-          hasDynamicWidth: false,
-          hasFilterDetection: false,
-          fileObjectType: 0,
-          minColumnWidth: 1,
-          openInNewWindow: true,
-          listName: "",
-          siteUrl: "",
-          fieldName: "",
-          filterViewName: "",
-          metrics: {}
-        };
-      }
-    },
+    disabled: Boolean,
     readonly: Boolean,
     initialItems: {
       type: Array,

@@ -3,7 +3,12 @@
     <v-app>
       <v-layout>
         <v-flex xs10 py-3 offset-sm1>
-          <Config @items-updated="updateItems" v-if="isEditing" :init-config="config"></Config>
+          <Config
+            @items-updated="updateItems"
+            v-if="isEditing"
+            :init-config="config"
+            :loading="state_map.loading.isLoading"
+          ></Config>
           <EditableBlockList readonly :initialItems="items" v-else></EditableBlockList>
         </v-flex>
       </v-layout>
@@ -121,6 +126,10 @@ export default {
     this.onHashChange();
   },
   created: function() {
+    this.toggleLoading({
+      isloading: true,
+      message: ""
+    });
     (function(that) {
       new Promise(function(resolve) {
         if (that.testing) {
@@ -149,7 +158,7 @@ export default {
           return new Promise(function(resolve) {
             if (that.testing) {
               resolve();
-            } else {
+            } else if (that.config.ID > 0) {
               that.getListFields(
                 function(data) {
                   var staticFieldMap;
@@ -177,6 +186,8 @@ export default {
                   });
                 }
               );
+            } else {
+              resolve();
             }
           });
         })
@@ -208,7 +219,7 @@ export default {
           });
         })
         .then(function() {
-          that.configFetched = true;
+          that.configFetched = that.config.ID > 0;
           if (Object.keys(that.metrics).length > 0 || that.editing) {
             that.toggleLoading({
               isloading: false,
