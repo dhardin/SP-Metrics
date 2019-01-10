@@ -8,6 +8,7 @@
             v-if="isEditing"
             :init-config="config"
             :loading="state_map.loading.isLoading"
+            :site-url="siteUrl"
           ></Config>
           <EditableBlockList readonly :initialItems="items" v-else></EditableBlockList>
         </v-flex>

@@ -321,6 +321,7 @@ export default {
   },
   mixins: [Data],
   props: {
+    siteUrL: "",
     loading: Boolean,
     initConfig: {
       type: Object,
@@ -402,7 +403,7 @@ export default {
         })
           .then(function(digest) {
             return new Promise(function(resolve) {
-              that.saveConfig(digest, function(result) {
+              that.saveConfigData(digest, function(result) {
                 resolve(result);
               });
             });
