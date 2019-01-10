@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="green" dark large @click="addItem" v-if="!readonly">
+    <v-btn color="green" dark large @click="addItem" v-if="!readonly" :disabled="disabled">
       <AddIcon class="icon"></AddIcon>Add
     </v-btn>
     <transition-group name="list" tag="p">
@@ -34,6 +34,7 @@
           :style="{top: '24px'}"
           class="speed-dial"
           v-if="!readonly"
+          :disabled="disabled"
         >
           <v-btn slot="activator" v-model="item.fab" color="blue darken-2" dark fab class="xs-btn">
             <transition name="fade" mode="out-in">>

@@ -262,13 +262,19 @@
               </div>
             </div>
           </div>
-          <EditableBlockList @update="updateMetrics"></EditableBlockList>
+          <EditableBlockList @update="updateMetrics" :disabled="isLoading || isSaving"></EditableBlockList>
         </v-flex>
       </v-layout>
     </v-container>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn flat color="blue" :loading="isLoading" :disabled="true" light>
+      <v-btn
+        flat
+        color="blue"
+        :loading="isLoading"
+        :disabled="isLoading || config.listName.length == 0"
+        light
+      >
         <span slot="loader">
           <v-layout row wrap>
             <v-flex>
@@ -278,7 +284,14 @@
           </v-layout>
         </span>Generate Metrics
       </v-btn>
-      <v-btn flat color="blue" :loading="isLoading" :disabled="isLoading" @click="save" light>
+      <v-btn
+        flat
+        color="blue"
+        :loading="isLoading"
+        :disabled="isLoading || config.listName.length == 0"
+        @click="save"
+        light
+      >
         <span slot="loader">
           <v-layout row wrap>
             <v-flex>
@@ -397,15 +410,26 @@ export default {
       this.isLoading = true;
       (function(that) {
         new Promise(function(resolve) {
-          that.getDigest(function(digest) {
-            resolve(digest);
-          });
+          that.getDigest(
+            function(digest) {
+              resolve(digest);
+            },
+            function(error) {
+              reject(error);
+            }
+          );
         })
           .then(function(digest) {
             return new Promise(function(resolve) {
-              that.saveConfigData(digest, function(result) {
-                resolve(result);
-              });
+              that.saveConfigData(
+                digest,
+                function(result) {
+                  resolve(result);
+                },
+                function(error) {
+                  reject(error);
+                }
+              );
             });
           })
           .then(function() {
