@@ -334,7 +334,12 @@ export default {
   },
   mixins: [Data],
   props: {
-    siteUrL: "",
+    siteUrL: {
+      type: String,
+      default: function() {
+        return "";
+      }
+    },
     loading: Boolean,
     initConfig: {
       type: Object,
@@ -409,7 +414,7 @@ export default {
     save: function() {
       this.isLoading = true;
       (function(that) {
-        new Promise(function(resolve) {
+        new Promise(function(resolve, reject) {
           that.getDigest(
             function(digest) {
               resolve(digest);
@@ -420,7 +425,7 @@ export default {
           );
         })
           .then(function(digest) {
-            return new Promise(function(resolve) {
+            return new Promise(function(resolve, reject) {
               that.saveConfigData(
                 digest,
                 function(result) {
