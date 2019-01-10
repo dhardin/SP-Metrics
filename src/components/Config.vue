@@ -334,7 +334,7 @@ export default {
   },
   mixins: [Data],
   props: {
-    siteUrL: {
+    siteUrl: {
       type: String,
       default: function() {
         return "";
