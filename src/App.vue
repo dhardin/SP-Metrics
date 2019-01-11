@@ -9,6 +9,7 @@
             :init-config="config"
             :loading="state_map.loading.isLoading"
             :site-url="siteUrl"
+            :config-list-name="configListName"
           ></Config>
           <EditableBlockList readonly :initialItems="items" v-else></EditableBlockList>
         </v-flex>

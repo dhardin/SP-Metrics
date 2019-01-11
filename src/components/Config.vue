@@ -340,6 +340,12 @@ export default {
         return "";
       }
     },
+    configListName: {
+      type: String,
+      default: function(){
+        return ""
+      }
+    },
     loading: Boolean,
     initConfig: {
       type: Object,
