@@ -61,7 +61,7 @@
         </v-flex>
         <v-flex xs6 :style="{position: 'relative'}">
           <v-select
-            v-model="config.columnWidth"
+            v-model="config.minColumnWidth"
             :items="columnWidthItems"
             ref="columnWidth"
             box
@@ -342,8 +342,8 @@ export default {
     },
     configListName: {
       type: String,
-      default: function(){
-        return ""
+      default: function() {
+        return "";
       }
     },
     loading: Boolean,
@@ -369,8 +369,8 @@ export default {
     }
   },
   watch: {
-    columnWidth: function() {
-      this.$refs.columnWidth.blur();
+    minColumnWidth: function() {
+      this.$refs.minColumnWidth.blur();
     },
     initConfig: function(newVal) {
       if (newVal.ID > 0) {
@@ -391,7 +391,7 @@ export default {
       isColumnWidthSelected: false,
       config: {
         ID: 0,
-        columnWidth: "1",
+        minColumnWidth: "1",
         listName: "",
         fieldName: "",
         siteRelativeUrl: "",
