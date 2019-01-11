@@ -150,7 +150,7 @@ export default {
         });
     },
     saveConfigData: function(digest, callback) {
-      var listName = this.config.listName;
+      var listName = this.configListName;
       var site = this.siteUrl;
       var url =
         site +
