@@ -37,7 +37,7 @@
         </v-flex>
         <v-flex xs6>
           <v-text-field
-            v-model="config.siteRelativeUrl"
+            v-model="config.siteUrl"
             label="Site Relative URL"
             box
             color="blue"
@@ -394,7 +394,7 @@ export default {
         minColumnWidth: "1",
         listName: "",
         fieldName: "",
-        siteRelativeUrl: "",
+        siteUrl: "",
         documentType: "File",
         dynamicWidth: false,
         enableFilterNavigation: false,
