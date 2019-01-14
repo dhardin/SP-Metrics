@@ -82,7 +82,7 @@
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="config.dynamicWidth"
+            v-model="config.hasDynamicWidth"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -92,13 +92,13 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="config.dynamicWidth = true"
-              :isChecked="config.dynamicWidth == true"
+              @toggle-checked="config.hasDynamicWidth = true"
+              :isChecked="config.hasDynamicWidth == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="config.dynamicWidth = false"
-              :isChecked="config.dynamicWidth == false"
+              @toggle-checked="config.hasDynamicWidth = false"
+              :isChecked="config.hasDynamicWidth == false"
             >No</Radio>
           </v-radio-group>
         </v-flex>
@@ -396,7 +396,7 @@ export default {
         fieldName: "",
         siteUrl: "",
         fileObjectType: 0,
-        dynamicWidth: false,
+        hasDynamicWidth: false,
         enableFilterNavigation: false,
         enableFilterDetection: false,
         isDocumentLibrary: false,
