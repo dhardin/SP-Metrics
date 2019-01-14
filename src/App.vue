@@ -24,12 +24,12 @@
           </v-card>
           <EditableBlockList
             readonly
-            :initialItems="items"
-            v-if="!isEditing && !state_map.loading.isLoading && items.length > 0"
+            :initialItems="config.metrics"
+            v-if="!isEditing && !state_map.loading.isLoading && config.metrics.length > 0"
           ></EditableBlockList>
           <v-card
             class="pa-5"
-            v-if="!state_map.loading.isLoading && !isEditing && items.length == 0"
+            v-if="!state_map.loading.isLoading && !isEditing && config.metrics.length == 0"
           >
             <v-layout row wrap>
               <v-flex>
