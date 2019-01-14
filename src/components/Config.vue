@@ -262,7 +262,11 @@
               </div>
             </div>
           </div>
-          <EditableBlockList @update="updateMetrics" :disabled="isLoading || isSaving"></EditableBlockList>
+          <EditableBlockList
+            @update="updateMetrics"
+            :disabled="isLoading || isSaving"
+            :initial-items="initConfig.metrics"
+          ></EditableBlockList>
         </v-flex>
       </v-layout>
     </v-container>
@@ -363,7 +367,7 @@ export default {
           siteUrl: "",
           fieldName: "",
           filterViewName: "",
-          metrics: {}
+          metrics: []
         };
       }
     }

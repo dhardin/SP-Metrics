@@ -276,7 +276,7 @@ export default {
           created: newVal[i].created
         });
       }
-      this.$emit("update", items);
+      //this.$emit("update", items);
     },
     editingItem: {
       handler: function(newVal) {
@@ -374,6 +374,7 @@ export default {
       var item = this.sortedItems[this.editingItem.sortOrder];
       Object.assign(item, this.editingItem);
       this.dialog = false;
+      this.$emit("update", this.sortedItems);
     },
     deleteItem: function(item) {
       var index = this.items.indexOf(item);
