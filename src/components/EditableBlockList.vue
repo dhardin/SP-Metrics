@@ -9,7 +9,7 @@
         v-bind:key="item.created"
         class="list-item"
         style="position: relative"
-        :style="{'background-color': item.backgroundColor.hex, 'color': item.color.hex}"
+        :style="{'background-color': getRgbaString(item.backgroundColor.rgba), 'color': getRgbaString(item.color.rgba)}"
         @mouseover="item.isHoveringOver = true"
         @mouseleave="item.isHoveringOver = false"
       >
@@ -70,7 +70,10 @@
 
         <v-container fill-height grid-list-md text-xs-center>
           <v-layout row wrap align-center>
-            <v-flex class="item-title">{{ item.name }}</v-flex>
+            <v-flex
+              class="item-title"
+              :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
+            >{{ item.name }}</v-flex>
           </v-layout>
         </v-container>
 
@@ -143,8 +146,25 @@
                   ticks="always"
                   step="1"
                   min="4"
-                  max="36"
+                  max="64"
                   tick-size="2"
+                ></v-slider>
+              </v-flex>
+              <v-flex xs12>
+                <v-subheader class="pl-0 mb-5">Font Weight</v-subheader>
+                <v-slider
+                  ref="fontWeight"
+                  v-model="editingItem.fontWeight"
+                  :label="blah"
+                  thumb-label="always"
+                  color="blue"
+                  ticks="always"
+                  step="1"
+                  min="0"
+                  max="2"
+                  tick-size="6"
+                  thumb-size="45"
+                  :tick-labels="fontWeightText"
                 ></v-slider>
               </v-flex>
               <v-flex xs4>
@@ -164,13 +184,13 @@
                 <v-card
                   class="list-item"
                   style="position: relative"
-                  :style="{'background-color': editingItem.backgroundColor.hex, 'color': editingItem.color.hex}"
+                  :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba), 'color': getRgbaString(editingItem.color.rgba)}"
                 >
                   <v-container fill-height grid-list-md text-xs-center>
                     <v-layout row wrap align-center>
                       <v-flex
                         class="item-title"
-                        :style="{'font-size': editingItem.fontSize + 'px'}"
+                        :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
                       >{{ editingItem.name }}</v-flex>
                     </v-layout>
                   </v-container>
@@ -243,7 +263,29 @@ export default {
   },
   watch: {
     sortedItems: function(newVal) {
-      this.$emit("update", newVal);
+      var items = [];
+      var i;
+      for (i = 0; i < newVal.length; i++) {
+        items.push({
+          name: newVal[i].name,
+          backgroundColor: newVal[i].backgroundColor,
+          color: newVal[i].color,
+          fontSize: newVal[i].fontSize,
+          fontWeight: newVal[i].fontWeight,
+          sortOrder: newVal[i].sortOrder,
+          isVisible: newVal[i].isVisible
+        });
+      }
+      this.$emit("update", items);
+    },
+    editingItem: {
+      handler: function(newVal) {
+        this.$refs.fontWeight.$el.querySelector(
+          ".v-slider__thumb-label"
+        ).innerHTML =
+          "<span>" + this.fontWeightText[newVal.fontWeight] + "</span>";
+      },
+      deep: true
     },
     initialItems: function(newVal) {
       this.items = Object.assign([], newVal);
@@ -254,6 +296,8 @@ export default {
       items: this.initialItems,
       direction: "bottom",
       fab: false,
+      fontWeightText: ["normal", "bold", "boldest"],
+      fontWeightValues: ["normal", "bold", "900"],
       fling: false,
       hover: true,
       tabs: null,
@@ -266,17 +310,18 @@ export default {
           hex: "#ffffff",
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
           hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
-          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          rgba: { r: 255, g: 255, b: 255, a: 1 },
           a: 1
         },
         color: {
           hex: "#000000",
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
           hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
-          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          rgba: { r: 0, g: 0, b: 0, a: 1 },
           a: 1
         },
         fontSize: 20,
+        fontWeight: 0,
         sortOrder: 0,
         isVisible: true
       },
@@ -285,6 +330,19 @@ export default {
     };
   },
   methods: {
+    getRgbaString: function(colorRgba) {
+      return (
+        "rgba(" +
+        colorRgba.r +
+        ", " +
+        colorRgba.g +
+        ", " +
+        colorRgba.b +
+        ", " +
+        colorRgba.a +
+        ")"
+      );
+    },
     addItem: function() {
       var item = {
         name: this.items.length,
@@ -294,19 +352,20 @@ export default {
         fab: false,
         backgroundColor: {
           hex: "#ffffff",
-          hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
-          hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
-          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          hsl: { h: 255, s: 255, l: 255, a: 1 },
+          hsv: { h: 255, s: 255, v: 255, a: 1 },
+          rgba: { r: 255, g: 255, b: 255, a: 1 },
           a: 1
         },
         color: {
           hex: "#000000",
-          hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
-          hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
-          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          hsl: { h: 0, s: 0, l: 0, a: 1 },
+          hsv: { h: 0, s: 0, v: 0, a: 1 },
+          rgba: { r: 0, g: 0, b: 0, a: 1 },
           a: 1
         },
         fontSize: 20,
+        fontWeight: 0,
         isHoveringOver: false
       };
       this.items.push(item);

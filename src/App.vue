@@ -11,7 +11,32 @@
             :site-url="siteUrl"
             :config-list-name="configListName"
           ></Config>
-          <EditableBlockList readonly :initialItems="items" v-else></EditableBlockList>
+
+          <v-card class="pa-5" v-if="state_map.loading.isLoading && !isEditing">
+            <v-layout row wrap>
+              <v-flex xs1 offset-sm4>
+                <LoadingIcon class="large-icon loading-icon"></LoadingIcon>
+              </v-flex>
+              <v-flex xs2>
+                <h1 id="loading-title" class="font-weight-thin">Loading</h1>
+              </v-flex>
+            </v-layout>
+          </v-card>
+          <EditableBlockList
+            readonly
+            :initialItems="items"
+            v-if="!isEditing && !state_map.loading.isLoading && items.length > 0"
+          ></EditableBlockList>
+          <v-card
+            class="pa-5"
+            v-if="!state_map.loading.isLoading && !isEditing && items.length == 0"
+          >
+            <v-layout row wrap>
+              <v-flex>
+                <h1 id="loading-title" class="font-weight-thin">No data</h1>
+              </v-flex>
+            </v-layout>
+          </v-card>
         </v-flex>
       </v-layout>
     </v-app>
@@ -20,12 +45,14 @@
 <script>
 import Config from "@/components/Config";
 import EditableBlockList from "@/components/EditableBlockList";
+import LoadingIcon from "@/assets/svg-sprite-action-symbol.svg?ic_cached_24px";
 import Data from "@/mixins/Data";
 import { _ } from "vue-underscore";
 export default {
   components: {
     Config: Config,
-    EditableBlockList: EditableBlockList
+    EditableBlockList: EditableBlockList,
+    LoadingIcon: LoadingIcon
   },
   mixins: [Data],
   data: function() {
@@ -58,7 +85,7 @@ export default {
           canClose: false,
           showLoading: true,
           message: "",
-          isloading: true
+          isLoading: true
         },
         fields: {
           staticMap: {},
@@ -129,7 +156,7 @@ export default {
   },
   created: function() {
     this.toggleLoading({
-      isloading: true,
+      isLoading: true,
       message: ""
     });
     (function(that) {
@@ -147,7 +174,7 @@ export default {
             },
             function(error) {
               that.toggleLoading({
-                isloading: true,
+                isLoading: false,
                 message: error.message,
                 canCancel: false,
                 canClose: true
@@ -181,7 +208,7 @@ export default {
                 },
                 function(error) {
                   that.toggleLoading({
-                    isloading: true,
+                    isLoading: false,
                     message: error.message,
                     canCancel: false,
                     canClose: true
@@ -200,12 +227,12 @@ export default {
               //this way we avoid more web service calls.
               that.getData(
                 function(data) {
-                  that.populateMetrics(data);
+                  this.items = data;
                   resolve();
                 },
                 function(error) {
                   that.toggleLoading({
-                    isloading: true,
+                    isLoading: false,
                     message: error.message,
                     canCancel: false,
                     canClose: true
@@ -224,7 +251,7 @@ export default {
           that.configFetched = that.config.ID > 0;
           if (Object.keys(that.metrics).length > 0 || that.editing) {
             that.toggleLoading({
-              isloading: false,
+              isLoading: false,
               message: "",
               canCancel: false,
               canClose: false
@@ -232,7 +259,7 @@ export default {
             //trigger hashchange to populate filter population
           } else {
             that.toggleLoading({
-              isloading: true,
+              isLoading: false,
               message: "No Data Available",
               canCancel: false,
               canClose: false
@@ -240,7 +267,12 @@ export default {
           }
         })
         .catch(function(error) {
-          console.log(error);
+          that.toggleLoading({
+            isLoading: false,
+            message: error.message,
+            canCancel: false,
+            canClose: false
+          });
         });
     })(this);
   }
@@ -266,5 +298,29 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.icon {
+  width: 25px;
+  height: 25px;
+  fill: white;
+}
+
+.large-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.loading-icon {
+  fill: rgba(0, 0, 0, 0.61);
+  margin-right: 8px;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  -moz-animation: spin 1s ease-in-out infinite;
+  animation: spin 1s ease-in-out infinite;
+}
+
+#loading-title {
+  text-transform: uppercase;
+  font-family: Roboto, sans-serif;
+  display: inline-block;
 }
 </style>
