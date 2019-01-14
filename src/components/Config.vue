@@ -395,7 +395,7 @@ export default {
         listName: "",
         fieldName: "",
         siteUrl: "",
-        fileObjectType: "File",
+        fileObjectType: 0,
         dynamicWidth: false,
         enableFilterNavigation: false,
         enableFilterDetection: false,
