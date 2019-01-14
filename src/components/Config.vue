@@ -104,7 +104,7 @@
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="config.enableFilterNavigation"
+            v-model="config.hasFiltering"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -114,17 +114,17 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="config.enableFilterNavigation = true"
-              :isChecked="config.enableFilterNavigation == true"
+              @toggle-checked="config.hasFiltering = true"
+              :isChecked="config.hasFiltering == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="config.enableFilterNavigation = false"
-              :isChecked="config.enableFilterNavigation == false"
+              @toggle-checked="config.hasFiltering = false"
+              :isChecked="config.hasFiltering == false"
             >No</Radio>
           </v-radio-group>
           <transition name="slide-down">
-            <v-card v-if="config.enableFilterNavigation" color="#f9f9f9" flat class="mr-3">
+            <v-card v-if="config.hasFiltering" color="#f9f9f9" flat class="mr-3">
               <v-card-text>
                 <v-text-field
                   v-model="config.filterViewName"
@@ -162,7 +162,7 @@
         </v-flex>
         <v-flex xs6>
           <v-radio-group
-            v-model="config.enableFilterDetection"
+            v-model="config.hasFilterDetection"
             row
             :disabled="isSaving || isLoading"
             color="#f00"
@@ -172,13 +172,13 @@
           >
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="config.enableFilterDetection = true"
-              :isChecked="config.enableFilterDetection == true"
+              @toggle-checked="config.hasFilterDetection = true"
+              :isChecked="config.hasFilterDetection == true"
             >Yes</Radio>
             <Radio
               :disabled="isSaving || isLoading"
-              @toggle-checked="config.enableFilterDetection = false"
-              :isChecked="config.enableFilterDetection == false"
+              @toggle-checked="config.hasFilterDetection = false"
+              :isChecked="config.hasFilterDetection == false"
             >No</Radio>
           </v-radio-group>
         </v-flex>
@@ -397,8 +397,8 @@ export default {
         siteUrl: "",
         fileObjectType: 0,
         hasDynamicWidth: false,
-        enableFilterNavigation: false,
-        enableFilterDetection: false,
+        hasFiltering: false,
+        hasFilterDetection: false,
         isDocumentLibrary: false,
         openInNewWindow: false
       },
