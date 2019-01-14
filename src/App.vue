@@ -169,7 +169,10 @@ export default {
                 console.log(data);
                 data[0].metrics = JSON.parse(data[0].metrics);
                 console.log(data);
-                _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+                that.config = Object.assign(
+                  {},
+                  _.pick(data[0], _.keys(that.config))
+                );
                 console.log(that.config);
               }
               resolve();
