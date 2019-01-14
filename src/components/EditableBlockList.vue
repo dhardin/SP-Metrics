@@ -9,7 +9,7 @@
         v-bind:key="item.created"
         class="list-item"
         style="position: relative"
-        :style="{'background-color': item.backgroundColor.hex, 'color': item.fontColor.hex}"
+        :style="{'background-color': item.backgroundColor.hex, 'color': item.color.hex}"
         @mouseover="item.isHoveringOver = true"
         @mouseleave="item.isHoveringOver = false"
       >
@@ -19,7 +19,7 @@
             class="font-weight-thin pa-2"
             :style="{position:'absolute', top: '0', left: '0', color: 'rgba(0,0,0,.65)'}"
           >
-            <VisibilityOffIcon class="icon" :style="{fill: item.fontColor.hex}"></VisibilityOffIcon>
+            <VisibilityOffIcon class="icon" :style="{fill: item.color.hex}"></VisibilityOffIcon>
           </span>
         </transition>
         <v-speed-dial
@@ -78,18 +78,18 @@
           <transition name="slide-right">
             <v-btn
               @click="moveLeft(item)"
-              v-if="item.index > 0 && item.isHoveringOver"
+              v-if="item.sortOrder > 0 && item.isHoveringOver"
               color="blue"
             >
               <LeftArrowIcon class="icon"></LeftArrowIcon>
             </v-btn>
           </transition>
-          <v-spacer v-if="(item.index == items.length - 1)"></v-spacer>
-          <span v-if="(item.index == 0)" :style="{width: '88px', height: '25px'}"></span>
+          <v-spacer v-if="(item.sortOrder == items.length - 1)"></v-spacer>
+          <span v-if="(item.sortOrder == 0)" :style="{width: '88px', height: '25px'}"></span>
           <transition name="slide-left">
             <v-btn
               @click="moveRight(item)"
-              v-if="item.index < items.length - 1 && item.isHoveringOver"
+              v-if="item.sortOrder < items.length - 1 && item.isHoveringOver"
               color="blue"
             >
               <RightArrowIcon class="icon"></RightArrowIcon>
@@ -156,7 +156,7 @@
               <v-flex xs4>
                 <v-layout align-center justify-center column fill-height>
                   <h2 class="font-weight-thin">Font Color</h2>
-                  <sketch-picker v-model="editingItem.fontColor"/>
+                  <sketch-picker v-model="editingItem.color"/>
                 </v-layout>
               </v-flex>
               <v-flex xs4>
@@ -164,7 +164,7 @@
                 <v-card
                   class="list-item"
                   style="position: relative"
-                  :style="{'background-color': editingItem.backgroundColor.hex, 'color': editingItem.fontColor.hex}"
+                  :style="{'background-color': editingItem.backgroundColor.hex, 'color': editingItem.color.hex}"
                 >
                   <v-container fill-height grid-list-md text-xs-center>
                     <v-layout row wrap align-center>
@@ -238,7 +238,7 @@ export default {
       } else {
         items = this.items;
       }
-      return items.slice().sort((a, b) => a.index - b.index);
+      return items.slice().sort((a, b) => a.sortOrder - b.sortOrder);
     }
   },
   watch: {
@@ -269,7 +269,7 @@ export default {
           rgba: { r: 25, g: 77, b: 51, a: 1 },
           a: 1
         },
-        fontColor: {
+        color: {
           hex: "#000000",
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
           hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
@@ -277,7 +277,7 @@ export default {
           a: 1
         },
         fontSize: 20,
-        index: 0,
+        sortOrder: 0,
         isVisible: true
       },
       bottom: false,
@@ -288,7 +288,7 @@ export default {
     addItem: function() {
       var item = {
         name: this.items.length,
-        index: this.items.length,
+        sortOrder: this.items.length,
         isVisible: true,
         created: new Date().toISOString(),
         fab: false,
@@ -299,7 +299,7 @@ export default {
           rgba: { r: 25, g: 77, b: 51, a: 1 },
           a: 1
         },
-        fontColor: {
+        color: {
           hex: "#000000",
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
           hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
@@ -312,29 +312,29 @@ export default {
       this.items.push(item);
     },
     saveItem: function() {
-      var item = this.sortedItems[this.editingItem.index];
+      var item = this.sortedItems[this.editingItem.sortOrder];
       Object.assign(item, this.editingItem);
       this.dialog = false;
     },
     deleteItem: function(item) {
       var index = this.items.indexOf(item);
-      var sortedIndex = item.index;
+      var sortedIndex = item.sortOrder;
       var i;
       //reorder all items after this.
       this.$delete(this.items, index);
       for (i = sortedIndex; i < this.sortedItems.length; i++) {
-        this.sortedItems[i].index = this.sortedItems[i].index - 1;
+        this.sortedItems[i].sortOrder = this.sortedItems[i].sortOrder - 1;
       }
     },
     moveRight: function(item) {
-      var index = item.index;
-      this.sortedItems[item.index + 1].index = index;
-      item.index++;
+      var index = item.sortOrder;
+      this.sortedItems[item.sortOrder + 1].sortOrder = index;
+      item.sortOrder++;
     },
     moveLeft: function(item) {
-      var index = item.index;
-      this.sortedItems[item.index - 1].index = index;
-      item.index--;
+      var index = item.sortOrder;
+      this.sortedItems[item.sortOrder - 1].sortOrder = index;
+      item.sortOrder--;
     }
   },
   mounted: function() {}

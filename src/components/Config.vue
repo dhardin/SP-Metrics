@@ -207,7 +207,7 @@
             <v-card v-if="config.isDocumentLibrary" color="#f9f9f9" flat class="mr-3">
               <v-card-text>
                 <v-radio-group
-                  v-model="config.documentType"
+                  v-model="config.fileObjectType"
                   row
                   :disabled="isSaving || isLoading"
                   color="#f00"
@@ -217,13 +217,13 @@
                 >
                   <Radio
                     :disabled="isSaving || isLoading"
-                    @toggle-checked="config.documentType = 'File'"
-                    :isChecked="config.documentType == 'File'"
+                    @toggle-checked="config.fileObjectType = '0'"
+                    :isChecked="config.fileObjectType == '0'"
                   >File</Radio>
                   <Radio
                     :disabled="isSaving || isLoading"
-                    @toggle-checked="config.documentType = 'Folder'"
-                    :isChecked="config.documentType == 'Folder'"
+                    @toggle-checked="config.fileObjectType = '1'"
+                    :isChecked="config.fileObjectType == '1'"
                   >Folder</Radio>
                 </v-radio-group>
               </v-card-text>
@@ -271,14 +271,14 @@
       <v-btn
         flat
         color="blue"
-        :loading="isLoading"
-        :disabled="isLoading || config.listName.length == 0"
+        :loading="isSaving"
+        :disabled="isSaving || config.listName.length == 0"
         light
       >
         <span slot="loader">
           <v-layout row wrap>
             <v-flex>
-              <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+              <LoadingIcon class="small-icon loading-icon" v-if="isSaving"></LoadingIcon>
             </v-flex>
             <v-flex>Generate Metrics</v-flex>
           </v-layout>
@@ -287,15 +287,15 @@
       <v-btn
         flat
         color="blue"
-        :loading="isLoading"
-        :disabled="isLoading || config.listName.length == 0"
+        :loading="isSaving"
+        :disabled="isSaving || config.listName.length == 0"
         @click="save"
         light
       >
         <span slot="loader">
           <v-layout row wrap>
             <v-flex>
-              <LoadingIcon class="small-icon loading-icon" v-if="isLoading"></LoadingIcon>
+              <LoadingIcon class="small-icon loading-icon" v-if="isSaving"></LoadingIcon>
             </v-flex>
             <v-flex>Save</v-flex>
           </v-layout>
@@ -395,7 +395,7 @@ export default {
         listName: "",
         fieldName: "",
         siteUrl: "",
-        documentType: "File",
+        fileObjectType: "File",
         dynamicWidth: false,
         enableFilterNavigation: false,
         enableFilterDetection: false,
@@ -416,9 +416,10 @@ export default {
   methods: {
     updateMetrics: function(items) {
       this.$emit("items-updated", items);
+      this.metrics = Object.assign({}, this.metrics);
     },
     save: function() {
-      this.isLoading = true;
+      this.isSaving = true;
       (function(that) {
         new Promise(function(resolve, reject) {
           that.getDigest(
@@ -447,8 +448,10 @@ export default {
             that.isSaving = false;
           })
           .catch(function(error) {
-            that.isSaving = false;
-            console.log(error);
+            setTimeout(function() {
+              that.isSaving = false;
+              console.log(error);
+            }, 2000);
           });
       })(this);
     }
