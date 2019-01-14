@@ -400,7 +400,8 @@ export default {
         hasFiltering: false,
         hasFilterDetection: false,
         isDocumentLibrary: false,
-        openInNewWindow: false
+        openInNewWindow: false,
+        metrics: {}
       },
       isConfigDataLoaded: false,
       columnWidthHint: `<blockquote>
@@ -416,7 +417,7 @@ export default {
   methods: {
     updateMetrics: function(items) {
       this.$emit("items-updated", items);
-      this.metrics = Object.assign({}, this.metrics);
+      this.config.metrics = Object.assign({}, items);
     },
     save: function() {
       this.isSaving = true;
