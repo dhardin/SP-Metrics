@@ -110,14 +110,13 @@ export default {
         siteUrl: "",
         fieldName: "",
         filterViewName: "",
-        metrics: {}
-      },
-      metrics: {}
+        metrics: []
+      }
     };
   },
   methods: {
     updateItems: function(items) {
-      this.items = Object.assign([], items);
+      this.config.metrics = Object.assign([], items);
     },
     checkEditMode: function() {
       var SP = SP || {};
@@ -231,6 +230,7 @@ export default {
               //this way we avoid more web service calls.
               that.getData(
                 function(data) {
+                  console.log(data);
                   resolve();
                 },
                 function(error) {

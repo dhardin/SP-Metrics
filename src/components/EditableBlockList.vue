@@ -155,7 +155,6 @@
                 <v-slider
                   ref="fontWeight"
                   v-model="editingItem.fontWeight"
-                  :label="blah"
                   thumb-label="always"
                   color="blue"
                   ticks="always"
@@ -273,7 +272,8 @@ export default {
           fontSize: newVal[i].fontSize,
           fontWeight: newVal[i].fontWeight,
           sortOrder: newVal[i].sortOrder,
-          isVisible: newVal[i].isVisible
+          isVisible: newVal[i].isVisible,
+          created: newVal[i].created
         });
       }
       this.$emit("update", items);
