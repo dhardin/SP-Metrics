@@ -167,8 +167,11 @@ export default {
           that.getConfigData(
             function(data) {
               if (data.length > 0) {
+                console.log(data);
                 data[0].metrics = JSON.parse(data[0].metrics);
+                console.log(data);
                 _.assign(that.config, _.pick(data[0], _.keys(that.config)));
+                console.log(that.config);
               }
               resolve();
             },
@@ -204,6 +207,7 @@ export default {
                     _.assign(that.state_map.fields.staticMap, staticFieldMap);
                     _.assign(that.state_map.fields.displayMap, displayFieldMap);
                   }
+
                   resolve();
                 },
                 function(error) {
@@ -227,7 +231,6 @@ export default {
               //this way we avoid more web service calls.
               that.getData(
                 function(data) {
-                  this.items = data;
                   resolve();
                 },
                 function(error) {
