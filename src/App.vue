@@ -135,6 +135,7 @@ export default {
         this.isEditing =
           this.isEditing || window.location.hash.indexOf("edit") > -1;
       }
+      console.log("Editing: " + this.isEditing);
     },
     onHashChange: function() {
       this.checkEditMode();

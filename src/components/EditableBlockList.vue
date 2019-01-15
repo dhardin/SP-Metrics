@@ -72,7 +72,7 @@
           <v-layout row wrap align-center>
             <v-flex
               class="item-title"
-              :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
+              :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight]}"
             >{{ item.name }}</v-flex>
           </v-layout>
         </v-container>

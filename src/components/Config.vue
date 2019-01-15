@@ -3,6 +3,9 @@
     <v-card-title>
       <span class="headline">Metrics Configuration</span>
       <v-spacer :style="{'text-align': 'right'}">
+        <v-chip label color="grey" text-color="white" v-if="isLoading">
+          <LoadingIcon class="small-icon loading-icon"></LoadingIcon>Loading
+        </v-chip>
         <v-chip
           label
           color="green"
