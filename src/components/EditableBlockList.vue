@@ -69,11 +69,18 @@
         </v-speed-dial>
 
         <v-container fill-height grid-list-md text-xs-center>
-          <v-layout row wrap align-center>
+          <v-layout column align-center justify-end>
+            <v-spacer></v-spacer>
             <v-flex
               class="item-title"
               :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight]}"
-            >{{ item.name }}</v-flex>
+            >{{ item.count }}</v-flex>
+            <v-flex>
+              <v-subheader
+                class="item-title"
+                :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight]}"
+              >{{ item.name }}</v-subheader>
+            </v-flex>
           </v-layout>
         </v-container>
 
@@ -186,11 +193,18 @@
                   :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba), 'color': getRgbaString(editingItem.color.rgba)}"
                 >
                   <v-container fill-height grid-list-md text-xs-center>
-                    <v-layout row wrap align-center>
+                    <v-layout column align-center justify-center>
+                      <v-spacer></v-spacer>
                       <v-flex
                         class="item-title"
                         :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
-                      >{{ editingItem.name }}</v-flex>
+                      >{{ editingItem.count }}</v-flex>
+                      <v-flex>
+                        <v-subheader
+                          class="item-title"
+                          :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
+                        >{{ editingItem.name }}</v-subheader>
+                      </v-flex>
                     </v-layout>
                   </v-container>
                 </v-card>
@@ -267,6 +281,7 @@ export default {
       for (i = 0; i < newVal.length; i++) {
         items.push({
           name: newVal[i].name,
+          count: 0,
           backgroundColor: newVal[i].backgroundColor,
           color: newVal[i].color,
           fontSize: newVal[i].fontSize,
@@ -288,7 +303,7 @@ export default {
       deep: true
     },
     initialItems: function(newVal) {
-      this.items = Object.assign([], newVal);
+      this.initItems(newVal);
     }
   },
   data() {
@@ -306,6 +321,7 @@ export default {
       dialog: false,
       editingItem: {
         name: "",
+        count: 0,
         backgroundColor: {
           hex: "#ffffff",
           hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
@@ -343,32 +359,48 @@ export default {
         ")"
       );
     },
-    addItem: function() {
-      var item = {
-        name: this.items.length,
-        sortOrder: this.items.length,
-        isVisible: true,
-        created: new Date().toISOString(),
+    addItem: function(item) {
+      var newItem = {
+        name:
+          item && item.hasOwnProperty("name") ? item.name : this.items.length,
+        count: item && item.hasOwnProperty("count") ? item.count : 0,
+        sortOrder:
+          item && item.hasOwnProperty("sortOrder")
+            ? item.sortOrder
+            : this.items.length,
+        isVisible:
+          item && item.hasOwnProperty("isVisible") ? item.isVisible : true,
+        created:
+          item && item.hasOwnProperty("created")
+            ? item.created
+            : new Date().toISOString(),
         fab: false,
-        backgroundColor: {
-          hex: "#ffffff",
-          hsl: { h: 255, s: 255, l: 255, a: 1 },
-          hsv: { h: 255, s: 255, v: 255, a: 1 },
-          rgba: { r: 255, g: 255, b: 255, a: 1 },
-          a: 1
-        },
-        color: {
-          hex: "#000000",
-          hsl: { h: 0, s: 0, l: 0, a: 1 },
-          hsv: { h: 0, s: 0, v: 0, a: 1 },
-          rgba: { r: 0, g: 0, b: 0, a: 1 },
-          a: 1
-        },
-        fontSize: 20,
-        fontWeight: 0,
+        backgroundColor:
+          item && item.hasOwnProperty("backgroundColor")
+            ? item.backgroundColor
+            : {
+                hex: "#ffffff",
+                hsl: { h: 255, s: 255, l: 255, a: 1 },
+                hsv: { h: 255, s: 255, v: 255, a: 1 },
+                rgba: { r: 255, g: 255, b: 255, a: 1 },
+                a: 1
+              },
+        color:
+          item && item.hasOwnProperty("color")
+            ? item.color
+            : {
+                hex: "#000000",
+                hsl: { h: 0, s: 0, l: 0, a: 1 },
+                hsv: { h: 0, s: 0, v: 0, a: 1 },
+                rgba: { r: 0, g: 0, b: 0, a: 1 },
+                a: 1
+              },
+        fontSize: item && item.hasOwnProperty("fontSize") ? item.fontSize : 20,
+        fontWeight:
+          item && item.hasOwnProperty("fontWeight") ? item.fontWeight : 0,
         isHoveringOver: false
       };
-      this.items.push(item);
+      this.items.push(newItem);
     },
     saveItem: function() {
       var item = this.sortedItems[this.editingItem.sortOrder];
@@ -395,10 +427,17 @@ export default {
       var index = item.sortOrder;
       this.sortedItems[item.sortOrder - 1].sortOrder = index;
       item.sortOrder--;
+    },
+    initItems: function(items) {
+      var i;
+      this.items = [];
+      for (i = 0; i < items.length; i++) {
+        this.addItem(items[i]);
+      }
     }
   },
   mounted: function() {
-    console.log(this.initialItems);
+    this.initItems(this.initialItems);
   }
 };
 </script>

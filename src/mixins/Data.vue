@@ -81,7 +81,7 @@ export default {
         "/_api/web/lists/GetByTitle('" +
         this.config.listName +
         "')/Items?$select=Title,EncodedAbsUrl," +
-        this.config.fieldName +
+        this.state_map.fields.displayMap[this.config.fieldName].InternalName +
         (this.state_map.fields.displayMap[this.config.fieldName].hasOwnProperty(
           "LookupField"
         )
@@ -89,7 +89,7 @@ export default {
             this.state_map.fields.displayMap[this.config.fieldName]
               .LookupField +
             "&$expand=" +
-            this.config.fieldName
+            this.state_map.fields.displayMap[this.config.fieldName].InternalName
           : "") +
         (this.state_map.filters.hasFilters
           ? "&$filter=" +

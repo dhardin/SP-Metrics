@@ -98,6 +98,7 @@ export default {
           hasFilters: false
         }
       },
+      metricsMap: {},
       config: {
         ID: 0,
         hasFiltering: false,
@@ -335,6 +336,10 @@ export default {
                 var data_config = _.pick(data[0], _.keys(that.config));
                 that.config = Object.assign({}, that.config, data_config);
                 that.config.metrics = Object.assign([], data_config.metrics);
+                var i;
+                for (i = 0; i < that.config.metrics.length; i++) {
+                  that.metricsMap[that.config.metrics[i].name] = 0;
+                }
                 console.log(that.config);
               }
               that.toggleLoading({
@@ -392,7 +397,32 @@ export default {
               //this way we avoid more web service calls.
               that.getData(
                 function(data) {
-                  console.log(data);
+                  var i;
+                  for (i = 0; i < data.length; i++) {
+                    that.metricsMap[data[i].displayFieldMap] = that.metricsMap[
+                      data[i].displayFieldMap
+                    ] || {
+                      name: data[i].displayFieldMap,
+                      count: 0
+                    };
+                    that.metricsMap[data[i].displayFieldMap].count++;
+                  }
+                  var key;
+                  for (i = 0; i < that.metrics.length; i++) {
+                    that.metrics[i].count =
+                      that.metricsMap[that.metrics[i]].count;
+                    that.metricsMap[that.metrics[i]].isProcessed = true;
+                  }
+                  for (key in that.metricsMap) {
+                    if (this.metricsMap[key].isProcessed) {
+                      continue;
+                    }
+                    this.metrics.push({
+                      name: key,
+                      count: that.metricsMap[key].count
+                    });
+                  }
+
                   resolve();
                 },
                 function(error) {
