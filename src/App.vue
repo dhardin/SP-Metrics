@@ -248,7 +248,7 @@ export default {
                 console.log(data);
                 data[0].metrics = JSON.parse(data[0].metrics);
                 var data_config = _.pick(data[0], _.keys(that.config));
-                that.config = Object.assign({}, that.config, data_config);
+                _.assign(that.config, data_config);
                 console.log(that.config);
               }
               resolve();
