@@ -280,22 +280,6 @@
         color="blue"
         :loading="isSaving"
         :disabled="isSaving || config.listName.length == 0"
-        light
-      >
-        <span slot="loader">
-          <v-layout row wrap>
-            <v-flex>
-              <LoadingIcon class="small-icon loading-icon" v-if="isSaving"></LoadingIcon>
-            </v-flex>
-            <v-flex>Generate Metrics</v-flex>
-          </v-layout>
-        </span>Generate Metrics
-      </v-btn>
-      <v-btn
-        flat
-        color="blue"
-        :loading="isSaving"
-        :disabled="isSaving || config.listName.length == 0"
         @click="save"
         light
       >

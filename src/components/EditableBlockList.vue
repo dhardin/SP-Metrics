@@ -397,6 +397,7 @@ export default {
       for (i = sortedIndex; i < this.sortedItems.length; i++) {
         this.sortedItems[i].sortOrder = this.sortedItems[i].sortOrder - 1;
       }
+      this.$emit("update", this.sortedItems);
     },
     moveRight: function(item) {
       var index = item.sortOrder;
