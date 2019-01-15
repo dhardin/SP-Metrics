@@ -24,7 +24,7 @@
           </v-card>
           <EditableBlockList
             readonly
-            :initial-items="config.metrics"
+            :initialItems="config.metrics"
             v-if="!isEditing && !state_map.loading.isLoading && config.metrics.length > 0"
           ></EditableBlockList>
           <v-card
@@ -244,14 +244,84 @@ export default {
         } else {
           that.getConfigData(
             function(data) {
+              data = [
+                {
+                  listName: "foo",
+                  metrics: [
+                    {
+                      name: 0,
+                      backgroundColor: {
+                        hex: "#ffffff",
+                        hsl: { h: 255, s: 255, l: 255, a: 1 },
+                        hsv: { h: 255, s: 255, v: 255, a: 1 },
+                        rgba: { r: 255, g: 255, b: 255, a: 1 },
+                        a: 1
+                      },
+                      color: {
+                        hex: "#000000",
+                        hsl: { h: 0, s: 0, l: 0, a: 1 },
+                        hsv: { h: 0, s: 0, v: 0, a: 1 },
+                        rgba: { r: 0, g: 0, b: 0, a: 1 },
+                        a: 1
+                      },
+                      fontSize: 20,
+                      fontWeight: 0,
+                      sortOrder: 0,
+                      isVisible: true,
+                      created: "2019-01-14T18:40:22.403Z",
+                      isHoveringOver: false
+                    },
+                    {
+                      name: 1,
+                      backgroundColor: {
+                        hex: "#ffffff",
+                        hsl: { h: 255, s: 255, l: 255, a: 1 },
+                        hsv: { h: 255, s: 255, v: 255, a: 1 },
+                        rgba: { r: 255, g: 255, b: 255, a: 1 },
+                        a: 1
+                      },
+                      color: {
+                        hex: "#000000",
+                        hsl: { h: 0, s: 0, l: 0, a: 1 },
+                        hsv: { h: 0, s: 0, v: 0, a: 1 },
+                        rgba: { r: 0, g: 0, b: 0, a: 1 },
+                        a: 1
+                      },
+                      fontSize: 20,
+                      fontWeight: 0,
+                      sortOrder: 1,
+                      isVisible: true,
+                      created: "2019-01-14T18:40:22.563Z"
+                    },
+                    {
+                      name: 2,
+                      backgroundColor: {
+                        hex: "#ffffff",
+                        hsl: { h: 255, s: 255, l: 255, a: 1 },
+                        hsv: { h: 255, s: 255, v: 255, a: 1 },
+                        rgba: { r: 255, g: 255, b: 255, a: 1 },
+                        a: 1
+                      },
+                      color: {
+                        hex: "#000000",
+                        hsl: { h: 0, s: 0, l: 0, a: 1 },
+                        hsv: { h: 0, s: 0, v: 0, a: 1 },
+                        rgba: { r: 0, g: 0, b: 0, a: 1 },
+                        a: 1
+                      },
+                      fontSize: 20,
+                      fontWeight: 0,
+                      sortOrder: 2,
+                      isVisible: true,
+                      created: "2019-01-14T18:40:22.724Z"
+                    }
+                  ]
+                }
+              ];
               if (data.length > 0) {
                 console.log(data);
-                data[0].metrics = JSON.parse(data[0].metrics);
-                console.log(data);
-                that.config = Object.assign(
-                  {},
-                  _.pick(data[0], _.keys(that.config))
-                );
+                var data_config = _.pick(data[0], _.keys(that.config));
+                that.config = Object.assign({}, that.config, data_config);
                 console.log(that.config);
               }
               resolve();
