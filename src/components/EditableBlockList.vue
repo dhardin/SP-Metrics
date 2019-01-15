@@ -397,7 +397,9 @@ export default {
       item.sortOrder--;
     }
   },
-  mounted: function() {}
+  mounted: function() {
+    console.log(this.initialItems);
+  }
 };
 </script>
 <style scoped>
