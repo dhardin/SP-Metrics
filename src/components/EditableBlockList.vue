@@ -53,13 +53,7 @@
             <EditIcon class="icon"></EditIcon>
           </v-btn>
 
-          <v-btn
-            fab
-            dark
-            color="purple"
-            @click="item.isVisible = !item.isVisible"
-            class="small-btn"
-          >
+          <v-btn fab dark color="purple" @click="toggleVisible(item)" class="small-btn">
             <VisibilityIcon class="icon" v-if="!item.isVisible"></VisibilityIcon>
             <VisibilityOffIcon class="icon" v-else></VisibilityOffIcon>
           </v-btn>
@@ -275,24 +269,6 @@ export default {
     }
   },
   watch: {
-    sortedItems: function(newVal) {
-      var items = [];
-      var i;
-      /*  for (i = 0; i < newVal.length; i++) {
-        items.push({
-          name: newVal[i].name,
-          count: newVal[i].count,
-          backgroundColor: newVal[i].backgroundColor,
-          color: newVal[i].color,
-          fontSize: newVal[i].fontSize,
-          fontWeight: newVal[i].fontWeight,
-          sortOrder: newVal[i].sortOrder,
-          isVisible: newVal[i].isVisible,
-          created: newVal[i].created
-        });
-      }*/
-      //this.$emit("update", items);
-    },
     editingItem: {
       handler: function(newVal) {
         this.$refs.fontWeight.$el.querySelector(
@@ -406,6 +382,10 @@ export default {
       var item = this.sortedItems[this.editingItem.sortOrder];
       Object.assign(item, this.editingItem);
       this.dialog = false;
+      this.$emit("update", this.sortedItems);
+    },
+    toggleVisible: function(item) {
+      item.isVisible = !item.isVisible;
       this.$emit("update", this.sortedItems);
     },
     deleteItem: function(item) {
