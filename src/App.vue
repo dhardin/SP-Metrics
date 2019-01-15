@@ -60,7 +60,7 @@ export default {
       configListName: "MetricsConfig",
       siteUrl: "",
       isEditing: false,
-      testing: true,
+      testing: false,
       items: [],
       state_map: {
         isFiltered: false,
