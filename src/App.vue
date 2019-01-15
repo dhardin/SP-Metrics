@@ -398,26 +398,40 @@ export default {
               that.getData(
                 function(data) {
                   var i;
+                  var staticName =
+                    that.state_map.fields.displayMap[that.config.fieldName]
+                      .StaticName;
                   for (i = 0; i < data.length; i++) {
-                    that.metricsMap[data[i].displayFieldMap] = that.metricsMap[
-                      data[i].displayFieldMap
+                    that.metricsMap[data[i][staticName]] = that.metricsMap[
+                      data[i][staticName]
                     ] || {
-                      name: data[i].displayFieldMap,
+                      name: data[i][staticName],
                       count: 0
                     };
-                    that.metricsMap[data[i].displayFieldMap].count++;
+                    that.metricsMap[data[i][staticName]].count++;
                   }
                   var key;
-                  for (i = 0; i < that.metrics.length; i++) {
-                    that.metrics[i].count =
-                      that.metricsMap[that.metrics[i]].count;
-                    that.metricsMap[that.metrics[i]].isProcessed = true;
-                  }
-                  for (key in that.metricsMap) {
-                    if (this.metricsMap[key].isProcessed) {
+                  for (i = 0; i < that.config.metrics.length; i++) {
+                    if (
+                      !that.metricsMap.hasOwnProperty(
+                        that.config.metrics[i].name
+                      )
+                    ) {
                       continue;
                     }
-                    this.metrics.push({
+                    that.config.metrics[i].count =
+                      that.config.metrics[i].hasOwnProperty("count") || 0;
+                    that.config.metrics[i].count =
+                      that.metricsMap[that.config.metrics[i].name].count;
+                    that.metricsMap[
+                      that.config.metrics[i].name
+                    ].isProcessed = true;
+                  }
+                  for (key in that.metricsMap) {
+                    if (that.metricsMap[key].isProcessed) {
+                      continue;
+                    }
+                    that.config.metrics.push({
                       name: key,
                       count: that.metricsMap[key].count
                     });

@@ -278,10 +278,10 @@ export default {
     sortedItems: function(newVal) {
       var items = [];
       var i;
-      for (i = 0; i < newVal.length; i++) {
+      /*  for (i = 0; i < newVal.length; i++) {
         items.push({
           name: newVal[i].name,
-          count: 0,
+          count: newVal[i].count,
           backgroundColor: newVal[i].backgroundColor,
           color: newVal[i].color,
           fontSize: newVal[i].fontSize,
@@ -290,7 +290,7 @@ export default {
           isVisible: newVal[i].isVisible,
           created: newVal[i].created
         });
-      }
+      }*/
       //this.$emit("update", items);
     },
     editingItem: {
@@ -422,11 +422,13 @@ export default {
       var index = item.sortOrder;
       this.sortedItems[item.sortOrder + 1].sortOrder = index;
       item.sortOrder++;
+      this.$emit("update", this.sortedItems);
     },
     moveLeft: function(item) {
       var index = item.sortOrder;
       this.sortedItems[item.sortOrder - 1].sortOrder = index;
       item.sortOrder--;
+      this.$emit("update", this.sortedItems);
     },
     initItems: function(items) {
       var i;
