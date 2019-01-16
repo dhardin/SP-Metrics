@@ -7,7 +7,7 @@
             @items-updated="updateItems"
             v-if="isEditing"
             :init-config="config"
-            :loading="state_map.loading.isLoading"
+            :is-loading="state_map.loading.isLoading"
             :site-url="siteUrl"
             :config-list-name="configListName"
           ></Config>
@@ -99,6 +99,7 @@ export default {
         }
       },
       metricsMap: {},
+      initMetrics: [],
       config: {
         ID: 0,
         hasFiltering: false,
@@ -115,6 +116,11 @@ export default {
         metrics: []
       }
     };
+  },
+  watch: {
+    isEditing: function(newVal) {
+      this.getData();
+    }
   },
   methods: {
     updateItems: function(items) {
@@ -150,198 +156,66 @@ export default {
         canClose: false
       });
       Object.assign(this.state_map.loading, options);
-    }
-  },
-  mounted: function() {
-    window.addEventListener("hashchange", this.onHashChange);
-    this.onHashChange();
-  },
-  created: function() {
-    this.toggleLoading({
-      isLoading: true,
-      message: ""
-    });
-    (function(that) {
-      new Promise(function(resolve) {
-        if (that.testing) {
-          setTimeout(function() {
-            that.config = Object.assign(
-              {},
-              {
-                listName: "foo",
-                metrics: [
-                  {
-                    name: 0,
-                    backgroundColor: {
-                      hex: "#ffffff",
-                      hsl: { h: 255, s: 255, l: 255, a: 1 },
-                      hsv: { h: 255, s: 255, v: 255, a: 1 },
-                      rgba: { r: 255, g: 255, b: 255, a: 1 },
-                      a: 1
-                    },
-                    color: {
-                      hex: "#000000",
-                      hsl: { h: 0, s: 0, l: 0, a: 1 },
-                      hsv: { h: 0, s: 0, v: 0, a: 1 },
-                      rgba: { r: 0, g: 0, b: 0, a: 1 },
-                      a: 1
-                    },
-                    fontSize: 20,
-                    fontWeight: 0,
-                    sortOrder: 0,
-                    isVisible: true,
-                    created: "2019-01-14T18:40:22.403Z",
-                    isHoveringOver: false
-                  },
-                  {
-                    name: 1,
-                    backgroundColor: {
-                      hex: "#ffffff",
-                      hsl: { h: 255, s: 255, l: 255, a: 1 },
-                      hsv: { h: 255, s: 255, v: 255, a: 1 },
-                      rgba: { r: 255, g: 255, b: 255, a: 1 },
-                      a: 1
-                    },
-                    color: {
-                      hex: "#000000",
-                      hsl: { h: 0, s: 0, l: 0, a: 1 },
-                      hsv: { h: 0, s: 0, v: 0, a: 1 },
-                      rgba: { r: 0, g: 0, b: 0, a: 1 },
-                      a: 1
-                    },
-                    fontSize: 20,
-                    fontWeight: 0,
-                    sortOrder: 1,
-                    isVisible: true,
-                    created: "2019-01-14T18:40:22.563Z"
-                  },
-                  {
-                    name: 2,
-                    backgroundColor: {
-                      hex: "#ffffff",
-                      hsl: { h: 255, s: 255, l: 255, a: 1 },
-                      hsv: { h: 255, s: 255, v: 255, a: 1 },
-                      rgba: { r: 255, g: 255, b: 255, a: 1 },
-                      a: 1
-                    },
-                    color: {
-                      hex: "#000000",
-                      hsl: { h: 0, s: 0, l: 0, a: 1 },
-                      hsv: { h: 0, s: 0, v: 0, a: 1 },
-                      rgba: { r: 0, g: 0, b: 0, a: 1 },
-                      a: 1
-                    },
-                    fontSize: 20,
-                    fontWeight: 0,
-                    sortOrder: 2,
-                    isVisible: true,
-                    created: "2019-01-14T18:40:22.724Z"
-                  }
-                ]
-              }
-            );
-            resolve();
-          }, 1000);
-        } else {
+    },
+    populateMetrics: function(data) {
+      var i;
+      var staticName = this.state_map.fields.displayMap[this.config.fieldName]
+        .StaticName;
+      for (i = 0; i < data.length; i++) {
+        this.metricsMap[data[i][staticName]] = this.metricsMap[
+          data[i][staticName]
+        ] || {
+          name: data[i][staticName],
+          count: 0
+        };
+        this.metricsMap[data[i][staticName]].count++;
+      }
+      var key;
+      for (i = 0; i < this.config.metrics.length; i++) {
+        if (!this.metricsMap.hasOwnProperty(this.config.metrics[i].name)) {
+          continue;
+        }
+        this.config.metrics[i].count =
+          this.config.metrics[i].hasOwnProperty("count") || 0;
+        this.config.metrics[i].count = this.metricsMap[
+          this.config.metrics[i].name
+        ].count;
+        this.metricsMap[this.config.metrics[i].name].isProcessed = true;
+      }
+      for (key in this.metricsMap) {
+        if (this.metricsMap[key].isProcessed) {
+          continue;
+        }
+        this.config.metrics.push({
+          name: key,
+          count: this.metricsMap[key].count
+        });
+      }
+    },
+    initConfig: function(data) {
+      if (data.length > 0) {
+        data = data[0];
+      }
+
+      data.metrics = JSON.parse(data.metrics);
+      var data_config = _.pick(data, _.keys(this.config));
+      this.config = Object.assign({}, this.config, data_config);
+      this.config.metrics = Object.assign([], data_config.metrics);
+      this.config.initMetrics = Object.assign([], data_config.metrics);
+    },
+    getData: function() {
+      this.toggleLoading({
+        isLoading: true,
+        message: ""
+      });
+      (function(that) {
+        new Promise(function(resolve) {
           that.getConfigData(
             function(data) {
-              if (data.length > 0) {
-                console.log(data);
-                data[0].metrics = JSON.parse(data[0].metrics);
-                var data_config = _.pick(data[0], _.keys(that.config));
-                that.config = Object.assign({}, that.config, data_config);
-                that.config.metrics = Object.assign([], data_config.metrics);
-                console.log(that.config);
-              }
+              that.initConfig(data);
               resolve();
             },
             function(error) {
-              var data = [
-                {
-                  listName: "foo",
-                  metrics: [
-                    {
-                      name: 0,
-                      backgroundColor: {
-                        hex: "#ffffff",
-                        hsl: { h: 255, s: 255, l: 255, a: 1 },
-                        hsv: { h: 255, s: 255, v: 255, a: 1 },
-                        rgba: { r: 255, g: 255, b: 255, a: 1 },
-                        a: 1
-                      },
-                      color: {
-                        hex: "#000000",
-                        hsl: { h: 0, s: 0, l: 0, a: 1 },
-                        hsv: { h: 0, s: 0, v: 0, a: 1 },
-                        rgba: { r: 0, g: 0, b: 0, a: 1 },
-                        a: 1
-                      },
-                      fontSize: 20,
-                      fontWeight: 0,
-                      sortOrder: 0,
-                      isVisible: true,
-                      created: "2019-01-14T18:40:22.403Z",
-                      isHoveringOver: false
-                    },
-                    {
-                      name: 1,
-                      backgroundColor: {
-                        hex: "#ffffff",
-                        hsl: { h: 255, s: 255, l: 255, a: 1 },
-                        hsv: { h: 255, s: 255, v: 255, a: 1 },
-                        rgba: { r: 255, g: 255, b: 255, a: 1 },
-                        a: 1
-                      },
-                      color: {
-                        hex: "#000000",
-                        hsl: { h: 0, s: 0, l: 0, a: 1 },
-                        hsv: { h: 0, s: 0, v: 0, a: 1 },
-                        rgba: { r: 0, g: 0, b: 0, a: 1 },
-                        a: 1
-                      },
-                      fontSize: 20,
-                      fontWeight: 0,
-                      sortOrder: 1,
-                      isVisible: true,
-                      created: "2019-01-14T18:40:22.563Z"
-                    },
-                    {
-                      name: 2,
-                      backgroundColor: {
-                        hex: "#ffffff",
-                        hsl: { h: 255, s: 255, l: 255, a: 1 },
-                        hsv: { h: 255, s: 255, v: 255, a: 1 },
-                        rgba: { r: 255, g: 255, b: 255, a: 1 },
-                        a: 1
-                      },
-                      color: {
-                        hex: "#000000",
-                        hsl: { h: 0, s: 0, l: 0, a: 1 },
-                        hsv: { h: 0, s: 0, v: 0, a: 1 },
-                        rgba: { r: 0, g: 0, b: 0, a: 1 },
-                        a: 1
-                      },
-                      fontSize: 20,
-                      fontWeight: 0,
-                      sortOrder: 2,
-                      isVisible: true,
-                      created: "2019-01-14T18:40:22.724Z"
-                    }
-                  ]
-                }
-              ];
-              if (data.length > 0) {
-                console.log(data);
-                //data[0].metrics = JSON.parse(data[0].metrics);
-                var data_config = _.pick(data[0], _.keys(that.config));
-                that.config = Object.assign({}, that.config, data_config);
-                that.config.metrics = Object.assign([], data_config.metrics);
-                var i;
-                for (i = 0; i < that.config.metrics.length; i++) {
-                  that.metricsMap[that.config.metrics[i].name] = 0;
-                }
-                console.log(that.config);
-              }
               that.toggleLoading({
                 isLoading: false,
                 message: error.message,
@@ -350,140 +224,111 @@ export default {
               });
             }
           );
-        }
-      })
-        .then(function() {
-          return new Promise(function(resolve) {
-            if (that.testing) {
-              resolve();
-            } else if (that.config.ID > 0) {
-              that.getListFields(
-                function(data) {
-                  var staticFieldMap;
-                  var displayFieldMap;
-                  if (data.length > 0) {
-                    staticFieldMap = data.reduce(function(map, obj) {
-                      map[obj.StaticName] = obj;
-                      return map;
-                    }, {});
-                    displayFieldMap = data.reduce(function(map, obj) {
-                      map[obj.Title] = obj;
-                      return map;
-                    }, {});
-                    _.assign(that.state_map.fields.staticMap, staticFieldMap);
-                    _.assign(that.state_map.fields.displayMap, displayFieldMap);
-                  }
-
-                  resolve();
-                },
-                function(error) {
-                  that.toggleLoading({
-                    isLoading: false,
-                    message: error.message,
-                    canCancel: false,
-                    canClose: true
-                  });
-                }
-              );
-            } else {
-              resolve();
-            }
-          });
         })
-        .then(function() {
-          return new Promise(function(resolve) {
-            if (that.config.ID > 0 && !that.config.hasFilterDetection) {
-              //we'll want to wait on filters to be generated from out filter component first if they're needed
-              //this way we avoid more web service calls.
-              that.getData(
-                function(data) {
-                  var i;
-                  var staticName =
-                    that.state_map.fields.displayMap[that.config.fieldName]
-                      .StaticName;
-                  for (i = 0; i < data.length; i++) {
-                    that.metricsMap[data[i][staticName]] = that.metricsMap[
-                      data[i][staticName]
-                    ] || {
-                      name: data[i][staticName],
-                      count: 0
-                    };
-                    that.metricsMap[data[i][staticName]].count++;
-                  }
-                  var key;
-                  for (i = 0; i < that.config.metrics.length; i++) {
-                    if (
-                      !that.metricsMap.hasOwnProperty(
-                        that.config.metrics[i].name
-                      )
-                    ) {
-                      continue;
+          .then(function() {
+            return new Promise(function(resolve) {
+              if (that.testing) {
+                resolve();
+              } else if (that.config.ID > 0) {
+                that.getListFields(
+                  function(data) {
+                    var staticFieldMap;
+                    var displayFieldMap;
+                    if (data.length > 0) {
+                      staticFieldMap = data.reduce(function(map, obj) {
+                        map[obj.StaticName] = obj;
+                        return map;
+                      }, {});
+                      displayFieldMap = data.reduce(function(map, obj) {
+                        map[obj.Title] = obj;
+                        return map;
+                      }, {});
+                      _.assign(that.state_map.fields.staticMap, staticFieldMap);
+                      _.assign(
+                        that.state_map.fields.displayMap,
+                        displayFieldMap
+                      );
                     }
-                    that.config.metrics[i].count =
-                      that.config.metrics[i].hasOwnProperty("count") || 0;
-                    that.config.metrics[i].count =
-                      that.metricsMap[that.config.metrics[i].name].count;
-                    that.metricsMap[
-                      that.config.metrics[i].name
-                    ].isProcessed = true;
-                  }
-                  for (key in that.metricsMap) {
-                    if (that.metricsMap[key].isProcessed) {
-                      continue;
-                    }
-                    that.config.metrics.push({
-                      name: key,
-                      count: that.metricsMap[key].count
+
+                    resolve();
+                  },
+                  function(error) {
+                    that.toggleLoading({
+                      isLoading: false,
+                      message: error.message,
+                      canCancel: false,
+                      canClose: true
                     });
                   }
-
-                  resolve();
-                },
-                function(error) {
-                  that.toggleLoading({
-                    isLoading: false,
-                    message: error.message,
-                    canCancel: false,
-                    canClose: true
-                  });
-                }
-              );
-            } else if (that.testing) {
-              that.populateMetrics([]);
-              resolve();
+                );
+              } else {
+                resolve();
+              }
+            });
+          })
+          .then(function() {
+            return new Promise(function(resolve) {
+              if (that.config.ID > 0 && !that.config.hasFilterDetection) {
+                //we'll want to wait on filters to be generated from out filter component first if they're needed
+                //this way we avoid more web service calls.
+                that.getMetricData(
+                  function(data) {
+                    that.populateMetrics(data);
+                    resolve();
+                  },
+                  function(error) {
+                    that.toggleLoading({
+                      isLoading: false,
+                      message: error.message,
+                      canCancel: false,
+                      canClose: true
+                    });
+                  }
+                );
+              } else if (that.testing) {
+                that.populateMetrics([]);
+                resolve();
+              } else {
+                resolve();
+              }
+            });
+          })
+          .then(function() {
+            that.configFetched = that.config.ID > 0;
+            if (Object.keys(that.metrics).length > 0 || that.isEditing) {
+              that.toggleLoading({
+                isLoading: false,
+                message: "",
+                canCancel: false,
+                canClose: false
+              });
+              //trigger hashchange to populate filter population
             } else {
-              resolve();
+              that.toggleLoading({
+                isLoading: false,
+                message: "No Data Available",
+                canCancel: false,
+                canClose: false
+              });
             }
-          });
-        })
-        .then(function() {
-          that.configFetched = that.config.ID > 0;
-          if (Object.keys(that.metrics).length > 0 || that.editing) {
+          })
+          .catch(function(error) {
             that.toggleLoading({
               isLoading: false,
-              message: "",
+              message: error.message,
               canCancel: false,
               canClose: false
             });
-            //trigger hashchange to populate filter population
-          } else {
-            that.toggleLoading({
-              isLoading: false,
-              message: "No Data Available",
-              canCancel: false,
-              canClose: false
-            });
-          }
-        })
-        .catch(function(error) {
-          that.toggleLoading({
-            isLoading: false,
-            message: error.message,
-            canCancel: false,
-            canClose: false
           });
-        });
-    })(this);
+      })(this);
+    }
+  },
+  mounted: function() {
+    window.addEventListener("hashchange", this.onHashChange);
+    this.onHashChange();
+  },
+  created: function() {
+    this.getData();
   }
 };
 </script>

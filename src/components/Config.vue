@@ -3,9 +3,6 @@
     <v-card-title>
       <span class="headline">Metrics Configuration</span>
       <v-spacer :style="{'text-align': 'right'}">
-        <v-chip label color="grey" text-color="white" v-if="isLoading">
-          <LoadingIcon class="small-icon loading-icon"></LoadingIcon>Loading
-        </v-chip>
         <v-chip
           label
           color="green"
@@ -277,11 +274,13 @@
       <v-spacer></v-spacer>
       <v-btn
         flat
+        outline
         color="blue"
         :loading="isSaving"
         :disabled="isSaving || config.listName.length == 0"
         @click="save"
         light
+        large
       >
         <span slot="loader">
           <v-layout row wrap>
@@ -337,7 +336,7 @@ export default {
         return "";
       }
     },
-    loading: Boolean,
+    isLoading: Boolean,
     initConfig: {
       type: Object,
       default: function() {
@@ -363,11 +362,19 @@ export default {
     minColumnWidth: function() {
       this.$refs.minColumnWidth.blur();
     },
-    initConfig: function(newVal) {
-      if (newVal.ID > 0) {
-        this.isConfigDataLoaded = true;
-      }
-      this.config = Object.assign(this.config, newVal);
+    initConfig: {
+      handler: function(newVal) {
+        if (newVal.ID > 0) {
+          this.isConfigDataLoaded = true;
+        }
+        this.config = Object.assign({}, this.config, newVal);
+        this.config.metrics = Object.assign(
+          [],
+          this.config.metrics,
+          newVal.metrics
+        );
+      },
+      deep: true
     },
     loading: function(newVal) {
       this.isLoading = newVal;
@@ -378,7 +385,6 @@ export default {
       valid: true,
       columnWidthItems: ["1", "2", "3", "4", "6", "12"],
       isSaving: false,
-      isLoading: false,
       isColumnWidthSelected: false,
       config: {
         ID: 0,
@@ -408,7 +414,7 @@ export default {
   methods: {
     updateMetrics: function(items) {
       this.$emit("items-updated", items);
-      this.config.metrics = Object.assign({}, items);
+      this.config.metrics = Object.assign([], items);
     },
     save: function() {
       this.isSaving = true;

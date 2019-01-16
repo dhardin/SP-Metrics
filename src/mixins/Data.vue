@@ -3,7 +3,7 @@ import axios from "axios";
 import { _ } from "vue-underscore";
 export default {
   methods: {
-    getData: function(callback, errorCallback) {
+    getMetricData: function(callback, errorCallback) {
       var filterMap = {};
       var filters = "";
       var key;

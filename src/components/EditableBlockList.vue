@@ -1,12 +1,20 @@
 <template>
   <div>
-    <v-btn color="green" dark large @click="addItem" v-if="!readonly" :disabled="disabled">
+    <v-btn
+      color="green"
+      large
+      @click="addItem"
+      v-if="!readonly"
+      :disabled="disabled"
+      :light="disabled"
+      :dark="!disabled"
+    >
       <AddIcon class="icon"></AddIcon>Add
     </v-btn>
-    <transition-group name="list" tag="p">
+    <transition-group name="list" tag="p" appear>
       <v-card
         v-for="item in sortedItems"
-        v-bind:key="item.created"
+        v-bind:key="item.key"
         class="list-item"
         style="position: relative"
         :style="{'background-color': getRgbaString(item.backgroundColor.rgba), 'color': getRgbaString(item.color.rgba)}"
@@ -279,7 +287,9 @@ export default {
       deep: true
     },
     initialItems: function(newVal) {
-      this.initItems(newVal);
+      if (this.items.length == 0) {
+        this.initItems(newVal);
+      }
     }
   },
   data() {
@@ -287,6 +297,7 @@ export default {
       items: this.initialItems,
       direction: "bottom",
       fab: false,
+      keyIndexer: 0,
       fontWeightText: ["normal", "bold", "boldest"],
       fontWeightValues: ["normal", "bold", "900"],
       fling: false,
@@ -336,6 +347,7 @@ export default {
       );
     },
     addItem: function(item) {
+      var dateStr = new Date().toISOString();
       var newItem = {
         name:
           item && item.hasOwnProperty("name") ? item.name : this.items.length,
@@ -347,10 +359,9 @@ export default {
         isVisible:
           item && item.hasOwnProperty("isVisible") ? item.isVisible : true,
         created:
-          item && item.hasOwnProperty("created")
-            ? item.created
-            : new Date().toISOString(),
+          item && item.hasOwnProperty("created") ? item.created : dateStr,
         fab: false,
+        key: this.keyIndexer,
         backgroundColor:
           item && item.hasOwnProperty("backgroundColor")
             ? item.backgroundColor
@@ -377,6 +388,7 @@ export default {
         isHoveringOver: false
       };
       this.items.push(newItem);
+      this.keyIndexer++;
     },
     saveItem: function() {
       var item = this.sortedItems[this.editingItem.sortOrder];
@@ -436,12 +448,12 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .fade-leave-to,
 .fade-enter {
-  transform: scale(0) rotate(90deg);
+  transform: scale(0);
   transform-origin: center;
 }
 
