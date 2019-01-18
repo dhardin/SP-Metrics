@@ -1,11 +1,20 @@
 module.exports = {
+    css: {
+        loaderOptions: {
+            css: {},
+            postcss: {}
+        }
+    },
+
     baseUrl: './',
+
     devServer: {
         overlay: {
             warnings: true,
             errors: true
         }
     },
+
     chainWebpack: (config) => {
         const svgRule = config.module.rule('svg');
 
@@ -23,11 +32,20 @@ module.exports = {
                 chunkFilename: '[name].css'
             }])
         }
+
     },
+
     configureWebpack: {
         output: {
             filename: '[name].js',
             chunkFilename: '[name].js'
-        }
-    }
+        },
+
+    },
+
+    outputDir: undefined,
+    assetsDir: undefined,
+    runtimeCompiler: undefined,
+    productionSourceMap: undefined,
+    parallel: undefined
 }

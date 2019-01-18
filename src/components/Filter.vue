@@ -1,7 +1,7 @@
 <script>
-import Helper from '../mixins/Helper'
+import Helper from "../mixins/Helper";
 export default {
-  mixins: [app_helper],
+  mixins: [Helper],
   props: {
     fields: {
       type: Object,
@@ -18,109 +18,128 @@ export default {
     }
   },
   watch: {
-      configfetched: function(newVal, oldVal) {
-          if(newVal == true && oldVal == false){
-            this.updateQuery();
-          }
+    configfetched: function(newVal, oldVal) {
+      if (newVal == true && oldVal == false) {
+        this.updateQuery();
       }
+    }
   },
-  mounted: function(){
-    (function(that){
-      $(that.$parent.$options.el).foundation();
-      $(window).on('hashchange', function(){
-        if(that.configfetched){
+  mounted: function() {
+    (function(that) {
+      console.log(that);
+      /* $(that.$parent.$options.el).foundation();
+      $(window).on("hashchange", function() {
+        if (that.configfetched) {
           that.updateQuery();
         }
-      });
+      });*/
     })(this);
     //run filters first time during init
-    if(this.configfetched){
+    if (this.configfetched) {
       this.updateQuery();
     }
   },
   computed: {
-    hasFilters: function(){
-      return this.filters.length > 0
+    hasFilters: function() {
+      return this.filters.length > 0;
     }
   },
   methods: {
-    getFilterMap: function(){
+    getFilterMap: function() {
       var filterMap = {};
       var regex = /(FilterField[s]{0,1}[0-9]+)%3D([^-]+)-(FilterValue[s]{0,1}[0-9]+)%3D([^-]+)/gi;
       //FilterField0%3DStatus-FilterValue0%3DStuff
       var hash = window.location.hash;
       var matches = [];
-      var staticFieldName = '';
-      var displayFieldName = '';
-      while((matches = regex.exec(hash)) != null){
+      var staticFieldName = "";
+      var displayFieldName = "";
+      while ((matches = regex.exec(hash)) != null) {
         var i;
-        for(i = 2; i < matches.length && i + 2 < matches.length; i+=2){
+        for (i = 2; i < matches.length && i + 2 < matches.length; i += 2) {
           staticFieldName = this.decodeSharePointFieldUri(matches[i]);
           //remove extra encoded colon and take first split
-          staticFieldName = staticFieldName.split('_x003a_')[0];
-          displayFieldName = this.fields.staticMap.hasOwnProperty(staticFieldName) ? this.fields.staticMap[staticFieldName].Title : false;
-          if(!displayFieldName){
+          staticFieldName = staticFieldName.split("_x003a_")[0];
+          displayFieldName = this.fields.staticMap.hasOwnProperty(
+            staticFieldName
+          )
+            ? this.fields.staticMap[staticFieldName].Title
+            : false;
+          if (!displayFieldName) {
             continue;
           }
-          filterMap[displayFieldName] = decodeURI(matches[i + 2]).split('%3B%23');
+          filterMap[displayFieldName] = decodeURI(matches[i + 2]).split(
+            "%3B%23"
+          );
         }
       }
       return filterMap;
     },
-    getFilterValueLength: function(filterMap, key){
+    getFilterValueLength: function(filterMap, key) {
       var valueArr = filterMap[key];
       var longestLength = 0;
       var i;
-      for(i = 0; i < valueArr.length; i++){
-        longestLength = valueArr[i].length > longestLength ? valueArr[i].length : longestLength;
+      for (i = 0; i < valueArr.length; i++) {
+        longestLength =
+          valueArr[i].length > longestLength
+            ? valueArr[i].length
+            : longestLength;
       }
       return longestLength;
     },
-    updateQuery: function(){
+    updateQuery: function() {
       var filterMap = this.getFilterMap();
       var queryRuleMap = this.generateQueryRules(filterMap);
       this.filters = [];
-      for(var key in filterMap){
-        this.filters.push({id: key, label: key, type: 'string', operators: ['equal'], size: this.getFilterValueLength(filterMap, key)});
+      for (var key in filterMap) {
+        this.filters.push({
+          id: key,
+          label: key,
+          type: "string",
+          operators: ["equal"],
+          size: this.getFilterValueLength(filterMap, key)
+        });
       }
-      if(this.queryInit){
+      if (this.queryInit) {
         filterMap = this.getFilterMap();
         queryRuleMap = this.generateQueryRules(filterMap);
-        $(this.$refs.filters).queryBuilder('destroy');
+        //   $(this.$refs.filters).queryBuilder("destroy");
         this.queryInit = false;
       }
-      if(this.filters.length > 0){
-        $(this.$refs.filters).queryBuilder({
+      if (this.filters.length > 0) {
+        /*  $(this.$refs.filters).queryBuilder({
           filters: this.filters,
           rules: queryRuleMap
-        });
+        });*/
         this.queryInit = true;
       }
-      this.$emit('filterupdate',{filterMap: filterMap, hasFilters: this.filters.length});
+      /*this.$emit("filterupdate", {
+        filterMap: filterMap,
+        hasFilters: this.filters.length
+      });*/
     },
-    generateQueryRules: function(filterMap){
+    generateQueryRules: function(filterMap) {
       var key;
       var i;
       var rulesMap = {
-        condition: '',
+        condition: "",
         rules: [],
         readonly: true
       };
       var rule = {};
-      if(Object.keys(filterMap).length > 0){
-        rulesMap.condition = 'AND';
+      if (Object.keys(filterMap).length > 0) {
+        rulesMap.condition = "AND";
       }
-      for(key in filterMap){
-        if(filterMap[key].length > 1){
+      for (key in filterMap) {
+        if (filterMap[key].length > 1) {
           rule = {
-            condition: 'OR',
+            condition: "OR",
             rules: [],
             readonly: true
-          }
-          for(i = 0; i < filterMap[key].length; i++){
+          };
+          for (i = 0; i < filterMap[key].length; i++) {
             rule.rules.push({
               id: key,
-              operator: 'equal',
+              operator: "equal",
               value: decodeURI(filterMap[key][i]),
               readonly: true
             });
@@ -128,10 +147,10 @@ export default {
         } else {
           rule = {
             id: key,
-            operator: 'equal',
+            operator: "equal",
             readonly: true,
             value: decodeURI(filterMap[key][0])
-          }
+          };
         }
         rulesMap.rules.push(rule);
       }
@@ -144,4 +163,4 @@ export default {
       queryInit: false
     };
   }
-})
+};

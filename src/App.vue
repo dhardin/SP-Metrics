@@ -33,7 +33,7 @@
           >
             <v-layout row wrap>
               <v-flex>
-                <h1 id="loading-title" class="font-weight-thin">No data</h1>
+                <h1 id="loading-title" class="font-weight-thin">No Data</h1>
               </v-flex>
             </v-layout>
           </v-card>
@@ -43,6 +43,10 @@
   </div>
 </template>
 <script>
+import "vuetify/dist/vuetify.min.css"; // Ensure you are using css-loader
+import "vuetify/dist/vuetify.js"; // Ensure you are using css-loader
+import "vue-color/dist/vue-color.js";
+import Observable from "@/mixins/Observable";
 import Config from "@/components/Config";
 import EditableBlockList from "@/components/EditableBlockList";
 import LoadingIcon from "@/assets/svg-sprite-action-symbol.svg?ic_cached_24px";
@@ -54,7 +58,7 @@ export default {
     EditableBlockList: EditableBlockList,
     LoadingIcon: LoadingIcon
   },
-  mixins: [Data],
+  mixins: [Observable, Data],
   data: function() {
     return {
       configListName: "MetricsConfig",
@@ -99,7 +103,6 @@ export default {
         }
       },
       metricsMap: {},
-      initMetrics: [],
       config: {
         ID: 0,
         hasFiltering: false,
@@ -118,7 +121,7 @@ export default {
     };
   },
   watch: {
-    isEditing: function(newVal) {
+    isEditing: function() {
       this.getData();
     }
   },
@@ -201,7 +204,6 @@ export default {
       var data_config = _.pick(data, _.keys(this.config));
       this.config = Object.assign({}, this.config, data_config);
       this.config.metrics = Object.assign([], data_config.metrics);
-      this.config.initMetrics = Object.assign([], data_config.metrics);
     },
     getData: function() {
       this.toggleLoading({
@@ -332,7 +334,7 @@ export default {
   }
 };
 </script>
-
+<style src='vuetify/dist/vuetify.min.css'></style>
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -376,5 +378,12 @@ export default {
   text-transform: uppercase;
   font-family: Roboto, sans-serif;
   display: inline-block;
+}
+
+*,
+:after,
+:before {
+  -webkit-box-sizing: inherit;
+  box-sizing: border-box;
 }
 </style>

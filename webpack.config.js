@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: ['babel-polyfill','./src/main.js' ],
+  entry: ['babel-polyfill', './src/main.js'],
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -16,13 +16,11 @@ module.exports = {
     }
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
-          }
+          loaders: {}
           // other vue-loader options go here
         }
       },
@@ -42,7 +40,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: ['style-loader', 'css-loader']
+        use: [{
+          loader: 'vue-style-loader',
+          options: {
+            shadowMode: true
+          }
+        }, 'css-loader']
       },
       {
         test: /\.styl$/,

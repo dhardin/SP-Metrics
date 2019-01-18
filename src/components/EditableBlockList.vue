@@ -235,6 +235,7 @@ import DeleteIcon from "@/assets/svg-sprite-action-symbol.svg?ic_delete_24px";
 import VisibilityIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_24px";
 import VisibilityOffIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_off_24px";
 import { Sketch } from "vue-color";
+
 import Radio from "./Radio";
 export default {
   components: {
