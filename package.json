@@ -35,7 +35,7 @@
   "browserslist": [
     "last 1 version",
     "> 1%",
-    "ie 11",
+    "ie 10",
     "Firefox > 20"
   ]
 }
