@@ -1,9 +1,10 @@
 module.exports = {
     css: {
-        loaderOptions: {
-            css: {},
-            postcss: {}
-        }
+      loaderOptions: {
+        css: {},
+        postcss: {}
+      },
+      extract: false
     },
 
     baseUrl: './',
