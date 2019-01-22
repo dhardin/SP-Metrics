@@ -1,10 +1,11 @@
 module.exports = {
+    transpileDependencies: ['veutify', 'vue-underscore'],
     css: {
-      loaderOptions: {
-        css: {},
-        postcss: {}
-      },
-      extract: false
+        loaderOptions: {
+            css: {},
+            postcss: {}
+        },
+        extract: false
     },
 
     baseUrl: './',
