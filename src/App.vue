@@ -137,11 +137,13 @@ export default {
         SP.Ribbon.PageState.Handlers.isPublishEnabled();
         this.isEditing = SP.Ribbon.PageState.Handlers.isInEditMode();
       } catch (err) {
-        this.isEditing =
-          window.hasOwnProperty("MSOWebPartPageFormName") &&
-          document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode.value ==
-            "1";
-
+        var inDesignMode = false;
+        if (window.hasOwnProperty("MSOWebPartPageFormName")) {
+          inDesignMode =
+            document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode
+              .value == "1";
+        }
+        this.isEditing = inDesignMode;
         this.isEditing =
           this.isEditing || window.location.hash.indexOf("edit") > -1;
       }
