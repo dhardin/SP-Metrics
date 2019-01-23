@@ -330,6 +330,7 @@ export default {
     this.onHashChange();
   },
   created: function() {
+    this.checkEditMode();
     this.getData();
   }
 };
@@ -380,22 +381,6 @@ export default {
   display: inline-block;
 }
 
-@-moz-keyframes spin {
-  100% {
-    -moz-transform: rotate(-360deg);
-  }
-}
-@-webkit-keyframes spin {
-  100% {
-    -webkit-transform: rotate(-360deg);
-  }
-}
-@keyframes spin {
-  100% {
-    -webkit-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-  }
-}
 /**,
 :after,
 :before {
