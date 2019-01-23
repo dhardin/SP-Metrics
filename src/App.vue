@@ -137,7 +137,13 @@ export default {
         SP.Ribbon.PageState.Handlers.isPublishEnabled();
         this.isEditing = SP.Ribbon.PageState.Handlers.isInEditMode();
       } catch (err) {
-        if (window.hasOwnProperty("MSOWebPartPageFormName")) {
+        if (
+          window.hasOwnProperty("MSOWebPartPageFormName") &&
+          document.forms.hasOwnProperty(MSOWebPartPageFormName) &&
+          document.forms[MSOWebPartPageFormName].hasOwnProperty(
+            "MSOLayout_InDesignMode"
+          )
+        ) {
           this.isEditing =
             document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode
               .value == "1";
