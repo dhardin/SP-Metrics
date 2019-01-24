@@ -17,7 +17,7 @@
         v-bind:key="item.key"
         class="list-item"
         style="position: relative"
-        :style="{'background-color': getRgbaString(item.backgroundColor.rgba), 'color': getRgbaString(item.color.rgba)}"
+        :style="{'background-color': getRgbaString(item.backgroundColor.rgba)}"
         @mouseover="item.isHoveringOver = true"
         @mouseleave="item.isHoveringOver = false"
       >
@@ -75,12 +75,12 @@
             <v-spacer></v-spacer>
             <v-flex
               class="item-title"
-              :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight]}"
+              :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
             >{{ item.count }}</v-flex>
             <v-flex>
               <v-subheader
                 class="item-title"
-                :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight]}"
+                :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
               >{{ item.name }}</v-subheader>
             </v-flex>
           </v-layout>
@@ -491,6 +491,7 @@ export default {
 .list-item .item-title {
   font-size: 20px;
   overflow-wrap: break-word;
+  opacity: 0.8;
 }
 
 .list-move {

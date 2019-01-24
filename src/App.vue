@@ -397,19 +397,37 @@ export default {
   }
 }
 
-/**,
+*,
 :after,
 :before {
   -webkit-box-sizing: inherit;
-  box-sizing: border-box;
-}*/
+  box-sizing: border-box !important;
+}
 </style>
 <style>
 .application--wrap {
   min-height: auto !important;
 }
+
+.application {
+  background-color: transparent;
+}
 html {
   box-sizing: initial !important;
   overflow-y: initial !important;
+}
+
+*,
+:after,
+:before {
+  -webkit-box-sizing: inherit;
+  box-sizing: content-box;
+}
+
+#app *,
+#app *:after,
+#app *:before {
+  -webkit-box-sizing: inherit;
+  box-sizing: border-box !important;
 }
 </style>
