@@ -131,21 +131,18 @@ export default {
     },
     checkEditMode: function() {
       var SP = SP || {};
-      var MSOWebPartPageFormName = MSOWebPartPageFormName || "";
+      var MSOWebPartPageFormName = window.MSOWebPartPageFormName || "";
       this.isEditing = false;
       try {
         SP.Ribbon.PageState.Handlers.isPublishEnabled();
         this.isEditing = SP.Ribbon.PageState.Handlers.isInEditMode();
       } catch (err) {
-        var inDesignMode = false;
-        if (window.hasOwnProperty("MSOWebPartPageFormName")) {
-          inDesignMode =
-            window.document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode
-              .value == "1";
-        }
-        this.isEditing = inDesignMode;
+        var inDesignMode =
+          window.document.forms.hasOwnProperty(MSOWebPartPageFormName) &&
+          window.document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode
+            .value == "1";
         this.isEditing =
-          this.isEditing || window.location.hash.indexOf("edit") > -1;
+          inDesignMode || window.location.hash.indexOf("edit") > -1;
       }
       console.log("Editing: " + this.isEditing);
     },
