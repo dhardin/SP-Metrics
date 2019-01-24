@@ -459,10 +459,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-input[type="text"],
-select {
+#app input[type="text"],
+#app select {
   border: none !important;
-  background-color: none !important;
+  background-color: transparent !important;
+  border-style: none !important;
 }
 #app h3 {
   margin: 40px 0 0;

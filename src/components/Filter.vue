@@ -26,7 +26,6 @@ export default {
   },
   mounted: function() {
     (function(that) {
-      console.log(that);
       /* $(that.$parent.$options.el).foundation();
       $(window).on("hashchange", function() {
         if (that.configfetched) {

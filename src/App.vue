@@ -144,7 +144,6 @@ export default {
         this.isEditing =
           inDesignMode || window.location.hash.indexOf("edit") > -1;
       }
-      console.log("Editing: " + this.isEditing);
     },
     onHashChange: function() {
       this.checkEditMode();
