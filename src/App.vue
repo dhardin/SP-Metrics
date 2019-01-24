@@ -338,7 +338,7 @@ export default {
 };
 </script>
 <!--<style src='vuetify/dist/vuetify.min.css'></style>-->
-<style>
+<style scoped>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -381,6 +381,23 @@ export default {
   text-transform: uppercase;
   font-family: Roboto, sans-serif;
   display: inline-block;
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(-360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
 }
 
 /**,
