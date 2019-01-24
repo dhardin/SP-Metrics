@@ -11,105 +11,120 @@
     >
       <AddIcon class="icon"></AddIcon>Add
     </v-btn>
-    <transition-group name="list" tag="p" appear>
-      <v-card
-        v-for="item in sortedItems"
-        v-bind:key="item.key"
-        class="list-item"
-        style="position: relative"
-        :style="{'background-color': getRgbaString(item.backgroundColor.rgba)}"
-        @mouseover="item.isHoveringOver = true"
-        @mouseleave="item.isHoveringOver = false"
-      >
-        <transition name="fade">
-          <span
-            v-if="!item.isVisible"
-            class="font-weight-thin pa-2"
-            :style="{position:'absolute', top: '0', left: '0', color: 'rgba(0,0,0,.65)'}"
+    <v-container grid-list-md text-xs-center>
+      <transition-group name="list" appear tag="div" class="layout row wrap justify-center">
+        <v-flex v-for="item in sortedItems" v-bind:key="item.key" :class="classes">
+          <v-card
+            class="list-item"
+            style="position: relative"
+            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%'}"
+            @mouseover="item.isHoveringOver = true"
+            @mouseleave="item.isHoveringOver = false"
           >
-            <VisibilityOffIcon class="icon" :style="{fill: item.color.hex}"></VisibilityOffIcon>
-          </span>
-        </transition>
-        <v-speed-dial
-          v-model="item.fab"
-          :top="top"
-          :bottom="bottom"
-          :right="right"
-          :left="left"
-          :direction="direction"
-          :open-on-hover="hover"
-          absolute
-          :style="{top: '24px'}"
-          class="speed-dial"
-          v-if="!readonly"
-          :disabled="disabled"
-        >
-          <v-btn slot="activator" v-model="item.fab" color="blue darken-2" dark fab class="xs-btn">
-            <transition name="fade" mode="out-in">>
-              <AppsIcon class="icon" v-if="!item.fab"></AppsIcon>
-              <CloseIcon class="icon" v-else></CloseIcon>
+            <transition name="fade">
+              <span
+                v-if="!item.isVisible"
+                class="font-weight-thin pa-2"
+                :style="{position:'absolute', top: '0', left: '0', color: 'rgba(0,0,0,.65)'}"
+              >
+                <VisibilityOffIcon class="icon" :style="{fill: item.color.hex}"></VisibilityOffIcon>
+              </span>
             </transition>
-          </v-btn>
-
-          <v-btn
-            fab
-            dark
-            color="green"
-            class="small-btn"
-            @click.native.stop="item.fab=false; Object.assign(editingItem, item); dialog=true;"
-          >
-            <EditIcon class="icon"></EditIcon>
-          </v-btn>
-
-          <v-btn fab dark color="purple" @click="toggleVisible(item)" class="small-btn">
-            <VisibilityIcon class="icon" v-if="!item.isVisible"></VisibilityIcon>
-            <VisibilityOffIcon class="icon" v-else></VisibilityOffIcon>
-          </v-btn>
-          <v-btn fab dark color="red" @click="deleteItem(item)" class="small-btn">
-            <DeleteIcon class="icon"></DeleteIcon>
-          </v-btn>
-        </v-speed-dial>
-
-        <v-container fill-height grid-list-md text-xs-center>
-          <v-layout column align-center justify-end>
-            <v-spacer></v-spacer>
-            <v-flex
-              class="item-title"
-              :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
-            >{{ item.count }}</v-flex>
-            <v-flex>
-              <v-subheader
-                class="item-title"
-                :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
-              >{{ item.name }}</v-subheader>
-            </v-flex>
-          </v-layout>
-        </v-container>
-
-        <v-card-actions :style="{position: 'absolute', bottom: '0'}" v-if="!readonly">
-          <transition name="slide-right">
-            <v-btn
-              @click="moveLeft(item)"
-              v-if="item.sortOrder > 0 && item.isHoveringOver"
-              color="blue"
+            <v-speed-dial
+              v-model="item.fab"
+              :top="top"
+              :bottom="bottom"
+              :right="right"
+              :left="left"
+              :direction="direction"
+              :open-on-hover="hover"
+              absolute
+              :style="{top: '24px'}"
+              class="speed-dial"
+              v-if="!readonly"
+              :disabled="disabled"
             >
-              <LeftArrowIcon class="icon"></LeftArrowIcon>
-            </v-btn>
-          </transition>
-          <v-spacer v-if="(item.sortOrder == items.length - 1)"></v-spacer>
-          <span v-if="(item.sortOrder == 0)" :style="{width: '88px', height: '25px'}"></span>
-          <transition name="slide-left">
-            <v-btn
-              @click="moveRight(item)"
-              v-if="item.sortOrder < items.length - 1 && item.isHoveringOver"
-              color="blue"
-            >
-              <RightArrowIcon class="icon"></RightArrowIcon>
-            </v-btn>
-          </transition>
-        </v-card-actions>
-      </v-card>
-    </transition-group>
+              <v-btn
+                slot="activator"
+                v-model="item.fab"
+                color="blue darken-2"
+                dark
+                fab
+                class="xs-btn"
+              >
+                <transition name="fade" mode="out-in">>
+                  <AppsIcon class="icon" v-if="!item.fab"></AppsIcon>
+                  <CloseIcon class="icon" v-else></CloseIcon>
+                </transition>
+              </v-btn>
+
+              <v-btn
+                fab
+                dark
+                color="green"
+                class="small-btn"
+                @click.native.stop="item.fab=false; Object.assign(editingItem, item); dialog=true;"
+              >
+                <EditIcon class="icon"></EditIcon>
+              </v-btn>
+
+              <v-btn fab dark color="purple" @click="toggleVisible(item)" class="small-btn">
+                <VisibilityIcon class="icon" v-if="!item.isVisible"></VisibilityIcon>
+                <VisibilityOffIcon class="icon" v-else></VisibilityOffIcon>
+              </v-btn>
+              <v-btn fab dark color="red" @click="deleteItem(item)" class="small-btn">
+                <DeleteIcon class="icon"></DeleteIcon>
+              </v-btn>
+            </v-speed-dial>
+
+            <v-container fill-height grid-list-md text-xs-center :style="{position: 'relative'}">
+              <v-layout column align-center justify-end>
+                <v-spacer></v-spacer>
+                <v-flex
+                  class="item-title"
+                  :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
+                >{{ item.count }}</v-flex>
+                <v-flex>
+                  <v-subheader
+                    class="item-title"
+                    :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
+                  >{{ item.name }}</v-subheader>
+                </v-flex>
+              </v-layout>
+              <v-layout
+                row
+                v-if="!readonly"
+                :style="{position: 'absolute', bottom: '14px', height: '44px', left: '0', right: '0', overflow: 'hidden'}"
+              >
+                <v-flex xs4>
+                  <transition name="slide-right">
+                    <v-btn
+                      @click="moveLeft(item)"
+                      v-if="item.sortOrder > 0 && item.isHoveringOver"
+                      color="blue"
+                    >
+                      <LeftArrowIcon class="icon"></LeftArrowIcon>
+                    </v-btn>
+                  </transition>
+                </v-flex>
+                <v-flex xs4></v-flex>
+                <v-flex xs4>
+                  <transition name="slide-left">
+                    <v-btn
+                      @click="moveRight(item)"
+                      v-if="item.sortOrder < items.length - 1 && item.isHoveringOver"
+                      color="blue"
+                    >
+                      <RightArrowIcon class="icon"></RightArrowIcon>
+                    </v-btn>
+                  </transition>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card>
+        </v-flex>
+      </transition-group>
+    </v-container>
     <v-dialog v-model="dialog" persistent v-if="!readonly">
       <v-card>
         <v-card-title></v-card-title>
@@ -175,41 +190,48 @@
                   :tick-labels="fontWeightText"
                 ></v-slider>
               </v-flex>
-              <v-flex xs4>
-                <v-layout align-center justify-center column fill-height>
-                  <h2 class="font-weight-thin">Background Color</h2>
-                  <sketch-picker v-model="editingItem.backgroundColor"/>
-                </v-layout>
-              </v-flex>
-              <v-flex xs4>
-                <v-layout align-center justify-center column fill-height>
-                  <h2 class="font-weight-thin">Font Color</h2>
-                  <sketch-picker v-model="editingItem.color"/>
-                </v-layout>
-              </v-flex>
-              <v-flex xs4>
-                <h2 class="font-weight-thin">Preview</h2>
-                <v-card
-                  class="list-item"
-                  style="position: relative"
-                  :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba), 'color': getRgbaString(editingItem.color.rgba)}"
-                >
-                  <v-container fill-height grid-list-md text-xs-center>
-                    <v-layout column align-center justify-center>
-                      <v-spacer></v-spacer>
-                      <v-flex
-                        class="item-title"
-                        :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
-                      >{{ editingItem.count }}</v-flex>
-                      <v-flex>
-                        <v-subheader
-                          class="item-title"
-                          :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight]}"
-                        >{{ editingItem.name }}</v-subheader>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-card>
+              <v-flex xs9 py-3 offset-sm2>
+                <v-container>
+                  <v-layout row>
+                    <v-flex xs4>
+                      <v-layout align-center justify-center column fill-height px-2>
+                        <h2 class="font-weight-thin">Background Color</h2>
+                        <sketch-picker v-model="editingItem.backgroundColor"/>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex xs4>
+                      <v-layout align-center justify-center column fill-height px-2>
+                        <h2 class="font-weight-thin">Font Color</h2>
+                        <sketch-picker v-model="editingItem.color"/>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex xs4 px-2>
+                      <h2 class="font-weight-thin">Preview</h2>
+                      <v-card
+                        class="list-item"
+                        style="position: relative"
+                        :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba)}"
+                        px-2
+                      >
+                        <v-container fill-height grid-list-md text-xs-center>
+                          <v-layout column align-center justify-center>
+                            <v-spacer></v-spacer>
+                            <v-flex
+                              class="item-title"
+                              :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
+                            >{{ editingItem.count }}</v-flex>
+                            <v-flex>
+                              <v-subheader
+                                class="item-title"
+                                :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
+                              >{{ editingItem.name }}</v-subheader>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
               </v-flex>
             </v-layout>
           </v-container>
@@ -253,6 +275,12 @@ export default {
   },
   props: {
     disabled: Boolean,
+    columnWidth: {
+      type: String,
+      default: function() {
+        return "3";
+      }
+    },
     readonly: Boolean,
     initialItems: {
       type: Array,
@@ -262,6 +290,11 @@ export default {
     }
   },
   computed: {
+    classes: function() {
+      var classObj = {};
+      classObj["xs" + this.columnWidth] = true;
+      return classObj;
+    },
     sortedItems: function() {
       var items = [];
       var i;
@@ -460,29 +493,30 @@ export default {
 
 .slide-left-enter-active,
 .slide-left-leave-active {
-  transition: all 0.1s;
+  transition: all 0.2s;
 }
 
 .slide-left-leave-to,
 .slide-left-enter {
   transform: translateX(200px);
+  opacity: 0;
 }
 
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: all 0.1s;
+  transition: all 0.2s;
 }
 
 .slide-right-leave-to,
 .slide-right-enter {
   transform: translateX(-200px);
+  opacity: 0;
 }
 .list-item {
-  width: 200px;
-  height: 212px;
+  width: 100%;
+  min-height: 100px;
   display: inline-block;
   margin: 10px;
-  overflow: hidden;
 }
 
 .list-item:first-child {
@@ -519,5 +553,8 @@ export default {
   display: block !important;
   font-size: 24px;
   text-align: center;
+}
+.vc-sketch {
+  width: 100%;
 }
 </style>

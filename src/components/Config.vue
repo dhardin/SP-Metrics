@@ -59,7 +59,7 @@
             :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
-        <v-flex xs6 :style="{position: 'relative'}">
+        <v-flex xs6 :style="{position: 'relative'}" id="column-width">
           <v-select
             v-model="config.minColumnWidth"
             :items="columnWidthItems"
@@ -67,6 +67,7 @@
             box
             color="blue"
             label="Column Width"
+            attach="#column-width"
             class="select"
             append-icon
             @focus="isColumnWidthSelected = true"
@@ -80,7 +81,7 @@
             :class="{active: isColumnWidthSelected, inactive: !isColumnWidthSelected}"
           />
         </v-flex>
-        <v-flex xs6>
+        <!-- <v-flex xs6>
           <v-radio-group
             v-model="config.hasDynamicWidth"
             row
@@ -101,7 +102,7 @@
               :isChecked="config.hasDynamicWidth == false"
             >No</Radio>
           </v-radio-group>
-        </v-flex>
+        </v-flex>-->
         <v-flex xs6>
           <v-radio-group
             v-model="config.hasFiltering"
@@ -182,7 +183,7 @@
             >No</Radio>
           </v-radio-group>
         </v-flex>
-        <v-flex xs6>
+        <v-flex xs12>
           <v-radio-group
             v-model="config.isDocumentLibrary"
             row
@@ -263,6 +264,7 @@
             </div>
           </div>
           <EditableBlockList
+            :column-width="config.minColumnWidth"
             @update="updateMetrics"
             :disabled="isLoading || isSaving"
             :initial-items="initConfig.metrics"
@@ -347,7 +349,7 @@ export default {
           hasDynamicWidth: false,
           hasFilterDetection: false,
           fileObjectType: 0,
-          minColumnWidth: 1,
+          minColumnWidth: 3,
           openInNewWindow: true,
           listName: "",
           siteUrl: "",
@@ -388,7 +390,7 @@ export default {
       isColumnWidthSelected: false,
       config: {
         ID: 0,
-        minColumnWidth: "1",
+        minColumnWidth: "3",
         listName: "",
         fieldName: "",
         siteUrl: "",
