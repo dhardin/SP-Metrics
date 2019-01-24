@@ -349,7 +349,7 @@ export default {
           hasDynamicWidth: false,
           hasFilterDetection: false,
           fileObjectType: 0,
-          minColumnWidth: 3,
+          minColumnWidth: "3",
           openInNewWindow: true,
           listName: "",
           siteUrl: "",

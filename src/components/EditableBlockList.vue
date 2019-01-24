@@ -11,13 +11,18 @@
     >
       <AddIcon class="icon"></AddIcon>Add
     </v-btn>
-    <v-container grid-list-md text-xs-center>
-      <transition-group name="list" appear tag="div" class="layout row wrap justify-center">
-        <v-flex v-for="item in sortedItems" v-bind:key="item.key" :class="classes">
+    <v-container grid-list-md text-xs-center box>
+      <transition-group
+        name="list"
+        appear
+        tag="div"
+        class="layout row wrap justify-center align-space-around"
+      >
+        <v-flex v-for="item in sortedItems" v-bind:key="item.key" :class="classes" shrink>
           <v-card
             class="list-item"
             style="position: relative"
-            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%'}"
+            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', height: '100%'}"
             @mouseover="item.isHoveringOver = true"
             @mouseleave="item.isHoveringOver = false"
           >
@@ -77,7 +82,7 @@
               </v-btn>
             </v-speed-dial>
 
-            <v-container fill-height grid-list-md text-xs-center :style="{position: 'relative'}">
+            <v-container grid-list-md text-xs-center :style="{position: 'relative'}">
               <v-layout column align-center justify-end>
                 <v-spacer></v-spacer>
                 <v-flex
