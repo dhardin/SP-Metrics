@@ -403,12 +403,6 @@ export default {
   -webkit-box-sizing: inherit;
   box-sizing: border-box !important;
 }
-
-input[type="text"],
-select {
-  border: none !important;
-  background-color: none !important;
-}
 </style>
 <style>
 .application--wrap {

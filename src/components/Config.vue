@@ -459,21 +459,26 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-h3 {
+input[type="text"],
+select {
+  border: none !important;
+  background-color: none !important;
+}
+#app h3 {
   margin: 40px 0 0;
 }
 
-ul {
+#app ul {
   list-style-type: none;
   padding: 0;
 }
 
-li {
+#app li {
   display: inline-block;
   margin: 0 10px;
 }
 
-a {
+#app a {
   color: #42b983;
 }
 
