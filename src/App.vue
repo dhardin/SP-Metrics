@@ -140,7 +140,7 @@ export default {
         var inDesignMode = false;
         if (window.hasOwnProperty("MSOWebPartPageFormName")) {
           inDesignMode =
-            document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode
+            window.document.forms[MSOWebPartPageFormName].MSOLayout_InDesignMode
               .value == "1";
         }
         this.isEditing = inDesignMode;
