@@ -404,3 +404,12 @@ export default {
   box-sizing: border-box;
 }*/
 </style>
+<style>
+.application--wrap {
+  min-height: auto !important;
+}
+html {
+  box-sizing: initial !important;
+  overflow-y: initial !important;
+}
+</style>
