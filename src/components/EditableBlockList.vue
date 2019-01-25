@@ -298,6 +298,12 @@ export default {
         return 3;
       }
     },
+    fieldMap: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    },
     config: {
       type: Object,
       default: function() {
@@ -359,6 +365,12 @@ export default {
     }
   },
   watch: {
+    fieldMap: {
+      handler: function(newVal) {
+        console.log(newVal);
+      },
+      deep: true
+    },
     editingItem: {
       handler: function(newVal) {
         this.$refs.fontWeight.$el.querySelector(
@@ -422,7 +434,9 @@ export default {
         this.config.fieldName &&
         this.config.siteUrl
         ? this.config.siteUrl +
-            (this.config.isDocumentLibrary ? "/Forms/" : "/") +
+            (this.config.isDocumentLibrary
+              ? this.config.listName + "/Forms/"
+              : "/Lists/" + this.config.listName) +
             (this.config.filterViewName != ""
               ? this.config.filterViewName + ".aspx"
               : "") +

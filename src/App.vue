@@ -22,6 +22,8 @@
             </v-layout>
           </v-card>
           <EditableBlockList
+            :config="config"
+            :field-map="state_map.fields.displayMap"
             readonly
             :initialItems="config.metrics"
             v-if="!isEditing && !state_map.loading.isLoading && config.metrics.length > 0"
