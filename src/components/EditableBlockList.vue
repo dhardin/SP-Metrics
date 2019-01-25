@@ -442,7 +442,7 @@ export default {
               : "") +
             "?FilterField1=" +
             this.config.fieldName +
-            "&FilterValue=" +
+            "&FilterValue1=" +
             item.name +
             "#FilterField1%3D" +
             this.config.fieldName +
