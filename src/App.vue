@@ -6,6 +6,7 @@
           <Config
             v-if="isEditing"
             :init-config="config"
+            :field-map="initFieldMap"
             :is-loading="state_map.loading.isLoading"
             :site-url="siteUrl"
             :config-list-name="configListName"
@@ -23,7 +24,7 @@
           </v-card>
           <EditableBlockList
             :config="config"
-            :field-map="state_map.fields.displayMap"
+            :field-map="initFieldMap"
             readonly
             :initialItems="config.metrics"
             v-if="!isEditing && !state_map.loading.isLoading && config.metrics.length > 0"
@@ -66,6 +67,7 @@ export default {
       siteUrl: "",
       isEditing: false,
       testing: false,
+      initFieldMap: {},
       items: [],
       state_map: {
         isFiltered: false,
@@ -124,6 +126,16 @@ export default {
   watch: {
     isEditing: function() {
       this.getData();
+    },
+    state_map: {
+      handler: function(newVal) {
+        this.initFieldMap = Object.assign(
+          {},
+          this.initFieldMap,
+          newVal.fields.displayMap
+        );
+      },
+      deep: true
     }
   },
   methods: {
@@ -252,8 +264,6 @@ export default {
                         displayFieldMap
                       );
                     }
-                    console.log(that.state_map.fields.displayMap);
-
                     resolve();
                   },
                   function(error) {
@@ -299,6 +309,7 @@ export default {
           })
           .then(function() {
             that.configFetched = that.config.ID > 0;
+
             if (Object.keys(that.metrics).length > 0 || that.isEditing) {
               that.toggleLoading({
                 isLoading: false,

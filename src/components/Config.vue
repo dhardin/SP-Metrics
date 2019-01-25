@@ -265,6 +265,7 @@
           </div>
           <EditableBlockList
             :config="config"
+            :field-map="fieldMap"
             :column-width="config.minColumnWidth"
             @update="updateMetrics"
             :disabled="isLoading || isSaving"
@@ -331,6 +332,12 @@ export default {
       type: String,
       default: function() {
         return "";
+      }
+    },
+    fieldMap: {
+      type: Object,
+      default: function() {
+        return {};
       }
     },
     configListName: {
