@@ -249,7 +249,7 @@ export default {
                       that.state_map.fields.displayMap = Object.assign(
                         {},
                         that.state_map.fields.displayMap,
-                        staticFieldMap
+                        displayFieldMap
                       );
                     }
                     console.log(that.state_map.fields.displayMap);

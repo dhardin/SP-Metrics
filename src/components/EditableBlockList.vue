@@ -432,11 +432,11 @@ export default {
         !item.fab &&
         this.config.filterViewName &&
         this.config.fieldName &&
-        this.config.siteUrl
+        this.config.siteUrl &&
+        Object.keys(this.fieldMap).length > 0 &&
+        this.fieldMap[Object.keys(this.fieldMap)[0]].hasOwnProperty("Scope")
         ? this.config.siteUrl +
-            (this.config.isDocumentLibrary
-              ? this.config.listName + "/Forms/"
-              : "/Lists/" + this.config.listName) +
+            this.fieldMap[Object.keys(this.fieldMap)[0]].Scope +
             (this.config.filterViewName != ""
               ? this.config.filterViewName + ".aspx"
               : "") +
