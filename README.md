@@ -58,8 +58,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 <div id="app"></div>
 ```
 4. When the page is in edit mode, you'll be able to configure the tool.
-<style>
-table {
-    width:50%;
-}
-</style>
