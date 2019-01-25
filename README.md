@@ -50,13 +50,14 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 | hasFiltering       | Yes/No                 |
 | openInNewWindow    | Yes/No                 |
 </center>
+
 3. On a page you wish to display metrics on, copy and paste the following script into a content editor webpart (make the url relative to your site collection):
 ``` javascript
 <script src="absolute-url-to-dist-folder/chunk-vendors.js"></script>
 <script src="absolute-url-to-dist-folder/app.js"></script>
 <div id="app"></div>
 ```
-3. 
+4. When the page is in edit mode, you'll be able to configure the tool.
 <style>
 table {
     width:50%;
