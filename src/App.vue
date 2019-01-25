@@ -405,7 +405,7 @@ export default {
 }
 
 .application {
-  background-color: transparent;
+  background: transparent !important;
 }
 html {
   box-sizing: initial !important;
