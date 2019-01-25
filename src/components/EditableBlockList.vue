@@ -101,26 +101,30 @@
                 v-if="!readonly"
                 :style="{position: 'absolute', bottom: '14px', height: '44px', left: '0', right: '0', overflow: 'hidden'}"
               >
-                <v-flex xs4>
+                <v-flex :class="buttonClasses">
                   <transition name="slide-right">
                     <v-btn
                       @click="moveLeft(item)"
                       v-if="item.sortOrder > 0 && item.isHoveringOver"
                       color="blue"
+                      block
+                      class="move-btn"
                     >
-                      <LeftArrowIcon class="icon"></LeftArrowIcon>
+                      <LeftArrowIcon class="icon" :class="{'small-icon': columnWidth == 1}"></LeftArrowIcon>
                     </v-btn>
                   </transition>
                 </v-flex>
-                <v-flex xs4></v-flex>
-                <v-flex xs4>
+                <v-flex xs4 v-if="columnWidth > 2"></v-flex>
+                <v-flex :class="buttonClasses">
                   <transition name="slide-left">
                     <v-btn
                       @click="moveRight(item)"
                       v-if="item.sortOrder < items.length - 1 && item.isHoveringOver"
                       color="blue"
+                      block
+                      class="move-btn"
                     >
-                      <RightArrowIcon class="icon"></RightArrowIcon>
+                      <RightArrowIcon class="icon" :class="{'small-icon': columnWidth == 1}"></RightArrowIcon>
                     </v-btn>
                   </transition>
                 </v-flex>
@@ -281,9 +285,9 @@ export default {
   props: {
     disabled: Boolean,
     columnWidth: {
-      type: String,
+      type: Number,
       default: function() {
-        return "3";
+        return 3;
       }
     },
     readonly: Boolean,
@@ -295,6 +299,11 @@ export default {
     }
   },
   computed: {
+    buttonClasses: function() {
+      var classObj = {};
+      classObj["xs" + (this.columnWidth < 3 ? "6" : "4")] = true;
+      return classObj;
+    },
     classes: function() {
       var classObj = {};
       classObj["xs" + this.columnWidth] = true;
@@ -477,9 +486,13 @@ export default {
 </script>
 <style scoped>
 .icon {
-  width: 25px;
-  height: 25px;
+  width: 32px;
+  height: 32px;
   fill: white;
+}
+.small-icon {
+  width: 20px;
+  height: 20px;
 }
 .icon.icon-blue {
   fill: rgb(25, 118, 210);
@@ -561,5 +574,9 @@ export default {
 }
 .vc-sketch {
   width: 100%;
+}
+.move-btn {
+  padding: 0;
+  min-width: 0px;
 }
 </style>

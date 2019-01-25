@@ -349,7 +349,7 @@ export default {
           hasDynamicWidth: false,
           hasFilterDetection: false,
           fileObjectType: 0,
-          minColumnWidth: "3",
+          minColumnWidth: 3,
           openInNewWindow: true,
           listName: "",
           siteUrl: "",
@@ -385,12 +385,12 @@ export default {
   data: function() {
     return {
       valid: true,
-      columnWidthItems: ["1", "2", "3", "4", "6", "12"],
+      columnWidthItems: [1, 2, 3, 4, 6, 12],
       isSaving: false,
       isColumnWidthSelected: false,
       config: {
         ID: 0,
-        minColumnWidth: "3",
+        minColumnWidth: 3,
         listName: "",
         fieldName: "",
         siteUrl: "",
@@ -415,7 +415,7 @@ export default {
   },
   methods: {
     updateMetrics: function(items) {
-      this.$emit("items-updated", items);
+      // this.$emit("items-updated", items);
       this.config.metrics = Object.assign([], items);
     },
     save: function() {

@@ -4,7 +4,6 @@
       <v-layout>
         <v-flex xs10 py-3 offset-sm1>
           <Config
-            @items-updated="updateItems"
             v-if="isEditing"
             :init-config="config"
             :is-loading="state_map.loading.isLoading"
@@ -110,7 +109,7 @@ export default {
         hasDynamicWidth: false,
         hasFilterDetection: false,
         fileObjectType: 0,
-        minColumnWidth: "3",
+        minColumnWidth: 3,
         openInNewWindow: true,
         listName: "",
         siteUrl: "",
@@ -126,9 +125,6 @@ export default {
     }
   },
   methods: {
-    updateItems: function(items) {
-      this.config.metrics = Object.assign([], items);
-    },
     checkEditMode: function() {
       var SP = SP || {};
       var MSOWebPartPageFormName = window.MSOWebPartPageFormName || "";
