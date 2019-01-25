@@ -435,8 +435,8 @@ export default {
         this.config.siteUrl &&
         Object.keys(this.fieldMap).length > 0 &&
         this.fieldMap[Object.keys(this.fieldMap)[0]].hasOwnProperty("Scope")
-        ? this.config.siteUrl +
-            this.fieldMap[Object.keys(this.fieldMap)[0]].Scope +
+        ? this.fieldMap[Object.keys(this.fieldMap)[0]].Scope +
+            "/" +
             (this.config.filterViewName != ""
               ? this.config.filterViewName + ".aspx"
               : "") +
