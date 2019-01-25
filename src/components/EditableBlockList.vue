@@ -216,28 +216,34 @@
                     </v-flex>
                     <v-flex xs4 px-2>
                       <h2 class="font-weight-thin">Preview</h2>
-                      <v-card
-                        class="list-item"
-                        style="position: relative"
-                        :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba)}"
-                        px-2
-                      >
-                        <v-container fill-height grid-list-md text-xs-center>
-                          <v-layout column align-center justify-center>
-                            <v-spacer></v-spacer>
-                            <v-flex
-                              class="item-title"
-                              :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
-                            >{{ editingItem.count }}</v-flex>
-                            <v-flex>
-                              <v-subheader
-                                class="item-title"
-                                :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
-                              >{{ editingItem.name }}</v-subheader>
-                            </v-flex>
-                          </v-layout>
-                        </v-container>
-                      </v-card>
+                      <v-container>
+                        <v-layout align-center justify-center>
+                          <v-flex :class="previewClasses">
+                            <v-card
+                              class="list-item"
+                              style="position: relative"
+                              :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba)}"
+                              px-2
+                            >
+                              <v-container fill-height grid-list-md text-xs-center>
+                                <v-layout column align-center justify-center>
+                                  <v-spacer></v-spacer>
+                                  <v-flex
+                                    class="item-title"
+                                    :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
+                                  >{{ editingItem.count }}</v-flex>
+                                  <v-flex>
+                                    <v-subheader
+                                      class="item-title"
+                                      :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
+                                    >{{ editingItem.name }}</v-subheader>
+                                  </v-flex>
+                                </v-layout>
+                              </v-container>
+                            </v-card>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -307,6 +313,12 @@ export default {
     classes: function() {
       var classObj = {};
       classObj["xs" + this.columnWidth] = true;
+      return classObj;
+    },
+    previewClasses: function() {
+      var classObj = {};
+      var modColWidth = this.columnWidth * 4;
+      classObj["xs" + (modColWidth < 12 ? modColWidth : 12)] = true;
       return classObj;
     },
     sortedItems: function() {
