@@ -241,12 +241,18 @@ export default {
                         map[obj.Title] = obj;
                         return map;
                       }, {});
-                      _.assign(that.state_map.fields.staticMap, staticFieldMap);
-                      _.assign(
+                      that.state_map.fields.staticMap = Object.assign(
+                        {},
+                        that.state_map.fields.staticMap,
+                        staticFieldMap
+                      );
+                      that.state_map.fields.displayMap = Object.assign(
+                        {},
                         that.state_map.fields.displayMap,
-                        displayFieldMap
+                        staticFieldMap
                       );
                     }
+                    console.log(that.state_map.fields.displayMap);
 
                     resolve();
                   },
