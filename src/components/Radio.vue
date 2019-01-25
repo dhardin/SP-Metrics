@@ -71,7 +71,7 @@ export default {
 }
 .checkbox-icon {
   padding: 0;
-  background-color: white;
+  background-color: transparent;
   width: 25px;
   height: 25px;
   fill: rgb(25, 118, 210);
