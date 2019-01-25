@@ -264,6 +264,7 @@
             </div>
           </div>
           <EditableBlockList
+            :config="config"
             :column-width="config.minColumnWidth"
             @update="updateMetrics"
             :disabled="isLoading || isSaving"

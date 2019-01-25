@@ -20,6 +20,8 @@
       >
         <v-flex v-for="item in sortedItems" v-bind:key="item.key" :class="classes" shrink>
           <v-card
+            :href="getItemHref(item)"
+            :target="config.openInNewWindow ? '_blank' : '_top'"
             class="list-item"
             style="position: relative"
             :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', height: '100%'}"
@@ -296,6 +298,26 @@ export default {
         return 3;
       }
     },
+    config: {
+      type: Object,
+      default: function() {
+        return {
+          ID: 0,
+          hasFiltering: false,
+          isDocumentLibrary: false,
+          hasDynamicWidth: false,
+          hasFilterDetection: false,
+          fileObjectType: 0,
+          minColumnWidth: 3,
+          openInNewWindow: true,
+          listName: "",
+          siteUrl: "",
+          fieldName: "",
+          filterViewName: "",
+          metrics: []
+        };
+      }
+    },
     readonly: Boolean,
     initialItems: {
       type: Array,
@@ -393,6 +415,27 @@ export default {
     };
   },
   methods: {
+    getItemHref: function(item) {
+      return this.config.hasFiltering &&
+        !item.fab &&
+        this.config.filterViewName &&
+        this.config.fieldName &&
+        this.config.siteUrl
+        ? this.config.siteUrl +
+            (this.config.isDocumentLibrary ? "/Forms/" : "/") +
+            (this.config.filterViewName != ""
+              ? this.config.filterViewName + ".aspx"
+              : "") +
+            "?FilterField1=" +
+            this.config.fieldName +
+            "&FilterValue=" +
+            item.name +
+            "#FilterField1%3D" +
+            this.config.fieldName +
+            "-FilterValue1%3D" +
+            item.name
+        : undefined;
+    },
     getRgbaString: function(colorRgba) {
       return (
         "rgba(" +
@@ -555,7 +598,6 @@ export default {
 .list-item .item-title {
   font-size: 20px;
   overflow-wrap: break-word;
-  opacity: 0.8;
 }
 
 .list-move {
