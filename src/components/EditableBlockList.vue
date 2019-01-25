@@ -99,9 +99,9 @@
               <v-layout
                 row
                 v-if="!readonly"
-                :style="{position: 'absolute', bottom: '14px', height: '44px', left: '0', right: '0', overflow: 'hidden'}"
+                :style="{position: 'absolute', bottom: '14px', height: '44px', left: columnWidth > 2 ? '8px' : '0', right:  columnWidth > 2 ? '8px' : '0', overflow: 'hidden'}"
               >
-                <v-flex :class="buttonClasses">
+                <v-flex :class="buttonClasses" class="pa-0">
                   <transition name="slide-right">
                     <v-btn
                       @click="moveLeft(item)"
@@ -114,8 +114,8 @@
                     </v-btn>
                   </transition>
                 </v-flex>
-                <v-flex xs4 v-if="columnWidth > 2"></v-flex>
-                <v-flex :class="buttonClasses">
+                <v-flex xs4 v-if="columnWidth > 2" class="pa-0"></v-flex>
+                <v-flex :class="buttonClasses" class="pa-0">
                   <transition name="slide-left">
                     <v-btn
                       @click="moveRight(item)"
