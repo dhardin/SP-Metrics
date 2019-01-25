@@ -431,6 +431,8 @@ export default {
       return this.config.hasFiltering &&
         !item.fab &&
         this.config.filterViewName &&
+        this.fieldMap[this.config.fieldName] &&
+        this.fieldMap[this.config.fieldName].StaticName &&
         this.config.fieldName &&
         this.config.siteUrl &&
         Object.keys(this.fieldMap).length > 0 &&
@@ -441,11 +443,11 @@ export default {
               ? this.config.filterViewName + ".aspx"
               : "") +
             "?FilterField1=" +
-            this.config.fieldName +
+            this.fieldMap[this.config.fieldName].StaticName +
             "&FilterValue1=" +
             item.name +
             "#FilterField1%3D" +
-            this.config.fieldName +
+            this.fieldMap[this.config.fieldName].StaticName +
             "-FilterValue1%3D" +
             item.name
         : undefined;
