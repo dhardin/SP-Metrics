@@ -615,7 +615,7 @@ export default {
   overflow-wrap: break-word;
 }
 
-.list-item .item-title:hover {
+.list-item:hover {
   text-decoration: none;
 }
 
