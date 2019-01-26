@@ -427,8 +427,8 @@ export default {
   background: transparent !important;
 }
 html {
-  box-sizing: initial !important;
-  overflow-y: initial !important;
+  box-sizing: inherit !important;
+  overflow-y: inherit !important;
 }
 
 *,

@@ -107,7 +107,7 @@
                   <transition name="slide-right">
                     <v-btn
                       @click="moveLeft(item)"
-                      v-if="item.sortOrder > 0 && item.isHoveringOver"
+                      v-if="item.sortOrder > 0 && item.isHoveringOver && !item.fab"
                       color="blue"
                       block
                       class="move-btn"
@@ -121,7 +121,7 @@
                   <transition name="slide-left">
                     <v-btn
                       @click="moveRight(item)"
-                      v-if="item.sortOrder < items.length - 1 && item.isHoveringOver"
+                      v-if="item.sortOrder < items.length - 1 && item.isHoveringOver  && !item.fab"
                       color="blue"
                       block
                       class="move-btn"
