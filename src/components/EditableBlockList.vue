@@ -101,7 +101,7 @@
               <v-layout
                 row
                 v-if="!readonly"
-                :style="{position: 'absolute', bottom: '14px', height: '44px', left: columnWidth > 2 ? '8px' : '0', right:  columnWidth > 2 ? '8px' : '0', overflow: 'hidden'}"
+                :style="{position: 'absolute', height: '44px', left: columnWidth > 2 ? '8px' : '0', right:  columnWidth > 2 ? '8px' : '0', overflow: 'hidden'}"
               >
                 <v-flex :class="buttonClasses" class="pa-0">
                   <transition name="slide-right">
