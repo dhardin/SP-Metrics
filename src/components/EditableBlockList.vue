@@ -146,7 +146,6 @@
                 <v-text-field
                   v-model="editingItem.name"
                   label="Name"
-                  required
                   box
                   color="blue"
                   hint="The name of the metric."

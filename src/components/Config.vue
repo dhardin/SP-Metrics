@@ -27,7 +27,6 @@
           <v-text-field
             v-model="config.listName"
             label="List Name"
-            required
             box
             color="blue"
             hint="The list where data will be pulled in order to generate metrics. This should be the display name of the list, not the internal name."
@@ -43,7 +42,6 @@
             color="blue"
             hint="URL of the site where the list is stored"
             persistent-hint
-            required
             :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
@@ -55,7 +53,6 @@
             color="blue"
             hint="The field name which will be used to generate metrics on. This should be the internal name of the field, not display name."
             persistent-hint
-            required
             :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
@@ -134,7 +131,6 @@
                   color="blue"
                   hint="The list view for the filter to be applied to"
                   persistent-hint
-                  required
                   :disabled="isSaving || isLoading"
                 ></v-text-field>
                 <v-radio-group
