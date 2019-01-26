@@ -615,6 +615,10 @@ export default {
   overflow-wrap: break-word;
 }
 
+.list-item .item-title:hover {
+  text-decoration: none;
+}
+
 .list-move {
   transition: transform 0.2s;
 }
