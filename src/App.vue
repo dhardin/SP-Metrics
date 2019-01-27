@@ -346,8 +346,7 @@ export default {
       //If we find the correct class, this app is in a web part.
       var parentEl;
       try {
-        parentEl = this.$root.$el.parentElement.parentElement.parentElement
-          .parentElement;
+        parentEl = this.$root.$el.parentElement.parentElement.parentElement;
       } catch (error) {
         parentEl = this.$root.$el.parentElement;
       }
