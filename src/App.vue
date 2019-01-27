@@ -344,7 +344,13 @@ export default {
     checkForWebPart: function() {
       //if this app is placed into a web part, there is two parent elements until the parent with the webpart ID.
       //If we find the correct class, this app is in a web part.
-      var parentEl = this.$root.$el.parentElement.parentElement;
+      var parentEl;
+      try {
+        parentEl = this.$root.$el.parentElement.parentElement.parentElement
+          .parentElement;
+      } catch (error) {
+        parentEl = this.$root.$el.parentElement;
+      }
       this.isInWebPart =
         parentEl.className.indexOf("ms-wpContentDivSpace") > -1;
       if (this.isInWebPart) {

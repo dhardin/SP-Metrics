@@ -51,10 +51,14 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 | openInNewWindow    | Yes/No                 |
 
 
-3. On a page you wish to display metrics on, copy and paste the following script into a content editor webpart (make the url relative to your site collection):
+3. On a page you wish to display metrics on, copy and paste the following script into a script editor webpart (make the url relative to your site collection):
 ``` javascript
 <script src="absolute-url-to-dist-folder/chunk-vendors.js"></script>
 <script src="absolute-url-to-dist-folder/app.js"></script>
-<div id="app"></div>
+<div class="sp-metrics"></div>
 ```
-4. When the page is in edit mode, you'll be able to configure the tool.
+4. Additional metrics may be added to the page but they must be added to a separate Script Editor Web Part.
+``` javascript
+<div class="sp-metrics"></div>
+```
+5. When the page is in edit mode, you'll be able to configure the tool.
