@@ -132,7 +132,7 @@ export default {
           window.location.pathname +
           "')" +
           (this.isInWebPart
-            ? " and startswith(webPartId, " + this.webPartId + ")"
+            ? " and startswith(webPartId, '" + this.webPartId + "')"
             : "") +
           ")",
         method: "get",
