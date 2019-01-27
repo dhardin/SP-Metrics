@@ -8,8 +8,11 @@ import store from './store'
 Vue.config.productionTip = false
 
 Vue.use(Vuetify);
-
-new Vue({
-  store,
-  render: h => h(App)
-}).$mount('.sp-metrics')
+let elements = document.getElementsByClassName('sp-metrics');
+for (let el of elements) {
+  new Vue({
+    el: el,
+    store,
+    render: h => h(App)
+  })//.$mount('.sp-metrics');
+}
