@@ -12,4 +12,4 @@ Vue.use(Vuetify);
 new Vue({
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('.sp-metrics')

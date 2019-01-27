@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="sp-metrics">
     <v-app>
       <v-layout>
         <v-flex xs10 py-3 offset-sm1>
