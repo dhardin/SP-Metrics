@@ -10,6 +10,8 @@
             :is-loading="state_map.loading.isLoading"
             :site-url="siteUrl"
             :config-list-name="configListName"
+            :web-part-id="webPartId"
+            :is-in-web-part="isInWebPart"
           ></Config>
 
           <v-card class="pa-5" v-if="state_map.loading.isLoading && !isEditing">
@@ -63,6 +65,8 @@ export default {
   mixins: [Data],
   data: function() {
     return {
+      isInWebPart: false,
+      webPartId: "",
       configListName: "MetricsConfig",
       siteUrl: "",
       isEditing: false,
@@ -336,6 +340,16 @@ export default {
             });
           });
       })(this);
+    },
+    checkForWebPart: function() {
+      //if this app is placed into a web part, there is two parent elements until the parent with the webpart ID.
+      //If we find the correct class, this app is in a web part.
+      var parentEl = this.$root.$el.parentElement.parentElement;
+      this.isInWebPart =
+        parentEl.className.indexOf("ms-wpContentDivSpace") > -1;
+      if (this.isInWebPart) {
+        this.webPartId = parentEl.getAttribute("webpartid");
+      }
     }
   },
   mounted: function() {
@@ -344,6 +358,7 @@ export default {
   },
   created: function() {
     this.checkEditMode();
+    this.checkForWebPart();
     this.getData();
   }
 };

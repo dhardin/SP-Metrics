@@ -326,6 +326,18 @@ export default {
   },
   mixins: [Data],
   props: {
+    isInWebPart: {
+      type: Boolean,
+      default: function() {
+        return false;
+      }
+    },
+    webPartId: {
+      type: String,
+      default: function() {
+        return "";
+      }
+    },
     siteUrl: {
       type: String,
       default: function() {
@@ -394,8 +406,6 @@ export default {
       columnWidthItems: [1, 2, 3, 4, 6, 12],
       isSaving: false,
       isColumnWidthSelected: false,
-      isInWebPart: false,
-      webPartId: null,
       config: {
         ID: 0,
         minColumnWidth: 3,
@@ -464,15 +474,7 @@ export default {
       })(this);
     }
   },
-  created: function() {
-    //if this app is placed into a web part, there is two parent elements until the parent with the webpart ID.
-    //If we find the correct class, this app is in a web part.
-    var parentEl = this.$root.$el.parentElement.parentElement;
-    this.isInWebPart = parentEl.className.indexOf("ms-wpContentDivSpace") > -1;
-    if (this.isInWebPart) {
-      this.webPartId = parentEl.getAttribute("webpartid");
-    }
-  }
+  created: function() {}
 };
 </script>
 

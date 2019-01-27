@@ -130,7 +130,11 @@ export default {
           this.siteUrl +
           "/_api/web/lists/GetByTitle('MetricsConfig')/Items?$filter=(startswith(Title,'" +
           window.location.pathname +
-          "'))",
+          "')" +
+          (this.isInWebPart
+            ? " and startswith(webPartId, " + this.webPartId + ")"
+            : "") +
+          ")",
         method: "get",
         headers: {
           accept: "application/json;odata=verbose",
@@ -162,6 +166,9 @@ export default {
       var data = {
         Title: window.location.pathname
       };
+      if (this.isInWebPart) {
+        data.webPartId = this.webPartId;
+      }
       var headers = {
         accept: "application/json;odata=verbose",
         "X-RequestDigest": digest,
