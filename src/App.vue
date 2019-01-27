@@ -29,6 +29,8 @@
             :field-map="initFieldMap"
             readonly
             :initialItems="config.metrics"
+            :web-part-id="webPartId"
+            :is-in-web-part="isInWebPart"
             v-if="!isEditing && !state_map.loading.isLoading && config.metrics.length > 0"
           ></EditableBlockList>
           <v-card
