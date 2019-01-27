@@ -352,8 +352,7 @@ export default {
       } catch (error) {
         parentEl = this.$root.$el.parentElement;
       }
-      this.isInWebPart =
-        parentEl.className.indexOf("ms-wpContentDivSpace") > -1;
+      this.isInWebPart = parentEl.hasAttribute("webpartid");
       if (this.isInWebPart) {
         this.webPartId = parentEl.getAttribute("webpartid");
       }
