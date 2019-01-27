@@ -3,6 +3,8 @@
     <v-card-title>
       <span class="headline">Metrics Configuration</span>
       <v-spacer :style="{'text-align': 'right'}">
+        <v-chip label color="grey" text-color="white" v-if="isInWebPart">{{webPartId}}</v-chip>
+        <v-chip v-else>No Web Part Detected</v-chip>
         <v-chip
           label
           color="green"
@@ -392,6 +394,8 @@ export default {
       columnWidthItems: [1, 2, 3, 4, 6, 12],
       isSaving: false,
       isColumnWidthSelected: false,
+      isInWebPart: false,
+      webPartId: null,
       config: {
         ID: 0,
         minColumnWidth: 3,
@@ -458,6 +462,15 @@ export default {
             }, 2000);
           });
       })(this);
+    }
+  },
+  created: function() {
+    //if this app is placed into a web part, there is two parent elements until the parent with the webpart ID.
+    //If we find the correct class, this app is in a web part.
+    var parentEl = this.$root.$el.parentElement.parentElement;
+    this.isInWebPart = parentEl.className.indexOf("ms-wpContentDivSpace") > -1;
+    if (this.isInWebPart) {
+      this.webPartId = parentEl.getAttribute("webpartid");
     }
   }
 };
