@@ -227,7 +227,12 @@
                               px-2
                             >
                               <v-container fill-height grid-list-md text-xs-center>
-                                <v-layout column align-center justify-center>
+                                <v-layout
+                                  column
+                                  align-center
+                                  justify-center
+                                  :style="{display: 'block'}"
+                                >
                                   <v-spacer></v-spacer>
                                   <v-flex
                                     class="item-title"
@@ -613,6 +618,8 @@ export default {
 .list-item .item-title {
   font-size: 20px;
   overflow-wrap: break-word;
+  /*IE fix for wrapping text*/
+  display: block;
 }
 
 .list-item:hover {
