@@ -8,6 +8,7 @@
       :disabled="disabled"
       :light="disabled"
       :dark="!disabled"
+      :ripple="false"
     >
       <AddIcon class="icon"></AddIcon>Add
     </v-btn>
@@ -57,6 +58,7 @@
                 dark
                 fab
                 class="xs-btn"
+                :ripple="false"
               >
                 <transition name="fade" mode="out-in">>
                   <AppsIcon class="icon" v-if="!item.fab"></AppsIcon>
@@ -70,15 +72,30 @@
                 color="green"
                 class="small-btn"
                 @click.native.stop="item.fab=false; Object.assign(editingItem, item); dialog=true;"
+                :ripple="false"
               >
                 <EditIcon class="icon"></EditIcon>
               </v-btn>
 
-              <v-btn fab dark color="purple" @click="toggleVisible(item)" class="small-btn">
+              <v-btn
+                fab
+                dark
+                color="purple"
+                @click="toggleVisible(item)"
+                class="small-btn"
+                :ripple="false"
+              >
                 <VisibilityIcon class="icon" v-if="!item.isVisible"></VisibilityIcon>
                 <VisibilityOffIcon class="icon" v-else></VisibilityOffIcon>
               </v-btn>
-              <v-btn fab dark color="red" @click="deleteItem(item)" class="small-btn">
+              <v-btn
+                fab
+                dark
+                color="red"
+                @click="deleteItem(item)"
+                class="small-btn"
+                :ripple="false"
+              >
                 <DeleteIcon class="icon"></DeleteIcon>
               </v-btn>
             </v-speed-dial>
@@ -107,6 +124,7 @@
                       color="blue"
                       block
                       class="move-btn"
+                      :ripple="false"
                     >
                       <LeftArrowIcon class="icon" :class="{'small-icon': columnWidth == 1}"></LeftArrowIcon>
                     </v-btn>
@@ -121,6 +139,7 @@
                       color="blue"
                       block
                       class="move-btn"
+                      :ripple="false"
                     >
                       <RightArrowIcon class="icon" :class="{'small-icon': columnWidth == 1}"></RightArrowIcon>
                     </v-btn>
@@ -248,8 +267,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat color="red" @click="dialog = false">Cancel</v-btn>
-          <v-btn flat color="blue" @click="saveItem">Save</v-btn>
+          <v-btn flat color="red" @click="dialog = false" :ripple="false">Cancel</v-btn>
+          <v-btn flat color="blue" @click="saveItem" :ripple="false">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

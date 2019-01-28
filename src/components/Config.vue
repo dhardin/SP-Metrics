@@ -4,7 +4,7 @@
       <span class="headline">Metrics Configuration</span>
       <v-spacer :style="{'text-align': 'right'}">
         <v-chip label color="grey" text-color="white" v-if="isInWebPart">{{webPartId}}</v-chip>
-        <v-chip v-else>No Web Part Detected</v-chip>
+        <v-chip label v-else>No Web Part Detected</v-chip>
         <v-chip
           label
           color="green"
