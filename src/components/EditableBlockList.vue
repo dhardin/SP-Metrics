@@ -86,17 +86,14 @@
 
             <v-container grid-list-md text-xs-center :style="{position: 'relative'}">
               <v-layout column align-center justify-end>
-                <v-spacer></v-spacer>
                 <v-flex
                   class="item-title"
                   :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
                 >{{ item.count }}</v-flex>
-                <v-flex>
-                  <v-subheader
-                    class="item-title"
-                    :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
-                  >{{ item.name }}</v-subheader>
-                </v-flex>
+                <v-flex
+                  class="item-title"
+                  :style="{'font-size': item.fontSize + 'px', 'font-weight': fontWeightValues[item.fontWeight],'color': getRgbaString(item.color.rgba)}"
+                >{{ item.name }}</v-flex>
               </v-layout>
               <v-layout
                 row
@@ -217,7 +214,8 @@
                     </v-flex>
                     <v-flex xs4 px-2>
                       <h2 class="font-weight-thin">Preview</h2>
-                      <v-container>
+
+                      <v-container grid-list-md text-xs-center>
                         <v-layout align-center justify-center>
                           <v-flex :class="previewClasses">
                             <v-card
@@ -226,24 +224,16 @@
                               :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba)}"
                               px-2
                             >
-                              <v-container fill-height grid-list-md text-xs-center>
-                                <v-layout
-                                  column
-                                  align-center
-                                  justify-center
-                                  :style="{display: 'block'}"
-                                >
-                                  <v-spacer></v-spacer>
+                              <v-container grid-list-md text-xs-center>
+                                <v-layout column align-center justify-center>
                                   <v-flex
                                     class="item-title"
                                     :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
                                   >{{ editingItem.count }}</v-flex>
-                                  <v-flex>
-                                    <v-subheader
-                                      class="item-title"
-                                      :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
-                                    >{{ editingItem.name }}</v-subheader>
-                                  </v-flex>
+                                  <v-flex
+                                    class="item-title"
+                                    :style="{'font-size': editingItem.fontSize + 'px', 'font-weight': fontWeightValues[editingItem.fontWeight], 'color': getRgbaString(editingItem.color.rgba)}"
+                                  >{{ editingItem.name }}</v-flex>
                                 </v-layout>
                               </v-container>
                             </v-card>
@@ -619,7 +609,7 @@ export default {
   font-size: 20px;
   overflow-wrap: break-word;
   /*IE fix for wrapping text*/
-  display: block;
+  /*display: block;*/
 }
 
 .list-item:hover {

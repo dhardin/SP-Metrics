@@ -346,13 +346,17 @@ export default {
     checkForWebPart: function() {
       //if this app is placed into a web part, there is two parent elements until the parent with the webpart ID.
       //If we find the correct class, this app is in a web part.
-      var parentEl;
-      try {
-        parentEl = this.$root.$el.parentElement.parentElement.parentElement;
-      } catch (error) {
-        parentEl = this.$root.$el.parentElement;
+      var parentEl = this.$root.$el;
+      var i;
+      const maxNumParents = 3; //in Script Editor Web Part, it's this many parents until you can get the web part id
+      for (i = 0; i < maxNumParents; i++) {
+        parentEl = parentEl.parentElement;
+        this.isInWebPart =
+          parentEl != null && parentEl.hasAttribute("webpartid");
+        if (this.isInWebPart || parentEl == null) {
+          break;
+        }
       }
-      this.isInWebPart = parentEl.hasAttribute("webpartid");
       if (this.isInWebPart) {
         this.webPartId = parentEl.getAttribute("webpartid");
       }
