@@ -58,11 +58,10 @@
             :disabled="isSaving || isLoading"
           ></v-text-field>
         </v-flex>
-        <v-flex xs6 :style="{position: 'relative'}" id="column-width">
+        <v-flex xs6 :style="{position: 'relative'}">
           <v-select
             v-model="config.minColumnWidth"
             :items="columnWidthItems"
-            ref="columnWidth"
             box
             color="blue"
             label="Column Width"
@@ -74,6 +73,7 @@
             :hint="columnWidthHint"
             persistent-hint
             :disabled="isSaving || isLoading"
+            :style="{position: 'absolute', top: '0px'}"
           ></v-select>
           <dropdownIcon
             class="dropdown"
