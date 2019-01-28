@@ -283,6 +283,7 @@
         @click="save"
         light
         large
+        :ripple="false"
       >
         <span slot="loader">
           <v-layout row wrap>
