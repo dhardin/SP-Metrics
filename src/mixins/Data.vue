@@ -205,7 +205,7 @@ export default {
           this.config.siteUrl +
           "/_api/web/lists/GetByTitle('" +
           this.config.listName +
-          "')/Fields?$filter=Hidden eq false and ReadOnlyField eq false",
+          "')/Fields?$filter=Hidden eq false",
         method: "get",
         headers: {
           accept: "application/json;odata=verbose",
