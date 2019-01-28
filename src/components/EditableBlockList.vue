@@ -44,7 +44,6 @@
               :right="right"
               :left="left"
               :direction="direction"
-              :open-on-hover="hover"
               absolute
               :style="{top: '24px'}"
               class="speed-dial"
