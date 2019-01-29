@@ -15,14 +15,12 @@
             @config-saved="getMetricData"
           ></Config>
 
-          <v-card class="pa-5" v-if="">
-                  <v-layout row wrap align-center justify-center>
-            
-                    <LoadingIcon class="large-icon loading-icon"></LoadingIcon>
-                  
-           <h1 id="loading-title" class="font-weight-thin">Loading</h1>
-        </v-layout>
-            
+          <v-card class="pa-5" v-if="stat_map.loading.isLoading && !isEditing">
+            <v-layout row wrap align-center justify-center>
+              <LoadingIcon class="large-icon loading-icon"></LoadingIcon>
+
+              <h1 id="loading-title" class="font-weight-thin">Loading</h1>
+            </v-layout>
           </v-card>
           <EditableBlockList
             :config="config"
@@ -417,6 +415,7 @@ export default {
   text-transform: uppercase;
   font-family: Roboto, sans-serif;
   display: inline-block;
+  margin: 0 !important;
 }
 
 @-moz-keyframes spin {

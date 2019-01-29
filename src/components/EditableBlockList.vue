@@ -241,7 +241,7 @@
                               :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba)}"
                               px-2
                             >
-                              <v-container grid-list-md text-xs-center class="pa-5">
+                              <v-container grid-list-md text-xs-center :style="{padding: '5px'}">
                                 <v-layout column align-center justify-center>
                                   <v-flex
                                     class="item-title"
