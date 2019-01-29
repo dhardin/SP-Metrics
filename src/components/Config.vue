@@ -472,7 +472,9 @@ export default {
                 digest,
                 function(result) {
                   that.isConfigDataLoaded = true;
-                  that.config.ID = result.Id;
+                  if (result.hasOwnProperty("ID")) {
+                    that.config.ID = result.ID;
+                  }
                   console.log(result);
                   that.$emit("config-saved", result);
                   console.log(
