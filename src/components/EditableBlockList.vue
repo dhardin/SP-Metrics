@@ -14,7 +14,7 @@
     </v-btn>
     <v-container grid-list-md text-xs-center box>
       <transition-group
-        name="list"
+        :name="transition ? 'list' : ''"
         :appear="transition ? true : false"
         tag="div"
         class="layout row wrap justify-center align-space-around"
