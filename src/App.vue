@@ -181,6 +181,7 @@ export default {
       var isLookupField = displayMap.hasOwnProperty("LookupField");
       var lookupFieldName = isLookupField ? displayMap.LookupField : "";
       var name;
+      var metrics = [];
       for (i = 0; i < data.length; i++) {
         name = !isLookupField
           ? data[i][staticName]
@@ -207,11 +208,12 @@ export default {
         if (this.metricsMap[key].isProcessed) {
           continue;
         }
-        this.config.metrics.push({
+        metrics.push({
           name: key,
           count: this.metricsMap[key].count
         });
       }
+      this.config.metrics = Object.assign([], this.config.metrics, metrics);
     },
     initConfig: function(data) {
       if (data.length > 0) {
