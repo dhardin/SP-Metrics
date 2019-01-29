@@ -1,5 +1,5 @@
 <template>
-  <v-btn class="radio-button" flat @click="toggleChecked" :disabled="disabled">
+  <v-btn class="radio-button" flat @click="toggleChecked" :disabled="disabled" :ripple="false">
     <radioButtonChecked class="checkbox-icon" :class="{hidden: checked == false}"/>
     <radioButtonUnchecked class="checkbox-icon" :class="{hidden: checked == true}"/>
     <span class="font-weight-thin subheading">

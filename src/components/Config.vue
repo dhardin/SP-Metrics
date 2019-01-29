@@ -72,6 +72,7 @@
             @blur="isColumnWidthSelected = false"
             :hint="columnWidthHint"
             persistent-hint
+            :ripple="false"
             :disabled="isSaving || isLoading"
             :style="{position: 'absolute', top: '0px'}"
           ></v-select>
@@ -80,28 +81,6 @@
             :class="{active: isColumnWidthSelected, inactive: !isColumnWidthSelected}"
           />
         </v-flex>
-        <!-- <v-flex xs6>
-          <v-radio-group
-            v-model="config.hasDynamicWidth"
-            row
-            :disabled="isSaving || isLoading"
-            color="#f00"
-            label="Dynamic Width"
-            hint="Dynamic Width will procedurally select an appropriate width for column widths if remaining columns in the row do not evenly fill up leftover space."
-            persistent-hint
-          >
-            <Radio
-              :disabled="isSaving || isLoading"
-              @toggle-checked="config.hasDynamicWidth = true"
-              :isChecked="config.hasDynamicWidth == true"
-            >Yes</Radio>
-            <Radio
-              :disabled="isSaving || isLoading"
-              @toggle-checked="config.hasDynamicWidth = false"
-              :isChecked="config.hasDynamicWidth == false"
-            >No</Radio>
-          </v-radio-group>
-        </v-flex>-->
         <v-flex xs6>
           <v-radio-group
             v-model="config.hasFiltering"
