@@ -15,7 +15,7 @@
             @config-saved="getMetricData"
           ></Config>
 
-          <v-card class="pa-5" v-if="stat_map.loading.isLoading && !isEditing">
+          <v-card class="pa-5" v-if="state_map.loading.isLoading && !isEditing">
             <v-layout row wrap align-center justify-center>
               <LoadingIcon class="large-icon loading-icon"></LoadingIcon>
 
