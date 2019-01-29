@@ -55,9 +55,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ``` javascript
 <script src="absolute-url-to-dist-folder/chunk-vendors.js"></script>
 <script src="absolute-url-to-dist-folder/app.js"></script>
-<div class="sp-metrics"></div>
 ```
-4. Additional metrics may be added to the page but they must be added to a separate Script Editor Web Part.
+**Note:** These scripts must be placed in a Script Editor Web Part at the bottom of the page in order to work properly.
+
+4. Metrics may be added to the page but they must be added to a separate Script Editor Web Part.
 ``` javascript
 <div class="sp-metrics"></div>
 ```
