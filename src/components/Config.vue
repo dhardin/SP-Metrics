@@ -264,6 +264,7 @@
           <EditableBlockList
             :config="config"
             :field-map="fieldMap"
+            :transition="false"
             :column-width="config.minColumnWidth"
             @update="updateMetrics"
             :disabled="isLoading || isSaving"
@@ -273,27 +274,46 @@
       </v-layout>
     </v-container>
     <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        outline
-        color="blue"
-        :loading="isSaving"
-        :disabled="isSaving || config.listName.length == 0"
-        @click="save"
-        light
-        large
-        :ripple="false"
-      >
-        <span slot="loader">
-          <v-layout row wrap>
-            <v-flex>
-              <LoadingIcon class="small-icon loading-icon" v-if="isSaving"></LoadingIcon>
-            </v-flex>
-            <v-flex>Save</v-flex>
-          </v-layout>
-        </span>Save
-      </v-btn>
+      <v-container grid-list-md fluid>
+        <v-layout row wrap>
+          <v-flex xs12 class="text-xs-right">
+            <v-btn
+              flat
+              outline
+              color="blue"
+              :loading="isSaving"
+              :disabled="isSaving || config.listName.length == 0"
+              @click="save"
+              light
+              large
+              :ripple="false"
+            >
+              <span slot="loader">
+                <v-layout row wrap>
+                  <v-flex>
+                    <LoadingIcon class="small-icon loading-icon" v-if="isSaving"></LoadingIcon>
+                  </v-flex>
+                  <v-flex>Save</v-flex>
+                </v-layout>
+              </span>Save
+            </v-btn>
+          </v-flex>
+          <v-flex xs12>
+            <transition name="slide-down">
+              <v-alert :value="true" color="error" v-if="hasError" class="text-xs-left">
+                <v-subheader
+                  class="text-xs-left font-weight-bold"
+                  :style="{color:'rgba(255,255,255,0.8)'}"
+                >
+                  <ErrorIcon></ErrorIcon>
+                  {{error.message}}
+                </v-subheader>
+                <v-subheader class="text-xs-left">{{error.stack}}</v-subheader>
+              </v-alert>
+            </transition>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </v-card-actions>
   </v-card>
 </template>
@@ -310,6 +330,7 @@ import DeleteIcon from "@/assets/svg-sprite-action-symbol.svg?ic_delete_24px";
 import VisibilityIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_24px";
 import VisibilityOffIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_off_24px";
 import LoadingIcon from "@/assets/svg-sprite-action-symbol.svg?ic_cached_24px";
+import ErrorIcon from "@/assets/svg-sprite-alert-symbol.svg?ic_error_outline_24px";
 import Data from "../mixins/Data";
 export default {
   components: {
@@ -320,6 +341,7 @@ export default {
     LeftArrowIcon: LeftArrowIcon,
     RightArrowIcon: RightArrowIcon,
     EditIcon: EditIcon,
+    ErrorIcon: ErrorIcon,
     DeleteIcon: DeleteIcon,
     VisibilityIcon: VisibilityIcon,
     VisibilityOffIcon: VisibilityOffIcon,
@@ -407,6 +429,8 @@ export default {
       columnWidthItems: [1, 2, 3, 4, 6, 12],
       isSaving: false,
       isColumnWidthSelected: false,
+      hasError: false,
+      error: null,
       config: {
         ID: 0,
         minColumnWidth: 3,
@@ -439,6 +463,8 @@ export default {
     },
     save: function() {
       this.isSaving = true;
+      this.hasError = false;
+      this.error = null;
       (function(that) {
         new Promise(function(resolve, reject) {
           that.getDigest(
@@ -446,6 +472,9 @@ export default {
               resolve(digest);
             },
             function(error) {
+              that.hasError = true;
+              that.error = error;
+              console.log(error);
               reject(error);
             }
           );
@@ -455,9 +484,12 @@ export default {
               that.saveConfigData(
                 digest,
                 function(result) {
+                  that.$emit("config-saved");
                   resolve(result);
                 },
                 function(error) {
+                  that.hasError = true;
+                  that.error = error;
                   reject(error);
                 }
               );
@@ -467,10 +499,10 @@ export default {
             that.isSaving = false;
           })
           .catch(function(error) {
-            setTimeout(function() {
-              that.isSaving = false;
-              console.log(error);
-            }, 2000);
+            that.isSaving = false;
+            that.hasError = true;
+            that.error = error;
+            console.log(error);
           });
       })(this);
     }

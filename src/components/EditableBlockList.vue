@@ -15,7 +15,7 @@
     <v-container grid-list-md text-xs-center box>
       <transition-group
         name="list"
-        appear
+        :appear="transition ? true : false"
         tag="div"
         class="layout row wrap justify-center align-space-around"
       >
@@ -308,6 +308,12 @@ export default {
       type: Number,
       default: function() {
         return 3;
+      }
+    },
+    transition: {
+      type: Boolean,
+      default: function() {
+        return true;
       }
     },
     fieldMap: {
