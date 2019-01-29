@@ -183,7 +183,7 @@ export default {
       var name;
       var metrics = [];
       this.metricsMap = {};
-      this.config.metrics = [];
+      //this.config.metrics = [];
       for (i = 0; i < data.length; i++) {
         name = !isLookupField
           ? data[i][staticName]
@@ -195,6 +195,7 @@ export default {
         this.metricsMap[name].count++;
       }
       var key;
+      //iterate through existing metrics and update counts based on map
       for (i = 0; i < this.config.metrics.length; i++) {
         if (!this.metricsMap.hasOwnProperty(this.config.metrics[i].name)) {
           continue;

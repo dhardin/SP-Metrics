@@ -26,7 +26,7 @@
             style="position: relative"
             :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', height: '100%', 'min-height': readonly ? 'initial' : '100px'}"
             @mouseover="item.isHoveringOver = true"
-            @mouseleave="item.isHoveringOver = false"
+            @mouseleave="item.isHoveringOver = false; item.fab = false;"
           >
             <transition name="fade">
               <span
@@ -37,68 +37,69 @@
                 <VisibilityOffIcon class="icon" :style="{fill: item.color.hex}"></VisibilityOffIcon>
               </span>
             </transition>
-            <v-speed-dial
-              v-model="item.fab"
-              :top="top"
-              :bottom="bottom"
-              :right="right"
-              :left="left"
-              :direction="direction"
-              absolute
-              :style="{top: '24px'}"
-              class="speed-dial"
-              v-if="!readonly"
-              :disabled="disabled"
-            >
-              <v-btn
-                slot="activator"
+            <transition name="fade">
+              <v-speed-dial
                 v-model="item.fab"
-                color="blue darken-2"
-                dark
-                fab
-                class="xs-btn"
-                :ripple="false"
+                :top="top"
+                :bottom="bottom"
+                :right="right"
+                :left="left"
+                :direction="direction"
+                absolute
+                :style="{top: '24px'}"
+                class="speed-dial"
+                v-if="!readonly &&  item.isHoveringOver"
+                :disabled="disabled"
               >
-                <transition name="fade" mode="out-in">>
-                  <AppsIcon class="icon" v-if="!item.fab"></AppsIcon>
-                  <CloseIcon class="icon" v-else></CloseIcon>
-                </transition>
-              </v-btn>
+                <v-btn
+                  slot="activator"
+                  v-model="item.fab"
+                  color="blue darken-2"
+                  dark
+                  fab
+                  class="xs-btn"
+                  :ripple="false"
+                >
+                  <transition name="fade" mode="out-in">
+                    <AppsIcon class="icon" v-if="!item.fab"></AppsIcon>
+                    <CloseIcon class="icon" v-else></CloseIcon>
+                  </transition>
+                </v-btn>
 
-              <v-btn
-                fab
-                dark
-                color="green"
-                class="small-btn"
-                @click.native.stop="item.fab=false; Object.assign(editingItem, item); dialog=true;"
-                :ripple="false"
-              >
-                <EditIcon class="icon"></EditIcon>
-              </v-btn>
+                <v-btn
+                  fab
+                  dark
+                  color="green"
+                  class="small-btn"
+                  @click.native.stop="item.fab=false; Object.assign(editingItem, item); dialog=true;"
+                  :ripple="false"
+                >
+                  <EditIcon class="icon"></EditIcon>
+                </v-btn>
 
-              <v-btn
-                fab
-                dark
-                color="purple"
-                @click="toggleVisible(item)"
-                class="small-btn"
-                :ripple="false"
-              >
-                <VisibilityIcon class="icon" v-if="!item.isVisible"></VisibilityIcon>
-                <VisibilityOffIcon class="icon" v-else></VisibilityOffIcon>
-              </v-btn>
-              <v-btn
-                fab
-                dark
-                color="red"
-                @click="deleteItem(item)"
-                class="small-btn"
-                :ripple="false"
-              >
-                <DeleteIcon class="icon"></DeleteIcon>
-              </v-btn>
-            </v-speed-dial>
-
+                <v-btn
+                  fab
+                  dark
+                  color="purple"
+                  @click="toggleVisible(item)"
+                  class="small-btn"
+                  :ripple="false"
+                >
+                  <VisibilityIcon class="icon" v-if="!item.isVisible"></VisibilityIcon>
+                  <VisibilityOffIcon class="icon" v-else></VisibilityOffIcon>
+                </v-btn>
+                <v-btn
+                  fab
+                  dark
+                  color="red"
+                  @click="deleteItem(item)"
+                  class="small-btn"
+                  :ripple="false"
+                >
+                  <DeleteIcon class="icon"></DeleteIcon>
+                </v-btn>
+              </v-speed-dial>
+            </transition>
             <v-container
               grid-list-md
               text-xs-center

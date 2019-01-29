@@ -388,10 +388,12 @@ export default {
     },
     initConfig: {
       handler: function(newVal) {
+        if (!this.isConfigDataLoaded) {
+          this.config = Object.assign({}, this.config, newVal);
+        }
         if (newVal.ID > 0) {
           this.isConfigDataLoaded = true;
         }
-        this.config = Object.assign({}, this.config, newVal);
         this.config.metrics = Object.assign(
           [],
           this.config.metrics,
@@ -465,6 +467,7 @@ export default {
               that.saveConfigData(
                 digest,
                 function(result) {
+                  that.isConfigDataLoaded = true;
                   that.$emit("config-saved");
                   resolve(result);
                 },
