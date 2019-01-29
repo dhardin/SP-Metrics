@@ -182,6 +182,8 @@ export default {
       var lookupFieldName = isLookupField ? displayMap.LookupField : "";
       var name;
       var metrics = [];
+      this.metricsMap = {};
+      this.config.metrics = [];
       for (i = 0; i < data.length; i++) {
         name = !isLookupField
           ? data[i][staticName]
