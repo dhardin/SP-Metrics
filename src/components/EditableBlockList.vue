@@ -241,7 +241,7 @@
                               :style="{'background-color': getRgbaString(editingItem.backgroundColor.rgba)}"
                               px-2
                             >
-                              <v-container grid-list-md text-xs-center>
+                              <v-container grid-list-md text-xs-center class="pa-5">
                                 <v-layout column align-center justify-center>
                                   <v-flex
                                     class="item-title"
@@ -620,7 +620,6 @@ export default {
 }
 .list-item {
   width: 100%;
-  min-height: 100px;
   display: inline-block;
   margin: 10px;
 }
