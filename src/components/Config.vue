@@ -464,11 +464,21 @@ export default {
         })
           .then(function(digest) {
             return new Promise(function(resolve, reject) {
+              console.log(
+                "populate metrics -- pre-save: ",
+                that.config.metrics
+              );
               that.saveConfigData(
                 digest,
                 function(result) {
                   that.isConfigDataLoaded = true;
-                  that.$emit("config-saved");
+                  that.config.ID = result.Id;
+                  console.log(result);
+                  that.$emit("config-saved", result);
+                  console.log(
+                    "populate metrics -- post-save: ",
+                    that.config.metrics
+                  );
                   resolve(result);
                 },
                 function(error) {
