@@ -12,7 +12,7 @@
             :config-list-name="configListName"
             :web-part-id="webPartId"
             :is-in-web-part="isInWebPart"
-            @config-saved="getMetricData"
+            @config-saved="getMetrics"
           ></Config>
 
           <v-card class="pa-5" v-if="state_map.loading.isLoading && !isEditing">
@@ -177,14 +177,19 @@ export default {
       var i;
       var staticName = this.state_map.fields.displayMap[this.config.fieldName]
         .StaticName;
+      var displayMap = this.state_map.fields.displayMap[this.config.fieldName];
+      var isLookupField = displayMap.hasOwnProperty("LookupField");
+      var lookupFieldName = isLookupField ? displayMap.LookupField : "";
+      var name;
       for (i = 0; i < data.length; i++) {
-        this.metricsMap[data[i][staticName]] = this.metricsMap[
-          data[i][staticName]
-        ] || {
-          name: data[i][staticName],
+        name = !isLookupField
+          ? data[i][staticName]
+          : data[i][staticName][lookupFieldName];
+        this.metricsMap[name] = this.metricsMap[name] || {
+          name: name,
           count: 0
         };
-        this.metricsMap[data[i][staticName]].count++;
+        this.metricsMap[name].count++;
       }
       var key;
       for (i = 0; i < this.config.metrics.length; i++) {
@@ -290,19 +295,11 @@ export default {
               if (that.config.ID > 0 && !that.config.hasFilterDetection) {
                 //we'll want to wait on filters to be generated from out filter component first if they're needed
                 //this way we avoid more web service calls.
-                that.getMetricData(
-                  function(data) {
-                    that.populateMetrics(data);
+                that.getMetrics(
+                  function() {
                     resolve();
                   },
-                  function(error) {
-                    that.toggleLoading({
-                      isLoading: false,
-                      message: error.message,
-                      canCancel: false,
-                      canClose: true
-                    });
-                  }
+                  function() {}
                 );
               } else if (that.testing) {
                 that.populateMetrics([]);
@@ -340,6 +337,29 @@ export default {
               canClose: false
             });
           });
+      })(this);
+    },
+    getMetrics: function(successFunc, errorFunc) {
+      (function(that) {
+        that.getMetricData(
+          function(data) {
+            that.populateMetrics(data);
+            if (successFunc) {
+              successFunc();
+            }
+          },
+          function(error) {
+            that.toggleLoading({
+              isLoading: false,
+              message: error.message,
+              canCancel: false,
+              canClose: true
+            });
+            if (errorFunc) {
+              errorFunc(error);
+            }
+          }
+        );
       })(this);
     },
     checkForWebPart: function() {
