@@ -2,7 +2,7 @@
   <div class="sp-metrics">
     <v-app>
       <v-layout>
-        <v-flex xs10 py-3 offset-sm1>
+        <v-flex>
           <Config
             v-if="isEditing"
             :init-config="config"
@@ -26,6 +26,7 @@
             :config="config"
             :field-map="initFieldMap"
             readonly
+            :column-width="config.minColumnWidth"
             :initialItems="config.metrics"
             :web-part-id="webPartId"
             :is-in-web-part="isInWebPart"

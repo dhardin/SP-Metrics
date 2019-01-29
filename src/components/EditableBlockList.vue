@@ -24,7 +24,7 @@
             :target="config.openInNewWindow ? '_blank' : '_top'"
             class="list-item"
             style="position: relative"
-            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', height: '100%'}"
+            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', 'min-height': readonly ? 'initial' : '100px',  'height': readonly ? 'auto' : '100%'}"
             @mouseover="item.isHoveringOver = true"
             @mouseleave="item.isHoveringOver = false"
           >
@@ -99,7 +99,13 @@
               </v-btn>
             </v-speed-dial>
 
-            <v-container grid-list-md text-xs-center :style="{position: 'relative'}">
+            <v-container
+              grid-list-md
+              text-xs-center
+              class="pa-1"
+              :class="{'pb-4': !readonly}"
+              :style="{position: 'relative'}"
+            >
               <v-layout column align-center justify-end>
                 <v-flex
                   class="item-title"
