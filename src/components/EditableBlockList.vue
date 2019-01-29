@@ -24,7 +24,7 @@
             :target="config.openInNewWindow ? '_blank' : '_top'"
             class="list-item"
             style="position: relative"
-            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', 'min-height': readonly ? 'initial' : '100px',  'height': readonly ? 'auto' : '100%'}"
+            :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', 'min-height': readonly ? 'initial' : '100px'}"
             @mouseover="item.isHoveringOver = true"
             @mouseleave="item.isHoveringOver = false"
           >
