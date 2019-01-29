@@ -102,7 +102,7 @@
             <v-container
               grid-list-md
               text-xs-center
-              class="pa-1"
+              class="pa-2"
               :class="{'pb-4': !readonly}"
               :style="{position: 'relative'}"
             >
