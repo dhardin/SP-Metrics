@@ -305,7 +305,9 @@
                   class="text-xs-left font-weight-bold"
                   :style="{color:'rgba(255,255,255,0.8)'}"
                 >
-                  <ErrorIcon></ErrorIcon>
+                  <span class="pr-2">
+                    <ErrorIcon class="icon"></ErrorIcon>
+                  </span>
                   {{error.message}}
                 </v-subheader>
                 <v-subheader class="text-xs-left">{{error.stack}}</v-subheader>
@@ -536,7 +538,11 @@ export default {
 #app a {
   color: #42b983;
 }
-
+.icon {
+  width: 32px;
+  height: 32px;
+  fill: white;
+}
 .small-icon {
   width: 18px;
   height: 18px;
