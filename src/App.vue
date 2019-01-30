@@ -183,7 +183,6 @@ export default {
       var name;
       var metrics = [];
       this.metricsMap = {};
-      console.log("populate metrics -- pre: ", this.config.metrics);
       //this.config.metrics = [];
       for (i = 0; i < data.length; i++) {
         name = !isLookupField
@@ -235,10 +234,8 @@ export default {
           sortOrder: 0,
           isVisible: true
         });
-        console.log("new metric -", metrics[metrics.length - 1]);
       }
       this.config.metrics = Object.assign([], this.config.metrics, metrics);
-      console.log("populate metrics -- post: ", this.config.metrics);
     },
     initConfig: function(data) {
       if (data.length > 0) {
@@ -249,7 +246,6 @@ export default {
       var data_config = _.pick(data, _.keys(this.config));
       this.config = Object.assign({}, this.config, data_config);
       this.config.metrics = Object.assign([], data_config.metrics);
-      console.log("metrics init: ", data_config.metrics);
     },
     getData: function() {
       this.toggleLoading({
