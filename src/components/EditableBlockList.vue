@@ -404,12 +404,6 @@ export default {
     }
   },
   watch: {
-    fieldMap: {
-      handler: function(newVal) {
-        console.log(newVal);
-      },
-      deep: true
-    },
     editingItem: {
       handler: function(newVal) {
         this.$refs.fontWeight.$el.querySelector(
@@ -534,7 +528,8 @@ export default {
         isHoveringOver: false
       };
       var newItem = _.defaults(item, defaults);
-      newItem = newItem.sortOrder > -1 ? newItem.sortOrder : this.items.length;
+      newItem.sortOrder =
+        newItem.sortOrder > -1 ? newItem.sortOrder : this.items.length;
       this.items.push(newItem);
       this.keyIndexer++;
     },
