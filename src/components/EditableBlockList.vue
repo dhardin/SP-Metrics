@@ -577,12 +577,13 @@ export default {
         itemsMap[this.items[i].name] = this.items[i];
       }
       //only add new items
+      this.items = [];
       for (i = 0; i < items.length; i++) {
-        if (itemsMap[items[i].name]) {
-          this.$set(this.items, i, items[i]);
-        } else {
-          this.addItem(items[i]);
-        }
+        //  if (itemsMap[items[i].name]) {
+        //   this.$set(this.ite ms, i, items[i]);
+        //  } else {
+        this.addItem(items[i]);
+        //   }
       }
     }
   },
