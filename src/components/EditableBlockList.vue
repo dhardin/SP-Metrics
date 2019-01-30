@@ -506,45 +506,33 @@ export default {
     },
     addItem: function(item) {
       var dateStr = new Date().toISOString();
-      var newItem = {
-        name:
-          item && item.hasOwnProperty("name") ? item.name : this.items.length,
-        count: item && item.hasOwnProperty("count") ? item.count : 0,
-        sortOrder:
-          item && item.hasOwnProperty("sortOrder")
-            ? item.sortOrder
-            : this.items.length,
-        isVisible:
-          item && item.hasOwnProperty("isVisible") ? item.isVisible : true,
-        created:
-          item && item.hasOwnProperty("created") ? item.created : dateStr,
+      var defaults = {
+        name: this.items.length,
+        count: 0,
+        sortOrder: this.items.length,
+        visible: true,
+        created: dateStr,
         fab: false,
         key: this.keyIndexer,
-        backgroundColor:
-          item && item.hasOwnProperty("backgroundColor")
-            ? item.backgroundColor
-            : {
-                hex: "#ffffff",
-                hsl: { h: 255, s: 255, l: 255, a: 1 },
-                hsv: { h: 255, s: 255, v: 255, a: 1 },
-                rgba: { r: 255, g: 255, b: 255, a: 1 },
-                a: 1
-              },
-        color:
-          item && item.hasOwnProperty("color")
-            ? item.color
-            : {
-                hex: "#000000",
-                hsl: { h: 0, s: 0, l: 0, a: 1 },
-                hsv: { h: 0, s: 0, v: 0, a: 1 },
-                rgba: { r: 0, g: 0, b: 0, a: 1 },
-                a: 1
-              },
-        fontSize: item && item.hasOwnProperty("fontSize") ? item.fontSize : 20,
-        fontWeight:
-          item && item.hasOwnProperty("fontWeight") ? item.fontWeight : 0,
+        backgroundColor: {
+          hex: "#ffffff",
+          hsl: { h: 255, s: 255, l: 255, a: 1 },
+          hsv: { h: 255, s: 255, v: 255, a: 1 },
+          rgba: { r: 255, g: 255, b: 255, a: 1 },
+          a: 1
+        },
+        color: {
+          hex: "#000000",
+          hsl: { h: 0, s: 0, l: 0, a: 1 },
+          hsv: { h: 0, s: 0, v: 0, a: 1 },
+          rgba: { r: 0, g: 0, b: 0, a: 1 },
+          a: 1
+        },
+        fontSize: 20,
+        fontWeight: 0,
         isHoveringOver: false
       };
+      var newItem = _.defaults(item, defaults);
       this.items.push(newItem);
       this.keyIndexer++;
     },
@@ -583,9 +571,19 @@ export default {
     },
     initItems: function(items) {
       var i;
-      this.items = [];
+      // this.items = [];
+      var itemMap = {};
+      var key;
+      for (i = 0; i < this.items.length; i++) {
+        itemMap[this.items[i].name] = this.items[i];
+      }
+      //only add new items
       for (i = 0; i < items.length; i++) {
-        this.addItem(items[i]);
+        if (itemsMap[items[i].name]) {
+          items[i] = Object.assign({}, items[i].name);
+        } else {
+          this.addItem(items[i]);
+        }
       }
     }
   },
