@@ -422,6 +422,7 @@ export default {
   data() {
     return {
       items: [],
+      sortOrderMap: {},
       direction: "bottom",
       fab: false,
       keyIndexer: 0,
@@ -530,6 +531,10 @@ export default {
       var newItem = _.defaults(item, defaults);
       newItem.sortOrder =
         newItem.sortOrder > -1 ? newItem.sortOrder : this.items.length;
+      if (sortOrderMap[newItem.sortOrder]) {
+        newItem.sortOrder = this.items.length;
+      }
+      sortOrderMap[newItem.sortOrder] = true;
       this.items.push(newItem);
       this.keyIndexer++;
     },
@@ -575,6 +580,7 @@ export default {
       //   }
       //only add new items
       this.items = [];
+      this.sortOrderMap = {};
       for (i = 0; i < items.length; i++) {
         //  if (itemsMap[items[i].name]) {
         //   this.$set(this.ite ms, i, items[i]);
