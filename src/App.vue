@@ -198,24 +198,44 @@ export default {
       var key;
       //iterate through existing metrics and update counts based on map
       for (i = 0; i < this.config.metrics.length; i++) {
+        //skip user defined metrics that don't exist in the list
         if (!this.metricsMap.hasOwnProperty(this.config.metrics[i].name)) {
           continue;
         }
-        this.config.metrics[i].count =
-          this.config.metrics[i].hasOwnProperty("count") || 0;
+        //update item count to reflect the count preformed in metrics map
         this.config.metrics[i].count = this.metricsMap[
           this.config.metrics[i].name
         ].count;
         this.metricsMap[this.config.metrics[i].name].isProcessed = true;
       }
+      //now iterate through the metrics map and add newly defined metrics to config metrics
       for (key in this.metricsMap) {
         if (this.metricsMap[key].isProcessed) {
           continue;
         }
         metrics.push({
           name: key,
-          count: this.metricsMap[key].count
+          count: this.metricsMap[key].count,
+          backgroundColor: {
+            hex: "#ffffff",
+            hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+            hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
+            rgba: { r: 255, g: 255, b: 255, a: 1 },
+            a: 1
+          },
+          color: {
+            hex: "#000000",
+            hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+            hsv: { h: 150, s: 0.66, v: 0.3, a: 1 },
+            rgba: { r: 0, g: 0, b: 0, a: 1 },
+            a: 1
+          },
+          fontSize: 20,
+          fontWeight: 0,
+          sortOrder: 0,
+          isVisible: true
         });
+        console.log("new metric -", metrics[metrics.length - 1]);
       }
       this.config.metrics = Object.assign([], this.config.metrics, metrics);
       console.log("populate metrics -- post: ", this.config.metrics);
