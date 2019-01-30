@@ -531,10 +531,10 @@ export default {
       var newItem = _.defaults(item, defaults);
       newItem.sortOrder =
         newItem.sortOrder > -1 ? newItem.sortOrder : this.items.length;
-      if (sortOrderMap[newItem.sortOrder]) {
+      if (this.sortOrderMap[newItem.sortOrder]) {
         newItem.sortOrder = this.items.length;
       }
-      sortOrderMap[newItem.sortOrder] = true;
+      this.sortOrderMap[newItem.sortOrder] = true;
       this.items.push(newItem);
       this.keyIndexer++;
     },
@@ -554,20 +554,24 @@ export default {
       var i;
       //reorder all items after this.
       this.$delete(this.items, index);
+      this.sortOrderMap = {};
       for (i = sortedIndex; i < this.sortedItems.length; i++) {
         this.sortedItems[i].sortOrder = this.sortedItems[i].sortOrder - 1;
+        this.sortOrderMap[this.sortedItems[i].sortOrder] = true;
       }
       this.$emit("update", this.sortedItems);
     },
     moveRight: function(item) {
       var index = item.sortOrder;
       this.sortedItems[item.sortOrder + 1].sortOrder = index;
+      this.sortOrderMap[index] = true;
       item.sortOrder++;
       this.$emit("update", this.sortedItems);
     },
     moveLeft: function(item) {
       var index = item.sortOrder;
       this.sortedItems[item.sortOrder - 1].sortOrder = index;
+      this.sortOrderMap[index] = true;
       item.sortOrder--;
       this.$emit("update", this.sortedItems);
     },
