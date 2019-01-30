@@ -473,7 +473,7 @@ export default {
         this.fieldMap[Object.keys(this.fieldMap)[0]].hasOwnProperty("Scope")
         ? this.fieldMap[Object.keys(this.fieldMap)[0]].Scope +
             "/" +
-            (this.config.isDocumentLibrary ? "Forms" : "") +
+            (this.config.isDocumentLibrary ? "Forms/" : "") +
             (this.config.filterViewName != ""
               ? this.config.filterViewName + ".aspx"
               : "") +
