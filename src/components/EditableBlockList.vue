@@ -3,7 +3,7 @@
     <v-btn
       color="green"
       large
-      @click="addItem"
+      @click="addItem({})"
       v-if="!readonly"
       :disabled="disabled"
       :light="disabled"
@@ -305,7 +305,7 @@ import VisibilityIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_
 import VisibilityOffIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_off_24px";
 import LoadingIcon from "@/assets/svg-sprite-action-symbol.svg?ic_cached_24px";
 import { Sketch } from "vue-color";
-
+import { _ } from "vue-underscore";
 import Radio from "./Radio";
 export default {
   components: {
@@ -427,7 +427,7 @@ export default {
   },
   data() {
     return {
-      items: this.initialItems,
+      items: [],
       direction: "bottom",
       fab: false,
       keyIndexer: 0,
@@ -510,7 +510,7 @@ export default {
         name: this.items.length,
         count: 0,
         sortOrder: this.items.length,
-        visible: true,
+        isVisible: true,
         created: dateStr,
         fab: false,
         key: this.keyIndexer,
@@ -572,15 +572,14 @@ export default {
     initItems: function(items) {
       var i;
       // this.items = [];
-      var itemMap = {};
-      var key;
+      var itemsMap = {};
       for (i = 0; i < this.items.length; i++) {
-        itemMap[this.items[i].name] = this.items[i];
+        itemsMap[this.items[i].name] = this.items[i];
       }
       //only add new items
       for (i = 0; i < items.length; i++) {
         if (itemsMap[items[i].name]) {
-          items[i] = Object.assign({}, items[i].name);
+          this.$set(this.items, i, items[i]);
         } else {
           this.addItem(items[i]);
         }
