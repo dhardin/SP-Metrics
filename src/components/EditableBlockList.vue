@@ -506,6 +506,7 @@ export default {
     },
     addItem: function(item) {
       var dateStr = new Date().toISOString();
+
       var defaults = {
         name: this.items.length,
         count: 0,
@@ -533,6 +534,7 @@ export default {
         isHoveringOver: false
       };
       var newItem = _.defaults(item, defaults);
+      newItem = newItem.sortOrder > -1 ? newItem.sortOrder : this.items.length;
       this.items.push(newItem);
       this.keyIndexer++;
     },
