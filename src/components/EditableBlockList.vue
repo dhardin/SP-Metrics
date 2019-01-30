@@ -420,9 +420,9 @@ export default {
       deep: true
     },
     initialItems: function(newVal) {
-      if (this.items.length == 0) {
-        this.initItems(newVal);
-      }
+      // if (this.items.length == 0) {
+      this.initItems(newVal);
+      // }
     }
   },
   data() {
