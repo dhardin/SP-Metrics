@@ -574,10 +574,10 @@ export default {
     initItems: function(items) {
       var i;
       // this.items = [];
-      var itemsMap = {};
-      for (i = 0; i < this.items.length; i++) {
-        itemsMap[this.items[i].name] = this.items[i];
-      }
+      // var itemsMap = {};
+      //  for (i = 0; i < this.items.length; i++) {
+      //   itemsMap[this.items[i].name] = this.items[i];
+      //   }
       //only add new items
       this.items = [];
       for (i = 0; i < items.length; i++) {
