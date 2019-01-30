@@ -12,21 +12,33 @@
     >
       <AddIcon class="icon"></AddIcon>Add
     </v-btn>
-    <v-container grid-list-md text-xs-center box>
+    <v-container grid-list-md text-xs-center box :style="{position: 'relative'}">
+      <div class="loading-overlay" v-if="isLoading">
+        <v-layout row wrap align-center justify-center fill-height>
+          <LoadingIcon class="large-icon loading-icon"></LoadingIcon>
+
+          <h1 id="loading-title" class="font-weight-thin">Loading</h1>
+        </v-layout>
+      </div>
       <transition-group
         name="list"
         tag="div"
         class="layout row wrap justify-center align-space-around"
       >
-        <v-flex v-for="item in sortedItems" v-bind:key="item.key" :class="classes" shrink>
+        <v-flex
+          v-for="item in sortedItems"
+          v-bind:key="item.key"
+          :class="classes"
+          shrink
+          @mouseover="item.isHoveringOver = true"
+          @mouseleave="item.isHoveringOver = false; item.fab = false;"
+        >
           <v-card
             :href="getItemHref(item)"
             :target="config.openInNewWindow ? '_blank' : '_top'"
             class="list-item"
             style="position: relative"
             :style="{'background-color': getRgbaString(item.backgroundColor.rgba), width: '100%', height: '100%', 'min-height': readonly ? 'initial' : '100px'}"
-            @mouseover="item.isHoveringOver = true"
-            @mouseleave="item.isHoveringOver = false; item.fab = false;"
           >
             <transition name="fade">
               <span
@@ -291,6 +303,7 @@ import EditIcon from "@/assets/svg-sprite-content-symbol.svg?ic_create_24px";
 import DeleteIcon from "@/assets/svg-sprite-action-symbol.svg?ic_delete_24px";
 import VisibilityIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_24px";
 import VisibilityOffIcon from "@/assets/svg-sprite-action-symbol.svg?ic_visibility_off_24px";
+import LoadingIcon from "@/assets/svg-sprite-action-symbol.svg?ic_cached_24px";
 import { Sketch } from "vue-color";
 
 import Radio from "./Radio";
@@ -305,11 +318,13 @@ export default {
     VisibilityIcon: VisibilityIcon,
     VisibilityOffIcon: VisibilityOffIcon,
     AppsIcon: AppsIcon,
+    LoadingIcon: LoadingIcon,
     "sketch-picker": Sketch,
     Radio: Radio
   },
   props: {
     disabled: Boolean,
+    isLoading: Boolean,
     columnWidth: {
       type: Number,
       default: function() {
@@ -677,5 +692,39 @@ export default {
 .move-btn {
   padding: 0;
   min-width: 0px;
+}
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.18);
+  z-index: 15;
+}
+.icon {
+  width: 25px;
+  height: 25px;
+  fill: white;
+}
+
+.large-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.loading-icon {
+  fill: rgba(0, 0, 0, 0.61);
+  margin-right: 8px;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  -moz-animation: spin 1s ease-in-out infinite;
+  animation: spin 1s ease-in-out infinite;
+}
+
+#loading-title {
+  text-transform: uppercase;
+  font-family: Roboto, sans-serif;
+  display: inline-block;
+  margin: 0 !important;
 }
 </style>

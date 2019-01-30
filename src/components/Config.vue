@@ -248,6 +248,7 @@
             @update="updateMetrics"
             :disabled="isLoading || isSaving"
             :initial-items="initConfig.metrics"
+            :is-loading="isLoading || isSaving"
           ></EditableBlockList>
         </v-flex>
       </v-layout>
